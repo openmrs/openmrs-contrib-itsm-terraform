@@ -6,8 +6,10 @@ terraform {
 }
 
 module "single-machine" {
-  source       = "../modules/single-machine"
-  flavor       = "${var.flavor}"
-  hostname     = "watamu"
-  project_name = "${var.project_name}"
+  source         = "../modules/single-machine"
+  flavor         = "${var.flavor}"
+  hostname       = "watamu"
+  project_name   = "${var.project_name}"
+  ssh_username   = "${var.ssh_username}"
+  ssh_key_file   = "${var.ssh_key_file}"
 }

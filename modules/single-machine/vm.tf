@@ -27,13 +27,13 @@ resource "openstack_compute_instance_v2" "vm" {
 
   # provisioner "remote-exec" {
   #   connection {
-  #     user        = "${var.ssh_user_name}"
+  #     user        = "${var.ssh_username}"
   #     private_key = "${file(var.ssh_key_file)}"
   #   }
   #
   #   inline = [
-  #     "sudo apt-get -y update",
-  #     "sudo apt-get -y install nginx",
+  #     "apt-get -y update",
+  #     "apt-get -y upgrade",
   #   ]
   # }
 }
