@@ -6,3 +6,8 @@ Get added to git crypt
 Get TACC creds
 Get AWS creds (with write access to the bucket)
 Rename /variables/openrc-personal-example to /variables/openrc-personal
+
+```
+./variables/openrc
+terraform plan
+```

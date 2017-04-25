@@ -7,7 +7,7 @@ variable "flavor" {
 }
 
 variable "ssh_key_file" {
-  default = "./ssh/terraform-api-key"
+  default = "./ssh/terraform-api.key"
 }
 
 variable "ssh_user_name" {
