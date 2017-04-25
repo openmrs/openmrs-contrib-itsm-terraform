@@ -2,8 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "basic-network-setup"
-    region = "us-west-2"
+    key    = "basic-network-setup.tfstate"
   }
 }
 
