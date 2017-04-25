@@ -24,8 +24,6 @@ resource "openstack_compute_instance_v2" "vm" {
   network {
     uuid = "${data.terraform_remote_state.base.network-id}"
   }
-
-
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
