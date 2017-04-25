@@ -17,3 +17,5 @@ variable "hostname" { }
 variable "project_name" { }
 
 variable "ssh_key_file" { }
+
+variable "domain_dns" { }

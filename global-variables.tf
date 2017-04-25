@@ -5,3 +5,7 @@ variable "ssh_key_file" {
 variable "project_name" {
   default = "TG-ASC170002"
 }
+
+variable "domain_dns" {
+  default = "4712658"
+}

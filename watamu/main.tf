@@ -11,4 +11,5 @@ module "single-machine" {
   hostname       = "watamu"
   project_name   = "${var.project_name}"
   ssh_key_file   = "${var.ssh_key_file}"
+  domain_dns     = "${var.domain_dns}"
 }
