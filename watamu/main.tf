@@ -10,6 +10,5 @@ module "single-machine" {
   flavor         = "${var.flavor}"
   hostname       = "watamu"
   project_name   = "${var.project_name}"
-  ssh_username   = "${var.ssh_username}"
   ssh_key_file   = "${var.ssh_key_file}"
 }

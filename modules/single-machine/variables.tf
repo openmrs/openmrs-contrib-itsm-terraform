@@ -6,12 +6,14 @@ variable "pool" {
   default = "public"
 }
 
+variable "ssh_username" {
+  default = "root"
+}
+
 variable "flavor" { }
 
 variable "hostname" { }
 
 variable "project_name" { }
-
-variable "ssh_username" { }
 
 variable "ssh_key_file" { }
