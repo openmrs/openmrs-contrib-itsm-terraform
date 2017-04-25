@@ -16,25 +16,24 @@ resource "openstack_networking_network_v2" "private-net" {
   name           = "${var.project_name}-terraform-private"
   admin_state_up = "true"
 }
-#
-# resource "openstack_networking_subnet_v2" "terraform" {
-#   name            = "terraform"
-#   network_id      = "${openstack_networking_network_v2.terraform.id}"
-#   cidr            = "10.0.0.0/24"
-#   ip_version      = 4
-#   dns_nameservers = ["8.8.8.8", "8.8.4.4"]
-# }
-#
-# resource "openstack_networking_router_v2" "terraform" {
-#   name             = "terraform"
-#   admin_state_up   = "true"
-#   external_gateway = "${var.external_gateway}"
-# }
-#
-# resource "openstack_networking_router_interface_v2" "terraform" {
-#   router_id = "${openstack_networking_router_v2.terraform.id}"
-#   subnet_id = "${openstack_networking_subnet_v2.terraform.id}"
-# }
+
+resource "openstack_networking_subnet_v2" "default-subnet" {
+  name            = "${var.project_name}-terraform-private-subnet"
+  network_id      = "${openstack_networking_network_v2.private-net.id}"
+  cidr            = "10.0.0.0/25"
+  ip_version      = 4
+}
+
+resource "openstack_networking_router_v2" "default-router" {
+  name             = "${var.project_name}-terraform-router"
+  admin_state_up   = "true"
+  external_gateway = "${var.external_gateway}"
+}
+
+resource "openstack_networking_router_interface_v2" "subnet-route" {
+  router_id = "${openstack_networking_router_v2.default-router.id}"
+  subnet_id = "${openstack_networking_subnet_v2.default-subnet.id}"
+}
 
 resource "openstack_compute_secgroup_v2" "ssh-icmp-secgroup" {
   name        = "${var.project_name}-ssh-icmp"
