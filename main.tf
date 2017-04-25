@@ -11,11 +11,11 @@ resource "openstack_compute_keypair_v2" "default-key" {
   name       = "${var.project_name}-terraform-key"
   public_key = "${file("${var.ssh_key_file}.pub")}"
 }
-#
-# resource "openstack_networking_network_v2" "terraform" {
-#   name           = "terraform"
-#   admin_state_up = "true"
-# }
+
+resource "openstack_networking_network_v2" "private-net" {
+  name           = "${var.project_name}-terraform-private"
+  admin_state_up = "true"
+}
 #
 # resource "openstack_networking_subnet_v2" "terraform" {
 #   name            = "terraform"
