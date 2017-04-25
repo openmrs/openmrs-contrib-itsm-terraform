@@ -5,13 +5,19 @@ Create bucket manually on AWS (versioned)
 Get added to git crypt
 Get TACC creds
 Get AWS creds (with write access to the bucket)
-Rename /variables/openrc-personal-example to /variables/openrc-personal
+Rename /conf/openrc-personal-example to /conf/openrc-personal
 
 install terraform
 install git crypt
+```
+source ./conf/openrc
+terraform init
+```
+
 
 
 ```
-./variables/openrc
+source ./conf/openrc
+terraform init
 terraform plan
 ```
