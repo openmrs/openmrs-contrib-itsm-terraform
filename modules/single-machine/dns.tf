@@ -3,7 +3,7 @@ provider "dme" {
 }
 
 resource "dme_record" "www" {
-  domainid    = "${lookup(var.domain_dns, 'openmrs.org')}"
+  domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "${var.hostname}"
   type        = "A"
   value       = "${openstack_compute_floatingip_v2.ip.address}"

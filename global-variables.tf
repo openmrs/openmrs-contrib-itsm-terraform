@@ -12,8 +12,8 @@ variable "domain_dns" {
   description = "DNS domains ID"
   default = {
      "openmrs.org"  = "4712658"
-     "openmrs.net"  = ""
-     "openmrs.com"  = ""
-     "om.rs"        = ""
+     "openmrs.net"  = "4714812"
+     "openmrs.com"  = "4714813"
+     "om.rs"        = "4714810"
   }
 }
