@@ -24,10 +24,12 @@ $excluded_dirs = ["conf/", "modules/"]
 $pwd = Dir.pwd
 
 class Build < Thor
-  desc "plan DIR", "run terraform plan on defined directory"
-  def plan(dir)
-    puts "Running terraform plan on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+  desc "clean", "Clean all folders"
+  def clean
+    puts "Cleaning temp folder"
+    FileUtils.rm_rf($tmp_dir)
+    puts "Cleaning .terraform folders"
+    Dir["**/.terraform/"].each { |x| FileUtils.rm_rf(x)}
   end
 
   desc "install", "Install required dependencies."
@@ -48,12 +50,27 @@ class Build < Thor
     }
   end
 
-  desc "clean", "Clean all folders"
-  def clean
-    puts "Cleaning temp folder"
-    FileUtils.rm_rf($tmp_dir)
-    puts "Cleaning .terraform folders"
-    Dir["**/.terraform/"].each { |x| FileUtils.rm_rf(x)}
+  desc "plan DIR", "run terraform plan on defined directory"
+  def plan(dir)
+    puts "Running terraform plan on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+  end
+
+  desc "apply DIR", "run terraform apply on defined directory"
+  def apply(dir)
+    puts "Terraform apply is NOT thread-safe, and there's no lock mechanism enabled. Two concurrent calls will cause inconsistences."
+    printf "Do you really want to modify stack #{dir}? [y/N]"
+    prompt = STDIN.gets.chomp
+    return unless prompt == 'y'
+
+    puts "Running terraform apply on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+  end
+
+  desc "terraform DIR 'subcommand --args'", "run arbitrary terraform subcommands on defined directory"
+  def terraform(dir, args)
+    puts "Running terraform \'#{args}\' on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
   end
 
 end

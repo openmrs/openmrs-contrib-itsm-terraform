@@ -15,6 +15,14 @@ You need to have installed:
   - ruby (2.0+)
   - thor (`gem install thor`)
 
+# Repository organisation
+  - _build.rb_: build helper (thor) file
+  - _conf/_ : configuration files and authentication files
+  - _modules/_: terraform modules
+  - _global-variables.tf_: global terraform variables symlinked on each stack
+  - _base-network/_ : stack basic infrastructure (network, subnets, routers)
+  - _stacks/_: each machine should have a directory defined in here. Each folder should be a different state/stack file.  
+
 # Development environment setup
 To install terraform and initial setup (needed only once)
 ```
@@ -28,11 +36,10 @@ To undo the changes from the previous commands:
 ./build clean
 ```
 
-To run terraform plan:
+To run terraform plan (and see what changed on your stack) on a _base-network_ stack:
 ```
-./build plan base-network
+./build plan base-network/  
 ```
-
 
 # Resources used by Terraform
 Some resources are necessary to run terraform, so they were created manually:
