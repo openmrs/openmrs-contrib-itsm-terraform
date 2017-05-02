@@ -13,3 +13,12 @@ module "single-machine" {
   ssh_key_file   = "${var.ssh_key_file}"
   domain_dns     = "${var.domain_dns}"
 }
+
+resource "dme_record" "addons" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "addons"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}

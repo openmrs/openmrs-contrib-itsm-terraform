@@ -18,4 +18,4 @@ variable "project_name" { }
 
 variable "ssh_key_file" { }
 
-variable "domain_dns" { }
+variable "domain_dns" { type = "map" }

@@ -1,8 +1,4 @@
-provider "dme" {
-  usesandbox = false
-}
-
-resource "dme_record" "www" {
+resource "dme_record" "hostname" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "${var.hostname}"
   type        = "A"

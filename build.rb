@@ -58,13 +58,13 @@ class Build < Thor
 
   desc "apply DIR", "run terraform apply on defined directory"
   def apply(dir)
-    puts "Terraform apply is NOT thread-safe, and there's no lock mechanism enabled. Two concurrent calls will cause inconsistences."
-    printf "Do you really want to modify stack #{dir}? [y/N]"
+    puts "Terraform apply is NOT thread-safe, and there's no lock mechanism enabled. Two concurrent calls on the same stack will cause inconsistences."
+    printf "Do you really want to modify stack #{dir}? [y/N]:  "
     prompt = STDIN.gets.chomp
     return unless prompt == 'y'
 
     puts "Running terraform apply on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply") or abort
   end
 
   desc "terraform DIR 'subcommand --args'", "run arbitrary terraform subcommands on defined directory"
