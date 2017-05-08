@@ -18,16 +18,7 @@ resource "aws_s3_bucket" "automatic-backups" {
 }
 
 resource "aws_s3_bucket" "manual-backups" {
-  bucket = "openmrs-backups-manual"
-  lifecycle_rule {
-    id      = "archive-and-delete"
-    prefix  = ""
-    enabled = true
-    transition {
-      days          = 180
-      storage_class = "GLACIER"
-    }
-  }
+  bucket = "openmrs-manual-backup"
   versioning {
     enabled = true
   }

@@ -70,7 +70,7 @@ class Build < Thor
   desc "terraform DIR 'subcommand --args'", "run arbitrary terraform subcommands on defined directory"
   def terraform(dir, args)
     puts "Running terraform \'#{args}\' on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform #{args}") or abort
   end
 
 end
