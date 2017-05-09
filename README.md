@@ -18,6 +18,7 @@ You need to have installed:
 # Repository organisation
   - _build.rb_: build helper (thor) file
   - _conf/_ : configuration files and authentication files
+  - _conf/template-stack_: base files used when creating new stacks
   - _modules/_: terraform modules
   - _global-variables.tf_: global terraform variables symlinked on each stack
   - _base-network/_ : stack basic infrastructure (network, subnets, routers)
