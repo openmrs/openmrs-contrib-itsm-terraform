@@ -14,6 +14,10 @@ output "network-id" {
   value = "${openstack_networking_network_v2.private-net.id}"
 }
 
-output "backup-bucket" {
+output "backup-bucket-name" {
   value = "${aws_s3_bucket.automatic-backups.bucket}"
+}
+
+output "backup-bucket-arn" {
+  value = "${aws_s3_bucket.automatic-backups.arn}"
 }

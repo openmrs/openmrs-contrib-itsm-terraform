@@ -73,6 +73,16 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform #{args}") or abort
   end
 
+  desc "init DIR", "create a new stack DIR"
+  def init(dir)
+    puts "Creating stack #{dir}"
+    FileUtils.mkdir_p $dir
+    FileUtils.cp_r 'conf/template-stack/.', $dir
+    FileUtils.ln_s '../gloval-variables.rf' "#{dir}/gloval-variables.rf"
+    system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init") or abort
+  end
+
+
 end
 
 Build.start
