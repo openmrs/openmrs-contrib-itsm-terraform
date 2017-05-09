@@ -15,11 +15,23 @@ resource "aws_s3_bucket" "automatic-backups" {
   versioning {
     enabled = true
   }
+  tags {
+    Terraform        = "base-network"
+  }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket" "manual-backups" {
   bucket = "openmrs-manual-backup"
   versioning {
     enabled = true
+  }
+  tags {
+    Terraform        = "base-network"
+  }
+  lifecycle {
+    prevent_destroy = true
   }
 }
