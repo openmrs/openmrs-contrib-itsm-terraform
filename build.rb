@@ -78,6 +78,10 @@ class Build < Thor
     puts "Creating stack \'#{dir}\'"
     FileUtils.mkdir_p dir
     FileUtils.cp_r 'conf/template-stack/.',dir
+    IO.write("#{dir}/main.tf", File.open("#{dir}/main.tf") do |f|
+        f.read.gsub(/STACK-NAME/, "#{dir}")
+      end
+    )
     FileUtils.ln_sf '../global-variables.tf',"#{dir}/global-variables.tf"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init") or abort
   end
