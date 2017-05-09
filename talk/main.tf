@@ -15,6 +15,25 @@ data "terraform_remote_state" "base" {
     }
 }
 
+resource "aws_s3_bucket" "talk-backups" {
+  bucket = "openmrs-talk-backup"
+  lifecycle_rule {
+    id      = "archive-and-delete"
+    prefix  = ""
+    enabled = true
+    transition {
+      days          = 30
+      storage_class = "GLACIER"
+    }
+    expiration {
+      days = 180
+    }
+  }
+  versioning {
+    enabled = true
+  }
+}
+
 resource "aws_iam_user" "backup-user" {
   name = "backup-${var.hostname}"
 }
@@ -32,13 +51,18 @@ resource "aws_iam_user_policy" "backup-user-policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["${aws_s3_bucket.talk-backups.arn}"]
+    },
+    {
       "Action": [
         "s3:PutObject",
         "s3:ListMultipartUploadParts",
         "s3:AbortMultipartUpload"
       ],
       "Effect": "Allow",
-      "Resource": "${data.terraform_remote_state.base.backup-bucket-arn}/*"
+      "Resource": "${aws_s3_bucket.talk-backups.arn}/*"
     }
   ]
 }
