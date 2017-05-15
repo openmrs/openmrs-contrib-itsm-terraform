@@ -14,3 +14,13 @@ data "terraform_remote_state" "base" {
         key    = "basic-network-setup.tfstate"
     }
 }
+
+module "single-machine" {
+  source         = "../modules/single-machine"
+  flavor         = "${var.flavor}"
+  hostname       = "${var.hostname}"
+  project_name   = "${var.project_name}"
+  ssh_key_file   = "${var.ssh_key_file}"
+  domain_dns     = "${var.domain_dns}"
+  has_backup     = false
+}

@@ -82,6 +82,10 @@ class Build < Thor
         f.read.gsub(/STACK-NAME/, "#{dir}")
       end
     )
+    IO.write("#{dir}/variables.tf", File.open("#{dir}/variables.tf") do |f|
+        f.read.gsub(/STACK-NAME/, "#{dir}")
+      end
+    )
     FileUtils.ln_sf '../global-variables.tf',"#{dir}/global-variables.tf"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init") or abort
   end
