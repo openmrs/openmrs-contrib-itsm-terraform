@@ -5,7 +5,7 @@ We are using terraform to generate Openstack, DNS and other resources.
 # Requirements
 ## Credentials
 Before you can use this repository, you need:
-  - TACC (Jetstream) credentials
+  - TACC (Jetstream) credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
 
 ## Software
@@ -43,6 +43,11 @@ To undo the changes from the previous commands:
 ./build.rb clean
 ```
 
+To create a new stack _test_:
+```
+./build.rb create test
+```
+
 To run terraform plan (and see what changed on your stack) on a _base-network_ stack:
 ```
 ./build.rb plan base-network/  
@@ -58,10 +63,10 @@ To see all available commands:
 ./build.rb
 ```
 
-# Notes
-For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names.
-Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention.
-More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
+# Guidelines
+  - For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names.
+  - Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention. More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
+  - Check <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Migration-to-Jetstream> for more details on migration to terraform/jetstream.
 
 # Resources needed by Terraform
 Some resources are necessary to run terraform, so they were created manually:
