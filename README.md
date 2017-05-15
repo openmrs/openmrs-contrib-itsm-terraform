@@ -58,7 +58,12 @@ To see all available commands:
 ./build.rb
 ```
 
-# Resources used by Terraform
+# Notes
+For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names.
+Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention.
+More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
+
+# Resources needed by Terraform
 Some resources are necessary to run terraform, so they were created manually:
   - S3 bucket to keep terraform state (versioned)
   - User to interact with bucket (access via bucket policy)

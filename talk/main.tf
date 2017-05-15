@@ -43,17 +43,11 @@ resource "aws_iam_user" "backup-user" {
 
 resource "aws_iam_access_key" "backup-user-key" {
   user = "${aws_iam_user.backup-user.name}"
-  tags {
-    Terraform        = "${var.hostname}"
-  }
 }
 
 resource "aws_iam_user_policy" "backup-user-policy" {
   name = "backup_${var.hostname}"
   user = "${aws_iam_user.backup-user.name}"
-  tags {
-    Terraform        = "${var.hostname}"
-  }
   policy = <<EOF
 {
   "Version": "2012-10-17",

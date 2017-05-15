@@ -12,6 +12,7 @@ module "single-machine" {
   project_name   = "${var.project_name}"
   ssh_key_file   = "${var.ssh_key_file}"
   domain_dns     = "${var.domain_dns}"
+  has_backup     = false
 }
 
 resource "dme_record" "addons" {
