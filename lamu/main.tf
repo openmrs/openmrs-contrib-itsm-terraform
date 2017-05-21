@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "STACK-NAME.tfstate"
+    key    = "lamu.tfstate"
   }
 }
 
@@ -24,4 +24,13 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_inventory = "${var.ansible_inventory}"
   has_backup        = false
+}
+
+resource "dme_record" "addons" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "addons-stg"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
 }

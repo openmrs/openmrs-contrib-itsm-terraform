@@ -1,6 +1,6 @@
 # Description
 This repository is the definition of OpenMRS community infrastructure (infra-as-code).
-We are using terraform to generate Openstack, DNS and other resources.
+We are using terraform to generate Openstack machines and network, DNS and backup resources.
 
 # Requirements
 ## Credentials
@@ -67,6 +67,8 @@ To see all available commands:
   - For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names.
   - Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention. More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
   - Check <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Migration-to-Jetstream> for more details on migration to terraform/jetstream.
+  - After provisioning this machine, you'll be able to ssh it using the key in conf/ssh (user root). You should run ansible with that key (it will not be available anymore after ansible runs for the first time).
+  - Note that DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack. 
 
 # Resources needed by Terraform
 Some resources are necessary to run terraform, so they were created manually:

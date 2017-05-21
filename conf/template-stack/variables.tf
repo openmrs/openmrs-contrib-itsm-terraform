@@ -5,3 +5,7 @@ variable "flavor" {
 variable "hostname" {
   default = "STACK-NAME"
 }
+
+variable "ansible_inventory" {
+  default = "production"
+}

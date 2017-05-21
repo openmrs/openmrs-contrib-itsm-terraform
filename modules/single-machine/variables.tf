@@ -23,3 +23,9 @@ variable "domain_dns" { type = "map" }
 variable "has_backup" {
   default = false
 }
+
+variable "ansible_repo" {
+  default = "git@github.com:openmrs/openmrs-contrib-itsmresources.git"
+}
+
+variable "ansible_inventory" { }

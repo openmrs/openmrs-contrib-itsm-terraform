@@ -1,6 +1,6 @@
 variable "ssh_key_file" {
   description = "SSH key used to provision VMs"
-  default = "../conf/ssh/terraform-api.key"
+  default = "../conf/provisioning/ssh/terraform-api.key"
 }
 
 variable "project_name" {

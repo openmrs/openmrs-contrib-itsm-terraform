@@ -28,12 +28,39 @@ resource "null_resource" "provision" {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
     host        = "${openstack_compute_floatingip_v2.ip.address}"
+    agent       = false
+    timeout     = "10s"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "apt-get -y update",
-      "apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
+      "DEBIAN_FRONTEND=noninteractive apt-get -y update",
+      "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
+      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt",
     ]
   }
 }
+
+
+  # provisioner "file" {
+  #   source      = "../conf/provisioning/github/github.key"
+  #   destination = "/root/.ssh/id_rsa"
+  # }
+  #
+  # provisioner "file" {
+  #   source      = "../conf/provisioning/ansible"
+  #   destination = "/root/.gnupg"
+  # }
+  #
+  # provisioner "file" {
+  #   source      = "../conf/provisioning/ansible.sh"
+  #   destination = "/tmp/ansible.sh"
+  # }
+
+  # ansible not working locally for some reason....
+  #"chmod a+x /tmp/ansible.sh",
+  #"/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}",
+  # "rm -rf /tmp/ansible",
+  #  "rm /root/.ssh/id_rsa",
+  #  "rm /root/.gnupg"
+  #  "rm /root/.ssh/authorized_keys",

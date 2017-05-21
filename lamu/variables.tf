@@ -3,9 +3,9 @@ variable "flavor" {
 }
 
 variable "hostname" {
-  default = "watamu"
+  default = "lamu"
 }
 
 variable "ansible_inventory" {
-  default = "production"
+  default = "staging"
 }
