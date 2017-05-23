@@ -19,6 +19,7 @@ You need to have installed:
   - _build.rb_: build helper (thor) file
   - _conf/_ : configuration files and authentication files
   - _conf/template-stack_: base files used when creating new stacks
+  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine
   - _modules/_: terraform modules
   - _global-variables.tf_: global terraform variables symlinked on each stack
   - _base-network/_ : stack basic infrastructure (network, subnets, routers)
@@ -66,10 +67,12 @@ To see all available commands:
 
 # Troubleshooting
 
+## Could not create DNS entries
+- Verify that the entry doesn't already exist in our DNS provider. 
 
 ## SSH / File resources/ Remote exec not working after ansible aplied
 
-That's caused by SSH server configuration incompatible.
+That's caused by SSH server configuration incompatible with terraform.
 
  - Edit `/etc/ssh/sshd_config`:
 ```
