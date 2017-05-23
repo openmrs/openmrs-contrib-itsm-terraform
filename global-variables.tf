@@ -3,6 +3,14 @@ variable "ssh_key_file" {
   default = "../conf/provisioning/ssh/terraform-api.key"
 }
 
+variable "ansible_repo" {
+  default = "git@github.com:openmrs/openmrs-contrib-itsmresources.git"
+}
+
+variable "ssh_username" {
+  default = "root"
+}
+
 variable "project_name" {
   description = "Project name in Jetstream"
   default = "TG-ASC170002"

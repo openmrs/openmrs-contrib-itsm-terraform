@@ -20,8 +20,11 @@ module "single-machine" {
   flavor            = "${var.flavor}"
   hostname          = "${var.hostname}"
   project_name      = "${var.project_name}"
+  ssh_username      = "${var.ssh_username}"
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
+  ansible_repo      = "${var.ansible_repo}"
   ansible_inventory = "${var.ansible_inventory}"
   has_backup        = false
+  use_ansible       = false
 }
