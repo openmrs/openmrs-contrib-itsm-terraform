@@ -34,16 +34,14 @@ resource "null_resource" "provision" {
     inline = [
       "DEBIAN_FRONTEND=noninteractive apt-get -y update",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
-      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt",
+      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt python-dev libffi-dev",
     ]
   }
 }
 
-
-
 resource "null_resource" "ansible" {
   count      = "${var.use_ansible}"
-  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm"]
+  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm", "null_resource.provision"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -74,7 +72,7 @@ resource "null_resource" "ansible" {
       "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}",
       "rm -rf /tmp/ansible",
       "rm /root/.ssh/id_rsa",
-      "rm /root/.gnupg"
+      "rm -rf /root/.gnupg"
     ]
   }
 }

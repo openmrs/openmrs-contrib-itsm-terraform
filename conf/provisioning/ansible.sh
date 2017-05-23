@@ -10,11 +10,11 @@ hostname="$3"
 
 echo "Repo: ${ansible_repo}, Inv: ${ansible_inventory}, Host: ${hostname}"
 
-fgrep "github.com" ~/.ssh/known_hosts || ssh-keyscan github.com >> ~/.ssh/known_hosts
+fgrep -q "github.com" ~/.ssh/known_hosts || ssh-keyscan github.com >> ~/.ssh/known_hosts
 rm -rf /tmp/ansible
-git clone ${ansible_repo} /tmp/ansible
+git clone -q ${ansible_repo} /tmp/ansible
 cd /tmp/ansible/ansible
 git crypt unlock
-pip install "ansible==2.2.3"
+pip install -q "ansible==2.2.3"
 ansible-galaxy install -p roles -r requirements.yml --force
 ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org -c local site.yml
