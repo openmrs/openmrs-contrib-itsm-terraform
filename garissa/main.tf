@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "thika.tfstate"
+    key    = "garissa.tfstate"
   }
 }
 
@@ -29,9 +29,36 @@ module "single-machine" {
   use_ansible       = true
 }
 
-resource "dme_record" "quizgrader" {
+resource "dme_record" "demo" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "quizgrader"
+  name        = "demo"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
+
+resource "dme_record" "modules" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "modules-refapp"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
+
+resource "dme_record" "uat" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "uat-refapp"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
+
+resource "dme_record" "qa" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "qa-refapp"
   type        = "CNAME"
   value       = "${var.hostname}"
   ttl         = 3600
