@@ -3,7 +3,7 @@ variable "flavor" {
 }
 
 variable "hostname" {
-  default = "mokolo"
+  default = "thika"
 }
 
 variable "ansible_inventory" {

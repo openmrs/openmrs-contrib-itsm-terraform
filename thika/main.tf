@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "mokolo.tfstate"
+    key    = "thika.tfstate"
   }
 }
 
@@ -27,4 +27,13 @@ module "single-machine" {
   ansible_inventory = "${var.ansible_inventory}"
   has_backup        = false
   use_ansible       = true
+}
+
+resource "dme_record" "addons" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "quizgrader"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
 }
