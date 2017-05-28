@@ -18,6 +18,7 @@ data "terraform_remote_state" "base" {
 module "single-machine" {
   source            = "../modules/single-machine"
   flavor            = "${var.flavor}"
+  image             = "${var.image}"
   hostname          = "${var.hostname}"
   project_name      = "${var.project_name}"
   ssh_username      = "${var.ssh_username}"

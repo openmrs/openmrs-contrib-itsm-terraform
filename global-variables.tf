@@ -1,3 +1,7 @@
+variable "image" {
+  default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
+}
+
 variable "ssh_key_file" {
   description = "SSH key used to provision VMs"
   default = "../conf/provisioning/ssh/terraform-api.key"

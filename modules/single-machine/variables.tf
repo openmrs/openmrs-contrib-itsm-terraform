@@ -1,6 +1,4 @@
-variable "image" {
-  default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
-}
+variable "image" { }
 
 variable "pool" {
   default = "public"

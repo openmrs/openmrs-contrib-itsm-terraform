@@ -23,7 +23,7 @@ resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
 }
 
 resource "null_resource" "provision" {
-  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm"]
+  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm", "openstack_compute_instance_v2.vm"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -41,7 +41,7 @@ resource "null_resource" "provision" {
 
 resource "null_resource" "ansible" {
   count      = "${var.use_ansible}"
-  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm", "null_resource.provision"]
+  depends_on = ["openstack_compute_instance_v2.vm", "openstack_compute_floatingip_associate_v2.fip_vm", "null_resource.provision"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"

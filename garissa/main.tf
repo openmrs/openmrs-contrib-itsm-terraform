@@ -18,6 +18,7 @@ data "terraform_remote_state" "base" {
 module "single-machine" {
   source            = "../modules/single-machine"
   flavor            = "${var.flavor}"
+  image             = "${var.override-image}"
   hostname          = "${var.hostname}"
   project_name      = "${var.project_name}"
   ssh_username      = "${var.ssh_username}"
@@ -26,7 +27,7 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
   ansible_inventory = "${var.ansible_inventory}"
   has_backup        = false
-  use_ansible       = true
+  use_ansible       = false
 }
 
 resource "dme_record" "demo" {

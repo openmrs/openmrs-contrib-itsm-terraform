@@ -67,8 +67,15 @@ To see all available commands:
 
 # Troubleshooting
 
+## Forcing machine to be reprovisioned:
+```
+./build.rb terraform <stack> "taint -module single-machine openstack_compute_instance_v2.vm"
+./build.rb plan <stack>
+./build.rb apply <stack>
+```
+
 ## Could not create DNS entries
-- Verify that the entry doesn't already exist in our DNS provider. 
+- Verify that the entry doesn't already exist in our DNS provider.
 
 ## SSH / File resources/ Remote exec not working after ansible aplied
 
