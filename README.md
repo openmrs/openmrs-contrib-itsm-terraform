@@ -25,7 +25,7 @@ You need to have installed:
   - _base-network/_ : stack basic infrastructure (network, subnets, routers)
   - _other-stacks/_: each machine should have a directory defined in here. Each folder should be a different state/stack file.
 
-Each stack should be more or less:  
+Each stack should be more or less:
   - _main.tf_: terraform resources
   - _outputs.tf_: stack outputs (can be used by other stacks as input params)
   - _variables.tf_: terraform variables
@@ -34,7 +34,7 @@ Each stack should be more or less:
 # Development environment setup
 To install terraform and initial setup (needed only once)
 ```
-./build.rb install   
+./build.rb install 
 # add your TACC credentials to conf/openrc-personal
 ./build.rb init
 ```
@@ -51,12 +51,12 @@ To create a new stack _test_:
 
 To run terraform plan (and see what changed on your stack) on a _base-network_ stack:
 ```
-./build.rb plan base-network/  
+./build.rb plan base-network/
 ```
 
 To run terraform apply (and apply changes to a stack) on a _base-network_ stack:
 ```
-./build.rb apply base-network/  
+./build.rb apply base-network/
 ```
 
 To see all available commands:
