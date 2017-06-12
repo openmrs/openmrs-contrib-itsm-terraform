@@ -29,3 +29,6 @@ variable "domain_dns" {
      "om.rs"        = "4714810"
   }
 }
+
+variable "tacc_url" { }
+variable "iu_url" { }
