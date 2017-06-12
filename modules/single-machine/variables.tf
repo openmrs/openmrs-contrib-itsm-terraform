@@ -12,6 +12,8 @@ variable "use_ansible" {
   default = false
 }
 
+variable "region" { }
+
 variable "flavor" { }
 
 variable "hostname" { }

@@ -6,7 +6,6 @@ terraform {
   }
 }
 
-
 provider "openstack" {
   auth_url = "${var.iu_url}"
   alias    = "iu"

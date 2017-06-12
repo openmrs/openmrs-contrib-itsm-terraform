@@ -13,7 +13,7 @@ resource "openstack_compute_instance_v2" "vm" {
   ]
 
   network {
-    uuid = "${data.terraform_remote_state.base.network-id}"
+    uuid = "${data.terraform_remote_state.base.network-id[var.region]}"
   }
 }
 

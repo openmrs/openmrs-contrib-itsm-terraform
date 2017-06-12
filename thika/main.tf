@@ -6,6 +6,10 @@ terraform {
   }
 }
 
+provider "openstack" {
+  auth_url = "${var.tacc_url}"
+}
+
 # any resources from the base stack
 data "terraform_remote_state" "base" {
     backend = "s3"
@@ -26,6 +30,7 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
   ansible_inventory = "${var.ansible_inventory}"
+  region            = "tacc"
   has_backup        = false
   use_ansible       = true
 }

@@ -5,6 +5,10 @@ terraform {
   }
 }
 
+provider "openstack" {
+  auth_url = "${var.tacc_url}"
+}
+
 module "single-machine" {
   source            = "../modules/single-machine"
   flavor            = "${var.flavor}"
@@ -16,6 +20,7 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
   ansible_inventory = "${var.ansible_inventory}"
+  region            = "tacc"
   has_backup        = false
   use_ansible       = false
 }
