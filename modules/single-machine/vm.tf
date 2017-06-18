@@ -22,7 +22,50 @@ resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
   instance_id = "${openstack_compute_instance_v2.vm.id}"
 }
 
+resource "openstack_blockstorage_volume_v2" "data_volume" {
+  count  = "${var.has_data_volume}"
+  name   = "${var.project_name}-data_volume"
+  size   = "${var.data_volume_size}"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
+  count       = "${var.has_data_volume}"
+  depends_on  = ["openstack_blockstorage_volume_v2.data_volume", "openstack_compute_instance_v2.vm"]
+  instance_id = "${openstack_compute_instance_v2.vm.id}"
+  volume_id   = "${openstack_blockstorage_volume_v2.data_volume.id}"
+}
+
+resource "null_resource" "mount_data_volume" {
+  count       = "${var.has_data_volume}"
+  depends_on  = ["openstack_compute_volume_attach_v2.attach_data_volume"]
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    source      = "../conf/provisioning/data_volume.sh"
+    destination = "/tmp/data_volume.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "chmod a+x /tmp/data_volume.sh",
+      "/tmp/data_volume.sh",
+    ]
+  }
+}
+
 resource "null_resource" "provision" {
+  count = "${var.update_os}"
   depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm", "openstack_compute_instance_v2.vm"]
   connection {
     user        = "${var.ssh_username}"
@@ -34,7 +77,6 @@ resource "null_resource" "provision" {
     inline = [
       "DEBIAN_FRONTEND=noninteractive apt-get -y update",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
-      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt python-dev libffi-dev",
     ]
   }
 }
@@ -68,6 +110,7 @@ resource "null_resource" "ansible" {
       "set -e",
       "set -u",
       "set -x",
+      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt python-dev libffi-dev",
       "chmod a+x /tmp/ansible.sh",
       "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}",
       "rm -rf /tmp/ansible",

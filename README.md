@@ -1,12 +1,13 @@
 # Description
 This repository is the definition of OpenMRS community infrastructure (infra-as-code).
-We are using terraform to generate Openstack machines and network, DNS and backup resources.
+We are using terraform to generate network infra, Openstack VMs (Jetstream IU and TACC), DNS and backup resources.
 
 # Requirements
 ## Credentials
 Before you can use this repository, you need:
   - TACC (Jetstream) credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
+
 
 ## Software
 You need to have installed:
@@ -19,8 +20,9 @@ You need to have installed:
   - _build.rb_: build helper (thor) file
   - _conf/_ : configuration files and authentication files
   - _conf/template-stack_: base files used when creating new stacks
-  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine
+  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine. Each
   - _modules/_: terraform modules
+  - _modules/single-machine_: terraform module to generate a machine, with a A DNS record.
   - _global-variables.tf_: global terraform variables symlinked on each stack
   - _base-network/_ : stack basic infrastructure (network, subnets, routers)
   - _other-stacks/_: each machine should have a directory defined in here. Each folder should be a different state/stack file.
@@ -34,7 +36,7 @@ Each stack should be more or less:
 # Development environment setup
 To install terraform and initial setup (needed only once)
 ```
-./build.rb install 
+./build.rb install
 # add your TACC credentials to conf/openrc-personal
 ./build.rb init
 ```
@@ -64,6 +66,12 @@ To see all available commands:
 ./build.rb
 ```
 
+To SSH a machine before running ansible:
+```
+ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
+```
+After ansible, you should use your regular user.
+
 
 # Troubleshooting
 
@@ -77,7 +85,7 @@ To see all available commands:
 ## Could not create DNS entries
 - Verify that the entry doesn't already exist in our DNS provider.
 
-## SSH / File resources/ Remote exec not working after ansible aplied
+## Ansible over SSH / File resources/ Remote exec not working after ansible aplied
 
 That's caused by SSH server configuration incompatible with terraform.
 

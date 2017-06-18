@@ -6,7 +6,6 @@ terraform {
   }
 }
 
-# any resources from the base stack
 data "terraform_remote_state" "base" {
     backend = "s3"
     config {
@@ -15,6 +14,8 @@ data "terraform_remote_state" "base" {
     }
 }
 
+
+# For now, only backups buckets on S3
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"
   lifecycle_rule {
