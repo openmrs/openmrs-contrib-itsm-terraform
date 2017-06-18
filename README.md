@@ -2,6 +2,8 @@
 This repository is the definition of OpenMRS community infrastructure (infra-as-code).
 We are using terraform to generate network infra, Openstack VMs (Jetstream IU and TACC), DNS and backup resources.
 
+You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack. 
+
 # Requirements
 ## Credentials
 Before you can use this repository, you need:
@@ -15,23 +17,6 @@ You need to have installed:
   (use `git crypt status` to verify your access to encrypted files)
   - ruby (2.0+)
   - thor (`gem install thor`)
-
-# Repository organisation
-  - _build.rb_: build helper (thor) file
-  - _conf/_ : configuration files and authentication files
-  - _conf/template-stack_: base files used when creating new stacks
-  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine. Each
-  - _modules/_: terraform modules
-  - _modules/single-machine_: terraform module to generate a machine, with a A DNS record.
-  - _global-variables.tf_: global terraform variables symlinked on each stack
-  - _base-network/_ : stack basic infrastructure (network, subnets, routers)
-  - _other-stacks/_: each machine should have a directory defined in here. Each folder should be a different state/stack file.
-
-Each stack should be more or less:
-  - _main.tf_: terraform resources
-  - _outputs.tf_: stack outputs (can be used by other stacks as input params)
-  - _variables.tf_: terraform variables
-  - _global-variables.tf_: symlink to the top level global file.
 
 # Development environment setup
 To install terraform and initial setup (needed only once)
@@ -66,6 +51,14 @@ To see all available commands:
 ./build.rb
 ```
 
+
+Forcing machine to be reprovisioned:
+```
+./build.rb terraform <stack> "taint -module single-machine openstack_compute_instance_v2.vm"
+./build.rb plan <stack>
+./build.rb apply <stack>
+```
+
 To SSH a machine before running ansible:
 ```
 ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
@@ -73,14 +66,24 @@ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 After ansible, you should use your regular user.
 
 
-# Troubleshooting
+# Repository organisation
+  - _build.rb_: build helper (thor) file
+  - _conf/_ : configuration files and authentication files
+  - _conf/template-stack_: base files used when creating new stacks
+  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine. Each
+  - _modules/_: terraform modules
+  - _modules/single-machine_: terraform module to generate a machine, with a A DNS record.
+  - _global-variables.tf_: global terraform variables symlinked on each stack
+  - _base-network/_ : stack basic infrastructure (network, subnets, routers)
+  - _other-stacks/_: each machine should have a directory defined in here. Each folder should be a different state/stack file.
 
-## Forcing machine to be reprovisioned:
-```
-./build.rb terraform <stack> "taint -module single-machine openstack_compute_instance_v2.vm"
-./build.rb plan <stack>
-./build.rb apply <stack>
-```
+Each stack should be more or less:
+  - _main.tf_: terraform resources
+  - _outputs.tf_: stack outputs (can be used by other stacks as input params)
+  - _variables.tf_: terraform variables
+  - _global-variables.tf_: symlink to the top level global file.
+
+# Troubleshooting
 
 ## Could not create DNS entries
 - Verify that the entry doesn't already exist in our DNS provider.
@@ -100,7 +103,6 @@ KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384
   - For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names.
   - Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention. More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
   - Check <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Migration-to-Jetstream> for more details on migration to terraform/jetstream.
-  - After provisioning this machine, you'll be able to ssh it using the key in conf/ssh (user root). You should run ansible with that key (it will not be available anymore after ansible runs for the first time).
   - Note that DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
 
 # Resources needed by Terraform
