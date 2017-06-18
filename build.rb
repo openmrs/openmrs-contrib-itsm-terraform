@@ -46,7 +46,7 @@ class Build < Thor
   def init
     (Dir["*/"] - $excluded_dirs).each { |d|
       puts "Running terraform init on #{d}"
-      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init") or abort
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -force-copy") or abort
     }
   end
 
