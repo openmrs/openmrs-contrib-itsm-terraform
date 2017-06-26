@@ -8,7 +8,7 @@ terraform {
 
 # Change to ${var.iu_url} if using iu datacenter
 provider "openstack" {
-  auth_url = "${var.tacc_url}"
+  auth_url = "${var.iu_url}"
 }
 
 

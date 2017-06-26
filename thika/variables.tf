@@ -6,7 +6,7 @@ variable "flavor" {
 }
 
 variable "region" {
-  default = "tacc"
+  default = "iu"
 }
 
 variable "hostname" {
