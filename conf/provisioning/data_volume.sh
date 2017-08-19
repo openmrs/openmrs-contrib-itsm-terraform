@@ -8,7 +8,7 @@ set -v
 mkdir /data
 
 if lsblk | fgrep sdb1; then
- echo "sdb1 already exists, skipping particioning"
+ echo "sdb1 already exists, skipping partitioning"
 else
   lsblk
   parted /dev/sdb --script -- mklabel gpt

@@ -67,6 +67,17 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply") or abort
   end
 
+  desc "taint-vm DIR", "mark virtual machine for recreation in DIR"
+  def taint_vm(dir)
+    puts "Running terraform taint on #{dir} (vm resources)"
+    system("""source conf/openrc && cd #{dir} \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_instance_v2.vm \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible \
+    """) or abort
+  end
+
   desc "terraform DIR 'subcommand --args'", "run arbitrary terraform subcommands on defined directory"
   def terraform(dir, args)
     puts "Running terraform \'#{args}\' on #{dir}"

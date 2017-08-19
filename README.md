@@ -54,10 +54,7 @@ To see all available commands:
 
 Forcing a VM to be reprovisioned:
 ```
-./build.rb terraform <stack> "taint -module single-machine openstack_compute_instance_v2.vm"
-./build.rb terraform <stack> "taint -module single-machine null_resource.mount_data_volume"
-./build.rb terraform <stack> "taint -module single-machine null_resource.provision"
-./build.rb terraform <stack> "taint -module single-machine null_resource.ansible"
+./build.rb taint-vm <stack>
 ./build.rb plan <stack>
 ./build.rb apply <stack>
 ```
@@ -90,16 +87,6 @@ Each stack should be more or less:
 
 ## Could not create DNS entries
 - Verify that the entry doesn't already exist in our DNS provider.
-
-## Ansible over SSH / File resources/ Remote exec not working after ansible aplied
-
-That's caused by SSH server configuration incompatible with terraform.
-
- - Edit `/etc/ssh/sshd_config`:
-```
-KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
-```
- - Restart sshd  `service sshd restart`
 
 
 # Guidelines
