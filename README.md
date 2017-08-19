@@ -52,9 +52,12 @@ To see all available commands:
 ```
 
 
-Forcing machine to be reprovisioned:
+Forcing a VM to be reprovisioned:
 ```
 ./build.rb terraform <stack> "taint -module single-machine openstack_compute_instance_v2.vm"
+./build.rb terraform <stack> "taint -module single-machine null_resource.mount_data_volume"
+./build.rb terraform <stack> "taint -module single-machine null_resource.provision"
+./build.rb terraform <stack> "taint -module single-machine null_resource.ansible"
 ./build.rb plan <stack>
 ./build.rb apply <stack>
 ```

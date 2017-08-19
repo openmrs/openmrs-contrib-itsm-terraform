@@ -75,7 +75,7 @@ resource "null_resource" "provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "DEBIAN_FRONTEND=noninteractive apt-get -y update",
+      "DEBIAN_FRONTEND=noninteractive aptdcon --safe-upgrade --fix-install",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
     ]
   }
