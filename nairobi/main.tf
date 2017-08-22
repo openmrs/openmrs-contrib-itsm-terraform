@@ -46,3 +46,12 @@ resource "dme_record" "ocl" {
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }
+
+resource "dme_record" "ocl-api" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "oclapi"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
