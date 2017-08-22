@@ -75,7 +75,7 @@ resource "null_resource" "upgrade" {
 
   provisioner "remote-exec" {
     inline = [
-      "DEBIAN_FRONTEND=noninteractive aptdcon --safe-upgrade --fix-install -y",
+      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --hide-terminal --safe-upgrade --fix-install",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
     ]
   }
@@ -110,7 +110,7 @@ resource "null_resource" "ansible" {
       "set -e",
       "set -u",
       "set -x",
-      "DEBIAN_FRONTEND=noninteractive apt-get -y install git-crypt python-dev libffi-dev",
+      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --hide-terminal -i git-crypt python-dev libffi-dev",
       "chmod a+x /tmp/ansible.sh",
       "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}",
       "rm -rf /tmp/ansible",
