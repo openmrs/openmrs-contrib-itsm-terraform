@@ -6,15 +6,6 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "base" {
-    backend = "s3"
-    config {
-        bucket = "openmrs-terraform-state-files"
-        key    = "basic-network-setup.tfstate"
-    }
-}
-
-
 # For now, only backups buckets on S3
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"

@@ -1,0 +1,3 @@
+variable "hostname" {
+  default = "bafoussam"
+}
