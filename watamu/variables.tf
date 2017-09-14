@@ -26,13 +26,13 @@ variable "ansible_inventory" {
 }
 
 variable "has_data_volume" {
-  default = false
+  default = true
 }
 
 variable "data_volume_size" {
-  default = 10
+  default = 20
 }
 
 variable "has_backup" {
-  default = false
+  default = true
 }

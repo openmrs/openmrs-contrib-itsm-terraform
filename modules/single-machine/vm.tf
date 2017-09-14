@@ -75,7 +75,7 @@ resource "null_resource" "upgrade" {
 
   provisioner "remote-exec" {
     inline = [
-      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --hide-terminal --safe-upgrade --fix-install",
+      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --safe-upgrade --fix-install",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
     ]
   }
