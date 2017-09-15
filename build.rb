@@ -36,6 +36,8 @@ class Build < Thor
   def install
     puts "Running on: #{os}"
     FileUtils.mkdir_p '.tmp/bin'
+    puts "\n\n\nAttempting to decrypt secrets using GPG key."
+    system("git-crypt unlock") or abort("Error when attempting to decrypt secrets")
     system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_url}") or abort("Error when downloading terraform")
     system("cd #{$tmp_dir} && unzip terraform.zip") or abort("Error when unzipping terraform")
     FileUtils.cp('conf/openrc-personal-example', 'conf/openrc-personal') unless File.exists?('conf/openrc-personal')

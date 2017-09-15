@@ -2,7 +2,7 @@
 This repository is the definition of OpenMRS community infrastructure (infra-as-code).
 We are using terraform to generate network infra, Openstack VMs (Jetstream IU and TACC), DNS and backup resources.
 
-You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack. 
+You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack.
 
 # Requirements
 ## Credentials
@@ -14,54 +14,59 @@ Before you can use this repository, you need:
 ## Software
 You need to have installed:
   - [git-crypt](https://github.com/AGWA/git-crypt/blob/master/INSTALL.md)
-  (use `git crypt status` to verify your access to encrypted files)
   - ruby (2.0+)
   - thor (`gem install thor`)
 
 # Development environment setup
 To install terraform and initial setup (needed only once)
 ```
-./build.rb install
+$ ./build.rb install
+
 # add your TACC credentials to conf/openrc-personal
-./build.rb init
+$ vi conf/openrc-personal
+
+# verify file is not encrypted
+$ cat conf/openrc
+
+$ ./build.rb init
 ```
 
 To undo the changes from the previous commands:
 ```
-./build.rb clean
+$ ./build.rb clean
 ```
 
 To create a new stack _test_:
 ```
-./build.rb create test
+$ ./build.rb create test
 ```
 
 To run terraform plan (and see what changed on your stack) on a _base-network_ stack:
 ```
-./build.rb plan base-network/
+$ ./build.rb plan base-network/
 ```
 
 To run terraform apply (and apply changes to a stack) on a _base-network_ stack:
 ```
-./build.rb apply base-network/
+$ ./build.rb apply base-network/
 ```
 
 To see all available commands:
 ```
-./build.rb
+$ ./build.rb
 ```
 
 
 Forcing a VM to be reprovisioned:
 ```
-./build.rb taint-vm <stack>
-./build.rb plan <stack>
-./build.rb apply <stack>
+$ ./build.rb taint-vm <stack>
+$ ./build.rb plan <stack>
+$ ./build.rb apply <stack>
 ```
 
 To SSH a machine before running ansible:
 ```
-ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
+$ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 ```
 After ansible, you should use your regular user.
 
