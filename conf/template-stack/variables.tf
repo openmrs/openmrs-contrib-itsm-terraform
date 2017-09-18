@@ -14,11 +14,11 @@ variable "hostname" {
 }
 
 variable "update_os" {
-  default = true
+  default = false
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {
@@ -34,5 +34,5 @@ variable "data_volume_size" {
 }
 
 variable "has_backup" {
-  default = true
+  default = false
 }
