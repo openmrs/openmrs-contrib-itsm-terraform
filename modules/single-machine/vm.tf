@@ -77,6 +77,7 @@ resource "null_resource" "upgrade" {
     inline = [
       "yes | DEBIAN_FRONTEND=noninteractive aptdcon --safe-upgrade --fix-install",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
+      "reboot -h"
     ]
   }
 }
