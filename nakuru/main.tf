@@ -37,21 +37,3 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-resource "dme_record" "ocl-stg" {
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "ocl-stg"
-  type        = "CNAME"
-  value       = "${var.hostname}"
-  ttl         = 3600
-  gtdLocation = "DEFAULT"
-}
-
-resource "dme_record" "ocl-stg-api" {
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "oclapi-stg"
-  type        = "CNAME"
-  value       = "${var.hostname}"
-  ttl         = 3600
-  gtdLocation = "DEFAULT"
-}
