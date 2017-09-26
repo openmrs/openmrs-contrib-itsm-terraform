@@ -65,7 +65,7 @@ resource "null_resource" "mount_data_volume" {
 }
 
 resource "null_resource" "setup-dns" {
-  depends_on  = ["openstack_compute_instance_v2.vm"]
+  depends_on  = ["openstack_compute_instance_v2.vm", "null_resource.mount_data_volume"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -99,7 +99,6 @@ resource "null_resource" "upgrade" {
 
   provisioner "remote-exec" {
     inline = [
-      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --safe-upgrade --fix-install",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
       "reboot -h"
     ]
