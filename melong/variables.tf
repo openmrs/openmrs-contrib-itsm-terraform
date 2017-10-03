@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "kisumu"
+  default = "melong"
 }
 
 variable "update_os" {
@@ -22,7 +22,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "staging"
+  default = "production"
 }
 
 variable "has_data_volume" {
@@ -34,5 +34,5 @@ variable "data_volume_size" {
 }
 
 variable "has_backup" {
-  default = false
+  default = true
 }

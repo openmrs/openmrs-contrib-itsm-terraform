@@ -99,6 +99,11 @@ resource "null_resource" "upgrade" {
 
   provisioner "remote-exec" {
     inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "dpkg --configure -a",
+      "apt-get update",
       "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
       "reboot -h"
     ]

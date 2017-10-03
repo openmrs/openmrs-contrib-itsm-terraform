@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "kisumu.tfstate"
+    key    = "menji.tfstate"
   }
 }
 
