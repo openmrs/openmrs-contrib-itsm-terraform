@@ -37,3 +37,12 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
+
+resource "dme_record" "confluence" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "wiki-new"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
