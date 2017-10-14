@@ -96,7 +96,7 @@ Each stack should be more or less:
 ## Cannot run null_resources via SSH after first ansible run
 Ansible configures and secures our SSH configuration, so root cannot SSH anymore.
 
-Change `./global-variables` and use your username and (passphrase-less) key. Do not commit this change.  
+Change `./global-variables` and use your username and (passphrase-less) key. Do not commit this change. 
 
 
 
