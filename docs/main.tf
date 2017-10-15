@@ -58,6 +58,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
   enabled = true
   aliases = ["docs.openmrs.org", "resources.openmrs.org"]
+  default_root_object = "index.html"
   logging_config {
     include_cookies = false
     bucket          = "${aws_s3_bucket.log_bucket.bucket_domain_name}"
@@ -94,11 +95,12 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
+# dot at the end doesn't appear to be working from terraform...
 resource "dme_record" "docs" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "docs"
   type        = "CNAME"
-  value       = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}"
+  value       = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }
@@ -107,7 +109,7 @@ resource "dme_record" "resources" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "resources"
   type        = "CNAME"
-  value       = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}"
+  value       = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }
