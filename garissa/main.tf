@@ -73,3 +73,12 @@ resource "dme_record" "qa" {
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }
+
+resource "dme_record" "msf" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "msf"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
