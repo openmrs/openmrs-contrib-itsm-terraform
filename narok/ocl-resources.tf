@@ -36,7 +36,7 @@ resource "aws_iam_user_policy" "ocl-user-policy" {
         "s3:PutObject*",
         "s3:ListMultipartUploadParts",
         "s3:AbortMultipartUpload",
-        "s3:DeleteObject",
+        "s3:DeleteObject*",
         "s3:GetObject*"
       ],
       "Effect": "Allow",
