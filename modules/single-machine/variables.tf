@@ -45,6 +45,12 @@ variable "has_backup" {
   default = false
 }
 
+# [Optional] extra CNAMES to create on DNS
+variable "dns_cnames" {
+  type    = "list"
+  default = []
+}
+
 
 ######  DO NOT CHANGE variables below ######
 ########  Check global-variables for their values. ########

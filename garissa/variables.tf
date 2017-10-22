@@ -36,3 +36,7 @@ variable "data_volume_size" {
 variable "has_backup" {
   default = false
 }
+
+variable "dns_cnames" {
+  default = ["modules-refapp", "demo", "uat-refapp", "qa-refapp", "msf"]
+}

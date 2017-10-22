@@ -27,6 +27,7 @@ module "single-machine" {
   has_data_volume   = "${var.has_data_volume}"
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
+  dns_cnames        = "${var.dns_cnames}"
 
 
   # Global variables
@@ -37,14 +38,4 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
-}
-
-
-resource "dme_record" "quizgrader" {
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "quizgrader"
-  type        = "CNAME"
-  value       = "${var.hostname}"
-  ttl         = 3600
-  gtdLocation = "DEFAULT"
 }

@@ -6,3 +6,14 @@ resource "dme_record" "hostname" {
   ttl         = 300
   gtdLocation = "DEFAULT"
 }
+
+
+resource "dme_record" "cnames" {
+  count       = "${length(var.dns_cnames)}"
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "${element(var.dns_cnames, count.index)}"
+  type        = "CNAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}

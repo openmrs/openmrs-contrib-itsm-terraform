@@ -26,6 +26,7 @@ module "single-machine" {
   has_data_volume   = "${var.has_data_volume}"
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
+  dns_cnames        = "${var.dns_cnames}"
 
 
   # Global variables

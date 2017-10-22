@@ -5,3 +5,7 @@ output "backup_access_key_id" {
 output "backup_access_key_secret" {
   value = "${module.backup-user.backup_access_key_secret}"
 }
+
+output "provisioner" {
+  value = "manual"
+}

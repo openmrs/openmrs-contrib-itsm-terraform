@@ -5,3 +5,7 @@ output "backup_access_key_id" {
 output "backup_access_key_secret" {
   value = "${aws_iam_access_key.backup-user-key.secret}"
 }
+
+output "provisioner" {
+  value = "manual"
+}

@@ -6,9 +6,9 @@ terraform {
   }
 }
 
-# Change to ${var.iu_url} if using iu datacenter
+# Change to ${var.tacc_url} if using tacc datacenter
 provider "openstack" {
-  auth_url = "${var.tacc_url}"
+  auth_url = "${var.iu_url}"
 }
 
 # Description of arguments can be found in
@@ -26,6 +26,7 @@ module "single-machine" {
   has_data_volume   = "${var.has_data_volume}"
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
+  dns_cnames        = "${var.dns_cnames}"
 
 
   # Global variables

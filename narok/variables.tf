@@ -36,3 +36,8 @@ variable "data_volume_size" {
 variable "has_backup" {
   default = false
 }
+
+# using openconceptlab.org instead, manually
+variable "dns_cnames" {
+  default = []
+}

@@ -6,7 +6,7 @@ variable "flavor" {
 }
 
 variable "region" {
-  default = "tacc"
+  default = "iu"
 }
 
 variable "hostname" {
@@ -35,4 +35,8 @@ variable "data_volume_size" {
 
 variable "has_backup" {
   default = false
+}
+
+variable "dns_cnames" {
+  default = []
 }
