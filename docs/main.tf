@@ -53,8 +53,15 @@ POLICY
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
-    domain_name = "${aws_s3_bucket.docs-s3.bucket_domain_name}"
-    origin_id = "S3-${var.bucket_name}"
+    domain_name          = "${aws_s3_bucket.docs-s3.website_endpoint}"
+    origin_id            = "S3-${var.bucket_name}"
+    custom_origin_config {
+      origin_read_timeout    = 60
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
   }
   enabled = true
   aliases = ["docs.openmrs.org", "resources.openmrs.org"]
@@ -95,7 +102,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
-# dot at the end doesn't appear to be working from terraform...
 resource "dme_record" "docs" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "docs"
