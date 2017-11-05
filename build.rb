@@ -3,6 +3,7 @@ require "rubygems" # ruby1.9 doesn't "require" it though
 require "thor"
 require 'rbconfig'
 require 'fileutils'
+require 'json'
 
 def os
   case RbConfig::CONFIG['host_os']
@@ -103,6 +104,40 @@ class Build < Thor
     FileUtils.ln_sf '../global-variables.tf',"#{dir}/global-variables.tf"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init") or abort
   end
+
+  desc "docs", "generate docs in .tmp/docs.md"
+  def docs
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
+
+    File.open(".tmp/docs.md", 'w') { |file|
+      (Dir["*/"] - $extra_excluded_dirs).each { |d|
+        puts "Retrieving outputs for #{d}"
+        outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
+
+        file << "\#\#\# #{d}\n"
+        puts "#{outputs}"
+
+        outputs_parsed = JSON.parse(outputs)
+        provisioner = outputs_parsed['provisioner']['value']
+        file << "Provisioner: #{provisioner}\n"
+
+        if provisioner == "terraform"
+          file << "Datacenter: #{outputs_parsed['region']['value']}\n"
+          file << "Size: #{outputs_parsed['flavor']['value']}\n"
+          file << "Backup enabled: #{outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No"}\n"
+          file << "Data volume enabled: #{outputs_parsed['has_data_volume']['value'] == "1" ? "Yes" : "No"}\n"
+          file << "IP: #{outputs_parsed['ip_address']['value']}\n"
+          file << "DNS: #{outputs_parsed['dns_entries']['value']} \n"
+        end
+
+        file << "\n\n"
+        file.flush
+      }
+    }
+
+
+  end
+
 end
 
 Build.start
