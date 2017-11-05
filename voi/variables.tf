@@ -38,5 +38,5 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["shortener"]
+  default = ["shortener", "atlas-new"]
 }

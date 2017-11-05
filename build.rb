@@ -56,7 +56,7 @@ class Build < Thor
   desc "plan DIR", "run terraform plan on defined directory"
   def plan(dir)
     puts "Running terraform plan on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan") or abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan -out terraform.plan") or abort
   end
 
   desc "apply DIR", "run terraform apply on defined directory"
@@ -67,7 +67,7 @@ class Build < Thor
     return unless prompt == 'y'
 
     puts "Running terraform apply on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply") or abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply terraform.plan") or abort
   end
 
   desc "taint-vm DIR", "mark virtual machine for recreation in DIR"

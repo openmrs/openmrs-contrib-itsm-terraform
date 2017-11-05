@@ -3,3 +3,4 @@ openrc-personal
 .tmp
 *.tfstate.backup
 *.tfstate
+terraform.plan
