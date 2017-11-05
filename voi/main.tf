@@ -43,7 +43,7 @@ resource "dme_record" "short-dns" {
   domainid    = "${var.domain_dns["om.rs"]}"
   name        = "new"
   type        = "CNAME"
-  value       = "${var.hostname}"
+  value       = "${var.hostname}.openmrs.org."
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }

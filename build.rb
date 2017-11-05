@@ -110,6 +110,8 @@ class Build < Thor
     $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
 
     File.open(".tmp/docs.md", 'w') { |file|
+      file << "https://jetstream-cloud.org/tech-specs/cloud-services.php\n\n"
+
       (Dir["*/"] - $extra_excluded_dirs).each { |d|
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
@@ -125,7 +127,7 @@ class Build < Thor
           file << "Datacenter: #{outputs_parsed['region']['value']}\n"
           file << "Size: #{outputs_parsed['flavor']['value']}\n"
           file << "Backup enabled: #{outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No"}\n"
-          file << "Data volume enabled: #{outputs_parsed['has_data_volume']['value'] == "1" ? "Yes" : "No"}\n"
+          file << "Data volume enabled: #{outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No"}\n"
           file << "IP: #{outputs_parsed['ip_address']['value']}\n"
           file << "DNS: #{outputs_parsed['dns_entries']['value']} \n"
         end
