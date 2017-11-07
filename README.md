@@ -74,11 +74,11 @@ $ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 After ansible, you should use your regular user.
 
 
-To generate documentation:
+To generate and update VM documentation:
 ```
 $ ./build docs
-
-# Upload manually to S3 docs bucket if desired
+$ ./build plan docs
+$ ./build apply docs
 ```
 
 # Repository organisation

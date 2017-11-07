@@ -154,3 +154,9 @@ resource "aws_iam_user_policy" "bamboo-user-policy" {
 }
 EOF
 }
+
+resource "aws_s3_bucket_object" "vms-inventory" {
+  bucket = "${var.bucket_name}"
+  key    = "infrastructure/vms.html"
+  source = "vms.html"                          # use './build docs' to generate it
+}

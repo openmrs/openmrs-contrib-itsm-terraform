@@ -4,4 +4,4 @@ openrc-personal
 *.tfstate.backup
 *.tfstate
 terraform.plan
-/vms.html
+docs/vms.html

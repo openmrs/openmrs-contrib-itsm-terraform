@@ -131,13 +131,17 @@ class Build < Thor
             "IP"          => outputs_parsed['ip_address']['value'],
             "DNS"         => outputs_parsed['dns_entries']['value']
           }
+
+          if outputs_parsed['dns_manual_entries']
+            $vms[vm_name]["Manual DNS"] = outputs_parsed['dns_manual_entries']['value']
+          end
         end
       }
     }
 
     # puts $vms
 
-    file_output = "vms.html"
+    file_output = "docs/vms.html"
     erb_file = 'conf/docs.erb'
     erb_str = File.read(erb_file)
     result = ERB.new(erb_str).result()
@@ -145,7 +149,8 @@ class Build < Thor
       f.write(result)
     end
 
-    puts "File generated in #{file_output}. Upload to S3 if desired. "
+    puts "\n\n\n\n"
+    puts "File generated in #{file_output}. Update stack <docs> to upload it to S3. "
   end
 
 end

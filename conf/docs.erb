@@ -8,18 +8,19 @@
         <% $vms.each do |vm, info| %>
           <h3><%= vm %></h3>
           <ul>
-          <!-- <% info.each do |key,value| %>
-            <% if value.kind_of(Array)? %>
-              <li><b><%= key %></b>:
+          <% info.each do |key,value| %>
+            <% if value.is_a?(Array) %>
+              <li>
+                <b><%= key %></b>:
                 <ul>
-                  <% value.each do |item| %>
-                    <li><%= item %></li>
-                  <% end %>
+                <% value.each do |item| %>
+                  <li><%= item %></li>
+                <% end %>
                 </ul>
               </li>
-            <% else %> -->
+            <% else %>
               <li><b><%= key %></b>: <%= value %></li>
-            <!-- <% end %> -->
+            <% end %>
           <% end %>
         </ul>
         <% end %>
