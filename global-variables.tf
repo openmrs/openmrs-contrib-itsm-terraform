@@ -30,5 +30,9 @@ variable "domain_dns" {
   }
 }
 
+variable "main_domain_dns" {
+  default = "openmrs.org"
+}
+
 variable "tacc_url" { }
 variable "iu_url" { }

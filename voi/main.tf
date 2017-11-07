@@ -40,19 +40,19 @@ module "single-machine" {
 }
 
 resource "dme_record" "short-dns" {
-  domainid    = "${var.domain_dns["om.rs"]}"
+  domainid    = "${var.domain_dns[var.dns_domain]}"
   name        = ""
   type        = "ANAME"
-  value       = "${var.hostname}.openmrs.org."
+  value       = "${var.hostname}.${var.main_domain_dns}."
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }
 
 resource "dme_record" "short-dns-wildcard" {
-  domainid    = "${var.domain_dns["om.rs"]}"
+  domainid    = "${var.domain_dns[var.dns_domain]}"
   name        = "*"
   type        = "ANAME"
-  value       = "${var.hostname}.openmrs.org."
+  value       = "${var.hostname}.${var.main_domain_dns}."
   ttl         = 3600
   gtdLocation = "DEFAULT"
 }

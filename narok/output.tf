@@ -12,7 +12,11 @@ output "ip_address" {
 }
 
 output "dns_entries" {
-  value = "${var.dns_cnames}"
+  value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
+}
+
+output "dns_manual_entries" {
+  value = ["qa.openconceptlab.org", "api.qa.openconceptlab.org", "flower.qa.openconceptlab.org"]
 }
 
 output "ansible_inventory" {

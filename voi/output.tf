@@ -12,7 +12,7 @@ output "ip_address" {
 }
 
 output "dns_entries" {
-  value = "${var.dns_cnames}"
+  value = "${concat( formatlist("%s.%s", var.dns_cnames, var.main_domain_dns), list(var.dns_domain, format("%s.%s", dme_record.short-dns-wildcard.name, var.dns_domain)) )}"
 }
 
 output "ansible_inventory" {

@@ -40,3 +40,7 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["shortener", "atlas-new"]
 }
+
+variable "dns_domain" {
+  default = "om.rs"
+}

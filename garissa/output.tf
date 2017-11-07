@@ -4,7 +4,7 @@ output "ip_address" {
 }
 
 output "dns_entries" {
-  value = "${var.dns_cnames}"
+  value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
 }
 
 output "ansible_inventory" {

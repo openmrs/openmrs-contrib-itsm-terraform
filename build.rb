@@ -137,7 +137,7 @@ class Build < Thor
 
     # puts $vms
 
-    file_output = ".tmp/vms.html"
+    file_output = "vms.html"
     erb_file = 'conf/docs.erb'
     erb_str = File.read(erb_file)
     result = ERB.new(erb_str).result()
