@@ -4,6 +4,9 @@ We are using terraform to generate network infra, Openstack VMs (Jetstream IU an
 
 You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack.
 
+This repository can generate documentation for all VMs created, and it's deployed to
+<https://docs.openmrs.org/infrastructure/vms.html>
+
 # Requirements
 ## Credentials
 Before you can use this repository, you need:
@@ -71,6 +74,13 @@ $ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 After ansible, you should use your regular user.
 
 
+To generate documentation:
+```
+$ ./build docs
+
+# Upload manually to S3 docs bucket if desired
+```
+
 # Repository organisation
   - _build.rb_: build helper (thor) file
   - _conf/_ : configuration files and authentication files
@@ -96,7 +106,7 @@ Each stack should be more or less:
 ## Cannot run null_resources via SSH after first ansible run
 Ansible configures and secures our SSH configuration, so root cannot SSH anymore.
 
-Change `./global-variables` and use your username and (passphrase-less) key. Do not commit this change. 
+Change `./global-variables` and use your username and (passphrase-less) key. Do not commit this change.
 
 
 

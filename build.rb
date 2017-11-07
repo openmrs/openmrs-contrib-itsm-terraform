@@ -123,6 +123,7 @@ class Build < Thor
           vm_name = d.chomp("/")
           puts "Found terraformed machine #{vm_name}"
           $vms[vm_name] = {
+            "Environment" => outputs_parsed['ansible_inventory']['value'],
             "Datacenter"  => outputs_parsed['region']['value'],
             "Size"        => outputs_parsed['flavor']['value'],
             "Backup"      => outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No",
@@ -136,12 +137,15 @@ class Build < Thor
 
     # puts $vms
 
+    file_output = ".tmp/vms.html"
     erb_file = 'conf/docs.erb'
     erb_str = File.read(erb_file)
     result = ERB.new(erb_str).result()
-    File.open(".tmp/docs.html", 'w') do |f|
+    File.open(file_output, 'w') do |f|
       f.write(result)
     end
+
+    puts "File generated in #{file_output}. Upload to S3 if desired. "
   end
 
 end
