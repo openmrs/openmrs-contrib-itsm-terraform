@@ -4,6 +4,7 @@ require "thor"
 require 'rbconfig'
 require 'fileutils'
 require 'json'
+require 'erb'
 
 def os
   case RbConfig::CONFIG['host_os']
@@ -109,35 +110,38 @@ class Build < Thor
   def docs
     $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
 
-    File.open(".tmp/docs.md", 'w') { |file|
-      file << "https://jetstream-cloud.org/tech-specs/cloud-services.php\n\n"
+    $vms = {}
 
+    File.open(".tmp/docs.md", 'w') { |file|
       (Dir["*/"] - $extra_excluded_dirs).each { |d|
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
-
-        file << "\#\#\# #{d}\n"
-        puts "#{outputs}"
-
         outputs_parsed = JSON.parse(outputs)
         provisioner = outputs_parsed['provisioner']['value']
-        file << "Provisioner: #{provisioner}\n"
 
         if provisioner == "terraform"
-          file << "Datacenter: #{outputs_parsed['region']['value']}\n"
-          file << "Size: #{outputs_parsed['flavor']['value']}\n"
-          file << "Backup enabled: #{outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No"}\n"
-          file << "Data volume enabled: #{outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No"}\n"
-          file << "IP: #{outputs_parsed['ip_address']['value']}\n"
-          file << "DNS: #{outputs_parsed['dns_entries']['value']} \n"
+          vm_name = d.chomp("/")
+          puts "Found terraformed machine #{vm_name}"
+          $vms[vm_name] = {
+            "Datacenter"  => outputs_parsed['region']['value'],
+            "Size"        => outputs_parsed['flavor']['value'],
+            "Backup"      => outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No",
+            "Data Volume" => outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No",
+            "IP"          => outputs_parsed['ip_address']['value'],
+            "DNS"         => outputs_parsed['dns_entries']['value']
+          }
         end
-
-        file << "\n\n"
-        file.flush
       }
     }
 
+    # puts $vms
 
+    erb_file = 'conf/docs.erb'
+    erb_str = File.read(erb_file)
+    result = ERB.new(erb_str).result()
+    File.open(".tmp/docs.html", 'w') do |f|
+      f.write(result)
+    end
   end
 
 end
