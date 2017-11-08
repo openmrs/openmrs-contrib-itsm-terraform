@@ -34,7 +34,7 @@ variable "data_volume_size" {
 }
 
 variable "has_backup" {
-  default = true
+  default = false
 }
 
 variable "dns_cnames" {
