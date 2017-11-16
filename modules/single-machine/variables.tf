@@ -51,6 +51,13 @@ variable "dns_cnames" {
   default = []
 }
 
+# [Optional] extra security_groups to apply to VM
+variable "extra_security_groups" {
+  type    = "list"
+  default = []
+}
+
+
 
 ######  DO NOT CHANGE variables below ######
 ########  Check global-variables for their values. ########

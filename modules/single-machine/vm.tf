@@ -9,7 +9,8 @@ resource "openstack_compute_instance_v2" "vm" {
   key_pair        = "${data.terraform_remote_state.base.key-pair-name}"
   security_groups = [
     "${data.terraform_remote_state.base.secgroup-ssh-name}",
-    "${data.terraform_remote_state.base.secgroup-http-name}"
+    "${data.terraform_remote_state.base.secgroup-http-name}",
+    "${var.extra_security_groups}"
   ]
 
   network {
