@@ -38,5 +38,5 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["wiki-new"]
+  default = ["wiki"]
 }
