@@ -14,6 +14,14 @@ output "secgroup-bamboo-remote-agent-name" {
   value = "${openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup-tacc.name}"
 }
 
+output "secgroup-bamboo-remote-agent-id-iu" {
+  value = "${openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup-iu.id}"
+}
+
+output "secgroup-bamboo-remote-agent-id-tacc" {
+  value = "${openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup-tacc.id}"
+}
+
 
 output "network-id" {
   value = {
