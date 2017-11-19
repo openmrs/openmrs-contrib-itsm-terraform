@@ -11,15 +11,6 @@ provider "openstack" {
   auth_url = "${var.iu_url}"
 }
 
-# any resources from the base stack
-data "terraform_remote_state" "base" {
-    backend = "s3"
-    config {
-        bucket = "openmrs-terraform-state-files"
-        key    = "basic-network-setup.tfstate"
-    }
-}
-
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {
@@ -49,22 +40,9 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
 }
 
-data "openstack_networking_secgroup_v2" "secgroup" {
-  name = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-name}"
-}
-
-
 resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
-  name        = "${var.project_name}-bamboo-remote-agent"
+  name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
-
-
-  rule {
-    from_port     = "${var.bamboo_remote_agent_port}"
-    to_port       = "${var.bamboo_remote_agent_port}"
-    ip_protocol   = "tcp"
-    from_group_id = "${data.openstack_networking_secgroup_v2.secgroup.secgroup_id}"
-  }
 
   # gw107 xsede
   rule {

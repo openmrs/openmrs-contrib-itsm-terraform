@@ -55,6 +55,12 @@ class Build < Thor
     }
   end
 
+  desc "init DIR", "Run terraform init on DIR"
+  def init(dir)
+    puts "Running terraform init on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -force-copy") or abort
+  end
+
   desc "plan DIR", "run terraform plan on defined directory"
   def plan(dir)
     puts "Running terraform plan on #{dir}"

@@ -31,7 +31,11 @@ $ vi conf/openrc-personal
 # verify file is not encrypted
 $ cat conf/openrc
 
+# to init terraform in all VMs (takes time)
 $ ./build.rb init
+
+# to init terraform in a single VM (e.g. narok)
+$ ./build.rb init narok
 ```
 
 To undo the changes from the previous commands:
