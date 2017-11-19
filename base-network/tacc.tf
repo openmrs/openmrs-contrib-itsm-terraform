@@ -88,3 +88,12 @@ resource "openstack_compute_secgroup_v2" "https-secgroup-tacc" {
     prevent_destroy = true
   }
 }
+
+resource "openstack_compute_secgroup_v2" "bamboo-remote-agent-secgroup-tacc" {
+  name        = "${var.project_name}-bamboo-remote-agent"
+  description = "Default bamboo-remote-agent group (terraform)."
+  provider    = "openstack.tacc"
+  lifecycle {
+    prevent_destroy = true
+  }
+}

@@ -10,6 +10,10 @@ output "secgroup-http-name" {
   value = "${openstack_compute_secgroup_v2.https-secgroup-tacc.name}"
 }
 
+output "secgroup-bamboo-remote-agent-name" {
+  value = "${openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup-tacc.name}"
+}
+
 
 output "network-id" {
   value = {

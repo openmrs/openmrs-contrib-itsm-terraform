@@ -19,7 +19,7 @@ def os
   end
 end
 
-$terraform_version = "0.9.5"
+$terraform_version = "0.11.0"
 $terraform_url = "https://releases.hashicorp.com/terraform/#{$terraform_version}/terraform_#{$terraform_version}_#{os}_amd64.zip"
 $tmp_dir = ".tmp/bin"
 $excluded_dirs = ["conf/", "modules/"]

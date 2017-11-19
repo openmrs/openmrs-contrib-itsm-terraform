@@ -57,6 +57,11 @@ variable "extra_security_groups" {
   default = []
 }
 
+# [Optional] remove web security group
+variable "allow_web" {
+  default = "true"
+}
+
 
 
 ######  DO NOT CHANGE variables below ######

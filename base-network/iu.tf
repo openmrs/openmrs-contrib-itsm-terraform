@@ -86,3 +86,12 @@ resource "openstack_compute_secgroup_v2" "https-secgroup-iu" {
     prevent_destroy = true
   }
 }
+
+resource "openstack_compute_secgroup_v2" "bamboo-remote-agent-secgroup-iu" {
+  name        = "${var.project_name}-bamboo-remote-agent"
+  description = "Default bamboo-remote-agent group (terraform)."
+  provider    = "openstack.iu"
+  lifecycle {
+    prevent_destroy = true
+  }
+}
