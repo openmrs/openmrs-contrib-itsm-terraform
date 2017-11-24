@@ -98,15 +98,19 @@ resource "null_resource" "upgrade" {
     host        = "${openstack_compute_floatingip_v2.ip.address}"
   }
 
+
+  provisioner "file" {
+    source      = "../conf/provisioning/upgrade.sh"
+    destination = "/tmp/upgrade.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "set -e",
       "set -u",
       "set -x",
-      "dpkg --configure -a",
-      "apt-get update",
-      "DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::=\"--force-confold\" --force-yes -y upgrade",
-      "reboot -h"
+      "chmod a+x /tmp/upgrade.sh",
+      "sudo /tmp/upgrade.sh",
     ]
   }
 }
