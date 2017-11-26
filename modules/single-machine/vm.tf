@@ -7,11 +7,17 @@ resource "openstack_compute_instance_v2" "vm" {
   image_id        = "${var.image}"
   flavor_name     = "${var.flavor}"
   key_pair        = "${data.terraform_remote_state.base.key-pair-name}"
-  security_groups = [
-    "${data.terraform_remote_state.base.secgroup-ssh-name}",
-    "${var.allow_web? format("%s", data.terraform_remote_state.base.secgroup-http-name) : ""}",
-    "${var.extra_security_groups}"
-  ]
+  security_groups = ["${
+    compact(
+      concat(
+          list(
+            data.terraform_remote_state.base.secgroup-ssh-name,
+            var.allow_web? data.terraform_remote_state.base.secgroup-http-name:""
+          ),
+          var.extra_security_groups
+      )
+    )
+  }"]
 
   network {
     uuid = "${data.terraform_remote_state.base.network-id[var.region]}"

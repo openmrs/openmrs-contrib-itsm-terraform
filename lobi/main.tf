@@ -11,6 +11,14 @@ provider "openstack" {
   auth_url = "${var.iu_url}"
 }
 
+data "terraform_remote_state" "base" {
+    backend = "s3"
+    config {
+        bucket = "openmrs-terraform-state-files"
+        key    = "basic-network-setup.tfstate"
+    }
+}
+
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {
@@ -44,14 +52,21 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
   name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
 
-  # https://github.com/terraform-providers/terraform-provider-openstack/issues/158
-  # IU bamboo agents group
+  # Bamboo agents Jetstream in IU
   rule {
     from_port      = "${var.bamboo_remote_agent_port}"
     to_port        = "${var.bamboo_remote_agent_port}"
     ip_protocol    = "tcp"
-    from_group_id  = "2f1dc9a1-1363-4ea8-98c5-73de34a1551f"
+    from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
   }
+
+  # Bamboo agents Jetstream in TACC
+  # rule {
+  #   from_port      = "${var.bamboo_remote_agent_port}"
+  #   to_port        = "${var.bamboo_remote_agent_port}"
+  #   ip_protocol    = "tcp"
+  #   from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-tacc}"
+  # }
 
   # gw107 xsede
   rule {
