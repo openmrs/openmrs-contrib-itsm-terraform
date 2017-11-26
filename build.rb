@@ -135,7 +135,8 @@ class Build < Thor
             "Backup"      => outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No",
             "Data Volume" => outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No",
             "IP"          => outputs_parsed['ip_address']['value'],
-            "DNS"         => outputs_parsed['dns_entries']['value']
+            "DNS"         => outputs_parsed['dns_entries']['value'],
+            "Description" => outputs_parsed['description']['value'],
           }
 
           if outputs_parsed['dns_manual_entries']

@@ -43,3 +43,7 @@ output "region" {
 output "provisioner" {
   value = "terraform"
 }
+
+output "description" {
+  value = "${var.description}"
+}

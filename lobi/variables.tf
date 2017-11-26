@@ -44,3 +44,7 @@ variable "dns_cnames" {
 variable "bamboo_remote_agent_port" {
   default = "54663"
 }
+
+variable "description" {
+  default = ""
+}

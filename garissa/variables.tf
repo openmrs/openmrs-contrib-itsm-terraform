@@ -40,3 +40,7 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["modules-refapp", "demo", "uat-refapp", "qa-refapp"]
 }
+
+variable "description" {
+  default = "OpenMRS reference applications without backups"
+}

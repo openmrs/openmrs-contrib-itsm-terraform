@@ -44,3 +44,7 @@ variable "dns_cnames" {
 variable "dns_domain" {
   default = "om.rs"
 }
+
+variable "description" {
+  default = ""
+}

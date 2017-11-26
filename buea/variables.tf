@@ -40,3 +40,7 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["msf"]
 }
+
+variable "description" {
+  default = "OpenMRS reference applications with backups"
+}

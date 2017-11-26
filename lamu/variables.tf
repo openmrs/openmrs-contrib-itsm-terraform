@@ -40,3 +40,7 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["addons-stg"]
 }
+
+variable "description" {
+  default = ""
+}

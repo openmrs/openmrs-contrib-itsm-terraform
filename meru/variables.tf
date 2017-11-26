@@ -40,3 +40,7 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["openhim", "openhim-api", "openhim-core"]
 }
+
+variable "description" {
+  default = ""
+}
