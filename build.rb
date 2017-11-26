@@ -47,8 +47,8 @@ class Build < Thor
     puts "\n\n\n*** Please edit conf/openrc-personal with your credentials. ***\n\n"
   end
 
-  desc "init", "Run terraform init"
-  def init
+  desc "init_all", "Run terraform init in all subfolders"
+  def init_all
     (Dir["*/"] - $excluded_dirs).each { |d|
       puts "Running terraform init on #{d}"
       system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -force-copy") or abort
