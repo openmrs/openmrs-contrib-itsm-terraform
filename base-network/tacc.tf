@@ -97,3 +97,12 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent-secgroup-tacc" {
     prevent_destroy = true
   }
 }
+
+resource "openstack_networking_secgroup_v2" "ldap-secgroup-tacc" {
+  name        = "${var.project_name}-ldap"
+  description = "Default group to contact ldap (terraform)."
+  provider    = "openstack.tacc"
+  lifecycle {
+    prevent_destroy = true
+  }
+}
