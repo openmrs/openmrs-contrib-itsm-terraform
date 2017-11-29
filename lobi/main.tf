@@ -84,3 +84,12 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.228.106/32"
   }
 }
+
+resource "dme_record" "alias-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "ci"
+  type        = "ANAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}

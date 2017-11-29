@@ -20,7 +20,7 @@ output "ip_address" {
 }
 
 output "dns_entries" {
-  value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
+  value = "${list(dme_record.alias-dns.name)}"
 }
 
 output "ansible_inventory" {
