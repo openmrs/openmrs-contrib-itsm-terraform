@@ -52,21 +52,13 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
   name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
 
-  # Bamboo agents Jetstream in IU
+  # Bamboo agents Jetstream in IU (works with the private IP only)
   rule {
     from_port      = "${var.bamboo_remote_agent_port}"
     to_port        = "${var.bamboo_remote_agent_port}"
     ip_protocol    = "tcp"
     from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
   }
-
-  # Bamboo agents Jetstream in TACC
-  # rule {
-  #   from_port      = "${var.bamboo_remote_agent_port}"
-  #   to_port        = "${var.bamboo_remote_agent_port}"
-  #   ip_protocol    = "tcp"
-  #   from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-tacc}"
-  # }
 
   # gw107 xsede
   rule {
@@ -83,6 +75,32 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     ip_protocol = "tcp"
     cidr        = "149.165.228.106/32"
   }
+
+
+  ##### after migration, the agents below will connect using the private DNS
+  # yak jetstream
+  rule {
+    from_port   = "${var.bamboo_remote_agent_port}"
+    to_port     = "${var.bamboo_remote_agent_port}"
+    ip_protocol = "tcp"
+    cidr        = "149.165.168.253/32"
+  }
+
+  # yokobue jetstream
+  rule {
+    from_port   = "${var.bamboo_remote_agent_port}"
+    to_port     = "${var.bamboo_remote_agent_port}"
+    ip_protocol = "tcp"
+    cidr        = "149.165.169.187/32"
+  }
+
+  # yue jetstream
+  rule {
+    from_port   = "${var.bamboo_remote_agent_port}"
+    to_port     = "${var.bamboo_remote_agent_port}"
+    ip_protocol = "tcp"
+    cidr        = "149.165.168.182/32"
+  }
 }
 
 resource "dme_record" "alias-dns" {
@@ -91,5 +109,14 @@ resource "dme_record" "alias-dns" {
   type        = "ANAME"
   value       = "${var.hostname}"
   ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
+
+resource "dme_record" "private-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "ci-internal"
+  type        = "A"
+  value       = "${module.single-machine.private_address}"
+  ttl         = 300
   gtdLocation = "DEFAULT"
 }

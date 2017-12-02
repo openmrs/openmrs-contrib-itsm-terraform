@@ -19,8 +19,12 @@ output "ip_address" {
   value = "${module.single-machine.address}"
 }
 
+output "private_ip_address" {
+  value = "${module.single-machine.private_address}"
+}
+
 output "dns_entries" {
-  value = "${list(dme_record.alias-dns.name)}"
+  value = "${formatlist("%s.%s", list(dme_record.alias-dns.name, dme_record.private-dns.name), var.main_domain_dns)}"
 }
 
 output "ansible_inventory" {

@@ -75,3 +75,12 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_internet" 
   remote_ip_prefix  = "0.0.0.0/0"
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
+
+resource "dme_record" "private-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "ldap-internal"
+  type        = "A"
+  value       = "${module.single-machine.private_address}"
+  ttl         = 300
+  gtdLocation = "DEFAULT"
+}
