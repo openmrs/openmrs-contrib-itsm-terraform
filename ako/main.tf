@@ -39,3 +39,26 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
+
+data "terraform_remote_state" "base" {
+    backend = "s3"
+    config {
+        bucket = "openmrs-terraform-state-files"
+        key    = "basic-network-setup.tfstate"
+    }
+}
+
+resource "openstack_networking_secgroup_v2" "secgroup_1" {
+  name                  = "${var.project_name}-ldap-clients"
+  description           = "Allow ldap clients to connect to server (terraform)"
+  delete_default_rules  = true
+}
+
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 636
+  port_range_max    = 636
+  security_group_id = "${data.terraform_remote_state.base.secgroup-ldap-id-iu}"
+}
