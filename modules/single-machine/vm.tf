@@ -48,7 +48,7 @@ resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
 
 resource "null_resource" "mount_data_volume" {
   count       = "${var.has_data_volume}"
-  depends_on  = ["openstack_compute_volume_attach_v2.attach_data_volume"]
+  depends_on  = ["openstack_compute_floatingip_associate_v2.fip_vm", "openstack_compute_volume_attach_v2.attach_data_volume"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -72,7 +72,7 @@ resource "null_resource" "mount_data_volume" {
 }
 
 resource "null_resource" "setup-dns" {
-  depends_on  = ["openstack_compute_instance_v2.vm", "null_resource.mount_data_volume"]
+  depends_on  = ["null_resource.mount_data_volume"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -97,7 +97,7 @@ resource "null_resource" "setup-dns" {
 
 resource "null_resource" "upgrade" {
   count = "${var.update_os}"
-  depends_on = ["openstack_compute_floatingip_associate_v2.fip_vm", "openstack_compute_instance_v2.vm", "null_resource.setup-dns"]
+  depends_on = ["null_resource.setup-dns"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -121,9 +121,37 @@ resource "null_resource" "upgrade" {
   }
 }
 
+resource "null_resource" "add_github_key" {
+  count      = "${var.add_github_key}"
+  depends_on = ["null_resource.upgrade"]
+
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    source      = "../conf/provisioning/github/github.key"
+    destination = "/tmp/github_id_rsa"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "sudo mkdir -p /root/.ssh",
+      "sudo mv /tmp/github_id_rsa /root/.ssh/github_id_rsa",
+      "sudo chmod 600 /root/.ssh/github_id_rsa"
+    ]
+  }
+}
+
+# ssh/scp from terraform stops working after this step
 resource "null_resource" "ansible" {
   count      = "${var.use_ansible}"
-  depends_on = ["openstack_compute_instance_v2.vm", "openstack_compute_floatingip_associate_v2.fip_vm", "null_resource.upgrade"]
+  depends_on = ["null_resource.add_github_key", "null_resource.upgrade"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
@@ -159,5 +187,3 @@ resource "null_resource" "ansible" {
     ]
   }
 }
-
-#  "rm /root/.ssh/authorized_keys",

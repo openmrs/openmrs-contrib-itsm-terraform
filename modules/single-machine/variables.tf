@@ -62,6 +62,11 @@ variable "allow_web" {
   default = "true"
 }
 
+# [Optional] If it should create a /root/.ssh/
+variable "add_github_key" {
+  default = false
+}
+
 
 
 ######  DO NOT CHANGE variables below ######

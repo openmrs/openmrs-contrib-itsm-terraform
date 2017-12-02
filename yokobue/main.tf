@@ -25,16 +25,17 @@ module "single-machine" {
   source            = "../modules/single-machine"
 
   # Change values in variables.tf file instead
-  flavor            = "${var.flavor}"
-  hostname          = "${var.hostname}"
-  region            = "${var.region}"
-  update_os         = "${var.update_os}"
-  use_ansible       = "${var.use_ansible}"
-  ansible_inventory = "${var.ansible_inventory}"
-  has_data_volume   = "${var.has_data_volume}"
-  data_volume_size  = "${var.data_volume_size}"
-  has_backup        = "${var.has_backup}"
-  dns_cnames        = "${var.dns_cnames}"
+  flavor                = "${var.flavor}"
+  hostname              = "${var.hostname}"
+  region                = "${var.region}"
+  update_os             = "${var.update_os}"
+  use_ansible           = "${var.use_ansible}"
+  ansible_inventory     = "${var.ansible_inventory}"
+  has_data_volume       = "${var.has_data_volume}"
+  data_volume_size      = "${var.data_volume_size}"
+  has_backup            = "${var.has_backup}"
+  dns_cnames            = "${var.dns_cnames}"
+  add_github_key        = true
   allow_web             = false
   extra_security_groups = ["${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-name}"]
 
