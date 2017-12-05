@@ -27,7 +27,6 @@ module "single-machine" {
   data_volume_size      = "${var.data_volume_size}"
   has_backup            = "${var.has_backup}"
   dns_cnames            = "${var.dns_cnames}"
-  allow_web             = false
   extra_security_groups = ["${openstack_networking_secgroup_v2.secgroup_ldap.name}"]
 
 
@@ -65,14 +64,13 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps" {
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
 
-# TODO remove it before going to prod
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_internet" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 636
   port_range_max    = 636
-  remote_ip_prefix  = "0.0.0.0/0"
+  remote_ip_prefix  = "149.165.157.188/32"
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
 
