@@ -22,7 +22,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "production"
+  default = "testing"
 }
 
 variable "has_data_volume" {
