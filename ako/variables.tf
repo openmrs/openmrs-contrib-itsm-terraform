@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ldap"]
+  default = ["ldap", "authentication"]
 }
 
 variable "description" {
