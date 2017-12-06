@@ -60,24 +60,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
   }
 
-  # gw107 xsede
-  rule {
-    from_port   = "${var.bamboo_remote_agent_port}"
-    to_port     = "${var.bamboo_remote_agent_port}"
-    ip_protocol = "tcp"
-    cidr        = "149.165.228.105/32"
-  }
-
-  # gw108 xsede
-  rule {
-    from_port   = "${var.bamboo_remote_agent_port}"
-    to_port     = "${var.bamboo_remote_agent_port}"
-    ip_protocol = "tcp"
-    cidr        = "149.165.228.106/32"
-  }
-
-
-  ##### after migration, the agents below will connect using the private DNS
+  ##### after migration, the agents shoud connect using the private DNS - ITSM-4090
   # yak jetstream
   rule {
     from_port   = "${var.bamboo_remote_agent_port}"
