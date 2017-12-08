@@ -38,12 +38,3 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-resource "dme_record" "private-dns" {
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "atlassian-database-internal"
-  type        = "A"
-  value       = "${module.single-machine.private_address}"
-  ttl         = 300
-  gtdLocation = "DEFAULT"
-}
