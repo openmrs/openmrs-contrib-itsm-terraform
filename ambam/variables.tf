@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["crowd", "id-new"]
+  default = ["crowd"]
 }
 
 variable "description" {
-  default = "ID related applications"
+  default = "Crowd/authentication applications"
 }
