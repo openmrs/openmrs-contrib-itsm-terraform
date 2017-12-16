@@ -38,3 +38,13 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
+
+
+resource "dme_record" "alias-dns" {
+  domainid     = "${var.domain_dns["openmrs.org"]}"
+  name         = "dev"
+  type         = "HTTPRED"
+  value        = "https://addons.openmrs.org/"
+  redirectType = "Standard - 301"
+  ttl          = 300
+}
