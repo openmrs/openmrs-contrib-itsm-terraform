@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["id-new"]
+  default = ["id"]
 }
 
 variable "description" {
