@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.small"
+  default = "m1.medium"
 }
 
 variable "region" {
@@ -18,7 +18,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = false
+  default = true
 }
 
 variable "ansible_inventory" {
