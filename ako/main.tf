@@ -75,17 +75,6 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_internet" 
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
 
-#batouri
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_xsede" {
-  direction         = "ingress"
-  ethertype         = "IPv4"
-  protocol          = "tcp"
-  port_range_min    = 636
-  port_range_max    = 636
-  remote_ip_prefix  = "149.165.228.114/32"
-  security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
-}
-
 #bagaroi
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_id" {
   direction         = "ingress"

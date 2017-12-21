@@ -11,6 +11,14 @@ provider "openstack" {
   auth_url = "${var.iu_url}"
 }
 
+data "terraform_remote_state" "base" {
+    backend = "s3"
+    config {
+        bucket = "openmrs-terraform-state-files"
+        key    = "basic-network-setup.tfstate"
+    }
+}
+
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {
@@ -28,6 +36,8 @@ module "single-machine" {
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
   allow_web         = false
+  extra_security_groups = ["${openstack_networking_secgroup_v2.secgroup_database.name}"]
+
 
   # Global variables
   # Don't change values below
@@ -37,4 +47,29 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
+}
+
+resource "dme_record" "private-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "database-internal"
+  type        = "A"
+  value       = "${module.single-machine.private_address}"
+  ttl         = 300
+  gtdLocation = "DEFAULT"
+}
+
+
+resource "openstack_networking_secgroup_v2" "secgroup_database" {
+  name                  = "${var.project_name}-database-clients"
+  description           = "Allow ldap clients to connect to server (terraform)"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_database" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 3306
+  port_range_max    = 3306
+  remote_group_id   = "${data.terraform_remote_state.base.secgroup-database-id-iu}"
+  security_group_id = "${openstack_networking_secgroup_v2.secgroup_database.id}"
 }

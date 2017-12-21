@@ -1,3 +1,0 @@
-variable "hostname" {
-  default = "bafoussam"
-}

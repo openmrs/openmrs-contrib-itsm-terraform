@@ -104,3 +104,12 @@ resource "openstack_networking_secgroup_v2" "ldap-secgroup-iu" {
     prevent_destroy = true
   }
 }
+
+resource "openstack_networking_secgroup_v2" "database-secgroup-iu" {
+  name        = "${var.project_name}-database"
+  description = "Default group to contact database (terraform)."
+  provider    = "openstack.iu"
+  lifecycle {
+    prevent_destroy = true
+  }
+}

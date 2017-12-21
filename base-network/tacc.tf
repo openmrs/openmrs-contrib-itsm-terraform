@@ -106,3 +106,12 @@ resource "openstack_networking_secgroup_v2" "ldap-secgroup-tacc" {
     prevent_destroy = true
   }
 }
+
+resource "openstack_networking_secgroup_v2" "database-secgroup-tacc" {
+  name        = "${var.project_name}-database"
+  description = "Default group to contact database (terraform)."
+  provider    = "openstack.tacc"
+  lifecycle {
+    prevent_destroy = true
+  }
+}

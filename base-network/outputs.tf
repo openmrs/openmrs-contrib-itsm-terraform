@@ -34,6 +34,18 @@ output "secgroup-ldap-id-tacc" {
   value = "${openstack_networking_secgroup_v2.ldap-secgroup-tacc.id}"
 }
 
+output "secgroup-database-name" {
+  value = "${openstack_networking_secgroup_v2.database-secgroup-tacc.name}"
+}
+
+output "secgroup-database-id-iu" {
+  value = "${openstack_networking_secgroup_v2.database-secgroup-iu.id}"
+}
+
+output "secgroup-database-id-tacc" {
+  value = "${openstack_networking_secgroup_v2.database-secgroup-tacc.id}"
+}
+
 
 output "network-id" {
   value = {

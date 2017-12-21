@@ -35,7 +35,7 @@ module "single-machine" {
   data_volume_size      = "${var.data_volume_size}"
   has_backup            = "${var.has_backup}"
   dns_cnames            = "${var.dns_cnames}"
-  extra_security_groups = ["${openstack_compute_secgroup_v2.bamboo-remote-agent.name}"]
+  extra_security_groups = ["${openstack_compute_secgroup_v2.bamboo-remote-agent.name}", "${data.terraform_remote_state.base.secgroup-database-name}"]
 
 
   # Global variables
