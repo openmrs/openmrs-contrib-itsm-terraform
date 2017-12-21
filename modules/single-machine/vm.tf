@@ -66,7 +66,7 @@ resource "null_resource" "mount_data_volume" {
       "set -u",
       "set -x",
       "chmod a+x /tmp/data_volume.sh",
-      "/tmp/data_volume.sh",
+      "sudo /tmp/data_volume.sh",
     ]
   }
 }
