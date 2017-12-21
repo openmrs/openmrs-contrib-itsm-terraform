@@ -115,7 +115,7 @@ Change `./global-variables` and use your username and (passphrase-less) key. Do 
 
 
 # Guidelines
-  - For OpenMRS, we have used city names from Cameroon and Kenya for most of our server names. Bamboo agents are the exception, using [Bamboo musical instruments](https://en.wikipedia.org/wiki/Bamboo_musical_instruments).
+  - For OpenMRS, we have used city names from Malawi, Cameroon and Kenya for most of our server names. Bamboo agents are the exception, using [Bamboo musical instruments](https://en.wikipedia.org/wiki/Bamboo_musical_instruments).
   - Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention. More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
   - Check <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Migration-to-Jetstream> for more details on migration to terraform/jetstream.
   - Note that DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
