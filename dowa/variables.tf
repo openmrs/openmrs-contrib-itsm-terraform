@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder-new"]
+  default = ["mdsbuilder"]
 }
 
 variable "description" {
