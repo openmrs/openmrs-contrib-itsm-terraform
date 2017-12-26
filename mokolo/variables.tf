@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sonar-new"]
+  default = ["sonar"]
 }
 
 variable "description" {
