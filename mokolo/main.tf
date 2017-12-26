@@ -69,29 +69,4 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     ip_protocol    = "tcp"
     from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
   }
-
-  ##### after migration, the agents shoud connect using the private DNS - ITSM-4090
-  # yak jetstream
-  rule {
-    from_port   = 3306
-    to_port     = 3306
-    ip_protocol = "tcp"
-    cidr        = "149.165.168.253/32"
-  }
-
-  # yokobue jetstream
-  rule {
-    from_port   = 3306
-    to_port     = 3306
-    ip_protocol = "tcp"
-    cidr        = "149.165.169.187/32"
-  }
-
-  # yue jetstream
-  rule {
-    from_port   = 3306
-    to_port     = 3306
-    ip_protocol = "tcp"
-    cidr        = "149.165.168.182/32"
-  }
 }
