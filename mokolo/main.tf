@@ -35,7 +35,6 @@ module "single-machine" {
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
-  extra_security_groups = ["${openstack_compute_secgroup_v2.bamboo-remote-agent.name}"]
 
 
   # Global variables
@@ -55,18 +54,4 @@ resource "dme_record" "private-dns" {
   value       = "${module.single-machine.private_address}"
   ttl         = 300
   gtdLocation = "DEFAULT"
-}
-
-
-resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
-  name        = "${var.project_name}-bamboo-server-agents-sonar"
-  description = "Allow bamboo agents to connect to mysql sonar server (terraform)."
-
-  # Bamboo agents Jetstream in IU (works with the private IP only)
-  rule {
-    from_port      = 3306
-    to_port        = 3306
-    ip_protocol    = "tcp"
-    from_group_id  = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
-  }
 }
