@@ -46,5 +46,16 @@ resource "dme_record" "alias-dns" {
   type         = "HTTPRED"
   value        = "https://addons.openmrs.org/"
   redirectType = "Standard - 301"
+  gtdLocation  = "DEFAULT"
+  ttl          = 300
+}
+
+resource "dme_record" "redirect-modules" {
+  domainid     = "${var.domain_dns["openmrs.org"]}"
+  name         = "modules"
+  type         = "HTTPRED"
+  value        = "https://addons.openmrs.org/"
+  redirectType = "Standard - 301"
+  gtdLocation  = "DEFAULT"
   ttl          = 300
 }
