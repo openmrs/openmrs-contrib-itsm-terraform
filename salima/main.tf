@@ -36,6 +36,8 @@ module "single-machine" {
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
   allow_web         = false
+  has_private_dns   = true
+
   extra_security_groups = ["${openstack_networking_secgroup_v2.secgroup_database.name}"]
 
 
@@ -52,8 +54,8 @@ module "single-machine" {
 resource "dme_record" "private-dns" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "database-internal"
-  type        = "A"
-  value       = "${module.single-machine.private_address}"
+  type        = "CNAME"
+  value       = "${module.single-machine.private-dns}"
   ttl         = 300
   gtdLocation = "DEFAULT"
 }

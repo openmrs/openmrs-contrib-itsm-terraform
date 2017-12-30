@@ -21,3 +21,7 @@ output "backup_access_key_secret" {
 output "dns_entries" {
   value = ["${dme_record.hostname.name}","${dme_record.cnames.*.name}"]
 }
+
+output "private-dns" {
+  value = "${element(concat(dme_record.private_hostname.*.name, list("")), 0)}"
+}

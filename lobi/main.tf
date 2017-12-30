@@ -37,6 +37,7 @@ module "single-machine" {
   dns_cnames            = "${var.dns_cnames}"
   extra_security_groups = ["${openstack_compute_secgroup_v2.bamboo-remote-agent.name}", "${data.terraform_remote_state.base.secgroup-database-name}"]
 
+  has_private_dns       = true
 
   # Global variables
   # Don't change values below
@@ -98,8 +99,8 @@ resource "dme_record" "alias-dns" {
 resource "dme_record" "private-dns" {
   domainid    = "${var.domain_dns["openmrs.org"]}"
   name        = "ci-internal"
-  type        = "A"
-  value       = "${module.single-machine.private_address}"
+  type        = "CNAME"
+  value       = "${module.single-machine.private-dns}"
   ttl         = 300
   gtdLocation = "DEFAULT"
 }
