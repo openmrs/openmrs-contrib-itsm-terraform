@@ -148,10 +148,85 @@ resource "null_resource" "add_github_key" {
   }
 }
 
+data "template_file" "provisioning_file" {
+  template = "${file("${path.module}/templates/provisioning_facts.tpl")}"
+
+  vars {
+    ansible_inventory = "${var.ansible_inventory}"
+    region            = "${var.region}"
+    has_backup        = "${var.has_backup}"
+  }
+}
+
+
+resource "null_resource" "copy_facts" {
+  count      = "${var.copy_ansible_facts}"
+  depends_on = ["null_resource.upgrade"]
+
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    content      = "${data.template_file.provisioning_file.rendered}"
+    destination = "/tmp/provisioning.fact"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "sudo mkdir -p /etc/ansible/facts.d/",
+      "sudo mv /tmp/provisioning.fact /etc/ansible/facts.d/",
+      "sudo chown -R root:root /etc/ansible/facts.d/"
+    ]
+  }
+}
+
+data "template_file" "provisioning_file_backup" {
+  count = "${var.has_backup}"
+  template = "${file("${path.module}/templates/provisioning_aws_facts.tpl")}"
+
+  vars {
+    aws_access_key_id     = "${aws_iam_access_key.backup-user-key.id}"
+    aws_secret_access_key = "${aws_iam_access_key.backup-user-key.secret}"
+  }
+}
+
+resource "null_resource" "copy_facts_backups" {
+  count = "${var.has_backup}"
+  depends_on = ["null_resource.copy_facts"]
+
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    content      = "${data.template_file.provisioning_file_backup.rendered}"
+    destination = "/tmp/aws.fact"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "sudo mv /tmp/aws.fact /etc/ansible/facts.d/",
+      "sudo chown -R root:root /etc/ansible/facts.d/"
+    ]
+  }
+}
+
 # ssh/scp from terraform stops working after this step
+# global-variables need to use personal creds instead
 resource "null_resource" "ansible" {
   count      = "${var.use_ansible}"
-  depends_on = ["null_resource.add_github_key", "null_resource.upgrade"]
+  depends_on = ["null_resource.add_github_key", "null_resource.copy_facts", "null_resource.copy_facts_backups"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"

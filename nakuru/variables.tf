@@ -22,7 +22,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "staging"
+  default = "prod-tier4"
 }
 
 variable "has_data_volume" {

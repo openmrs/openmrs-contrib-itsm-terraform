@@ -7,6 +7,16 @@ resource "dme_record" "hostname" {
   gtdLocation = "DEFAULT"
 }
 
+resource "dme_record" "private_hostname" {
+  count       = "${var.has_private_dns}"
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "${var.hostname}-internal"
+  type        = "A"
+  value       = "${openstack_compute_instance_v2.vm.network.0.fixed_ip_v4}"
+  ttl         = 300
+  gtdLocation = "DEFAULT"
+}
+
 
 resource "dme_record" "cnames" {
   count       = "${length(var.dns_cnames)}"

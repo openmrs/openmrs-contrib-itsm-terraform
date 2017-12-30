@@ -17,6 +17,11 @@ variable "update_os" {
   default = true
 }
 
+# [Optional] if ansible facts should be generated as part of provisioning
+variable "copy_ansible_facts" {
+  default = true
+}
+
 # [Optional] if ansible should be part of provisioning
 variable "use_ansible" {
   default = false
@@ -26,6 +31,7 @@ variable "use_ansible" {
 variable "ansible_inventory" {
   default = "production"
 }
+
 
 # [Optional] Create data volume (extra disk)
 # If applications generate non-ephemeral data,
@@ -49,6 +55,11 @@ variable "has_backup" {
 variable "dns_cnames" {
   type    = "list"
   default = []
+}
+
+# [Optional] create DNS entry for private IP
+variable "has_private_dns" {
+  default = false
 }
 
 # [Optional] extra security_groups to apply to VM

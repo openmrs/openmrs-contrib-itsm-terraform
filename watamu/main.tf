@@ -40,6 +40,7 @@ module "single-machine" {
 }
 
 
+# Don't use redirect anymore; it doesn't support https
 resource "dme_record" "alias-dns" {
   domainid     = "${var.domain_dns["openmrs.org"]}"
   name         = "dev"

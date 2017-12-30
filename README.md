@@ -7,6 +7,10 @@ You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check t
 This repository can generate documentation for all VMs created, and it's deployed to
 <https://docs.openmrs.org/infrastructure/vms.html>
 
+Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provision-new-machine) and [Guidelines for New Servers](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Guidelines-for-New-Servers) for more details on how to create machines (these docs are not public).
+
+
+
 # Requirements
 ## Credentials
 Before you can use this repository, you need:
@@ -114,11 +118,11 @@ Change `./global-variables` and use your username and (passphrase-less) key. Do 
 
 
 
-# Guidelines
-  - For OpenMRS, we have used city names from Malawi, Cameroon and Kenya for most of our server names. Bamboo agents are the exception, using [Bamboo musical instruments](https://en.wikipedia.org/wiki/Bamboo_musical_instruments).
-  - Within Jetstream, all server names should be in the form ${OS_PROJECT_NAME}-servername by Jetstream convention. More details on Jetstream can be found in <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provider-Jetstream>.
-  - Check <https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Migration-to-Jetstream> for more details on migration to terraform/jetstream.
-  - Note that DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
+# Gotchas
+  - DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
+  - Updating a DNS resource doesn't work in terraform, it appears to be a bug. You need to either delete and create, or change manually.
+  - Don't use the DNS redirect. It doesn't support HTTPS.
+  - Use _/etc/ansible/facts.d/_ files to export data to ansible. If the files should be modified, you can do it manually. 
 
 # Resources needed by Terraform
 Some resources are necessary to run terraform, so they were created manually:

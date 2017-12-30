@@ -87,6 +87,7 @@ class Build < Thor
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.setup-dns \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key \
     """) or abort
