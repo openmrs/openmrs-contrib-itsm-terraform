@@ -35,7 +35,11 @@ module "single-machine" {
   data_volume_size      = "${var.data_volume_size}"
   has_backup            = "${var.has_backup}"
   dns_cnames            = "${var.dns_cnames}"
-  extra_security_groups = ["${openstack_compute_secgroup_v2.bamboo-remote-agent.name}", "${data.terraform_remote_state.base.secgroup-database-name}"]
+  extra_security_groups = [
+    "${openstack_compute_secgroup_v2.bamboo-remote-agent.name}",
+    "${data.terraform_remote_state.base.secgroup-database-name}",
+    "${openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.name}"
+  ]
 
   has_private_dns       = true
 
@@ -47,6 +51,23 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
+}
+
+
+
+resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-ssl" {
+  name                  = "${var.project_name}-bamboo-server-agents-ssl"
+  description           = "Allow bamboo agents to connect to server using SSL (terraform)."
+}
+
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 54667
+  port_range_max    = 54667
+  remote_group_id   = "${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-id-iu}"
+  security_group_id = "${openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id}"
 }
 
 resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
