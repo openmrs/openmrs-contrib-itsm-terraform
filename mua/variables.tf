@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "ako"
+  default = "mua"
 }
 
 variable "update_os" {
@@ -18,11 +18,11 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = false
+  default = true
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier1"
+  default = "prod-tier2"
 }
 
 variable "has_data_volume" {
@@ -30,7 +30,7 @@ variable "has_data_volume" {
 }
 
 variable "data_volume_size" {
-  default = 20
+  default = 40
 }
 
 variable "has_backup" {
@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ldap", "authentication"]
+  default = ["site"]
 }
 
 variable "description" {
-  default = ""
+  default = "OpenMRS site"
 }
