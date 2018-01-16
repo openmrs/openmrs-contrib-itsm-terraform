@@ -1,7 +1,7 @@
 .terraform
 openrc-personal
 .tmp
-*.tfstate.backup
+*.tfstate*backup
 *.tfstate
 terraform.plan
 docs/vms.html

@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "mua"
+  default = "balaka"
 }
 
 variable "update_os" {
@@ -18,7 +18,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {
@@ -26,21 +26,21 @@ variable "ansible_inventory" {
 }
 
 variable "has_data_volume" {
-  default = true
+  default = false
 }
 
 variable "data_volume_size" {
-  default = 40
+  default = 10
 }
 
 variable "has_backup" {
-  default = true
+  default = false
 }
 
 variable "dns_cnames" {
-  default = ["site", "www"]
+  default = ["modules-refapp", "demo", "uat-refapp", "qa-refapp"]
 }
 
 variable "description" {
-  default = "OpenMRS site"
+  default = "OpenMRS reference applications without backups"
 }

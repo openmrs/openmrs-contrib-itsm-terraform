@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "mua.tfstate"
+    key    = "balaka.tfstate"
   }
 }
 
@@ -38,14 +38,3 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-
-# Terraform provider bug doesn't allow to update APEX
-# resource "dme_record" "apex" {
-#   domainid    = "${var.domain_dns["openmrs.org"]}"
-#   name        = ""
-#   type        = "A"
-#   value       = "${module.single-machine.address}"
-#   ttl         = 300
-#   gtdLocation = "DEFAULT"
-# }

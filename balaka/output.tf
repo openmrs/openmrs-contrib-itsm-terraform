@@ -1,17 +1,17 @@
-output "backup_access_key_id" {
-  value = "${module.single-machine.backup_access_key_id}"
-}
-
-output "backup_access_key_secret" {
-  value = "${module.single-machine.backup_access_key_secret}"
-}
+# output "backup_access_key_id" {
+#   value = "${module.single-machine.backup_access_key_id}"
+# }
+#
+# output "backup_access_key_secret" {
+#   value = "${module.single-machine.backup_access_key_secret}"
+# }
 
 output "ip_address" {
   value = "${module.single-machine.address}"
 }
 
 output "dns_entries" {
-  value = "${concat(formatlist("%s.%s", var.dns_cnames, var.main_domain_dns), list(var.main_domain_dns))}"
+  value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
 }
 
 output "ansible_inventory" {
