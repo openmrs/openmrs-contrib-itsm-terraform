@@ -2,13 +2,13 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "watamu.tfstate"
+    key    = "limbe.tfstate"
   }
 }
 
-# Change to ${var.iu_url} if using iu datacenter
+# Change to ${var.tacc_url} if using tacc datacenter
 provider "openstack" {
-  auth_url = "${var.tacc_url}"
+  auth_url = "${var.iu_url}"
 }
 
 # Description of arguments can be found in
@@ -37,4 +37,15 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
+}
+
+# Don't use redirect anymore; it doesn't support https
+resource "dme_record" "alias-dns" {
+  domainid     = "${var.domain_dns["openmrs.org"]}"
+  name         = "dev"
+  type         = "HTTPRED"
+  value        = "https://addons.openmrs.org/"
+  redirectType = "Standard - 301"
+  gtdLocation  = "DEFAULT"
+  ttl          = 300
 }
