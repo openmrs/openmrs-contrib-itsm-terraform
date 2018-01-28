@@ -173,6 +173,11 @@ resource "aws_iam_user_policy" "website-assets-user-policy" {
   "Statement": [
     {
       "Effect": "Allow",
+      "Action": ["s3:ListAllMyBuckets", "s3:GetBucketLocation"],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
       "Action": ["s3:ListBucket"],
       "Resource": ["${aws_s3_bucket.docs-s3.arn}"]
     },
