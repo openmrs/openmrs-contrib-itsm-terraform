@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["quizgrader"]
+  default = ["quizgrader", "pmtool"]
 }
 
 variable "description" {
-  default = ""
+  default = "Quizgrader, pmtools and other bots"
 }
