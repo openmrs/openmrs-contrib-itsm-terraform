@@ -6,11 +6,11 @@ variable "flavor" {
 }
 
 variable "region" {
-  default = "iu"
+  default = "tacc"
 }
 
 variable "hostname" {
-  default = "mokolo"
+  default = "ruiru"
 }
 
 variable "update_os" {
@@ -18,11 +18,11 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier4"
+  default = "staging"
 }
 
 variable "has_data_volume" {
@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sonar", "implementation"]
+  default = ["ldap-stg", "authentication-stg"]
 }
 
 variable "description" {
-  default = "Sonarqube and implementation ID for OpenMRS"
+  default = "LDAP staging"
 }

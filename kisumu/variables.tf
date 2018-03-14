@@ -2,15 +2,15 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.medium"
+  default = "m1.small"
 }
 
 variable "region" {
-  default = "iu"
+  default = "tacc"
 }
 
 variable "hostname" {
-  default = "mokolo"
+  default = "kisumu"
 }
 
 variable "update_os" {
@@ -18,7 +18,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {
@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sonar", "implementation"]
+  default = ["atlas-stg"]
 }
 
 variable "description" {
-  default = "Sonarqube and implementation ID for OpenMRS"
+  default = "Atlas staging machine"
 }
