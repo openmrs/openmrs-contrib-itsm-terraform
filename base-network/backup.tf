@@ -15,11 +15,23 @@ resource "aws_s3_bucket" "automatic-backups" {
   versioning {
     enabled = true
   }
+  logging {
+    target_bucket = "${aws_s3_bucket.log_bucket.id}"
+    target_prefix = "log/"
+  }
   tags {
     Terraform        = "base-network"
   }
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = "openmrs-backups-logs"
+  acl    = "log-delivery-write"
+  tags {
+    Terraform        = "base-network"
   }
 }
 
