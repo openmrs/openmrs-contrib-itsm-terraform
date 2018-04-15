@@ -36,7 +36,7 @@ $ vi conf/openrc-personal
 $ cat conf/openrc
 
 # to init terraform in all VMs (takes time)
-$ ./build.rb init
+$ ./build.rb init_all
 
 # to init terraform in a single VM (e.g. narok)
 $ ./build.rb init narok
