@@ -5,7 +5,7 @@ We are using terraform to generate network infra, Openstack VMs (Jetstream IU an
 You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack.
 
 This repository can generate documentation for all VMs created, and it's deployed to
-<https://docs.openmrs.org/infrastructure/vms.html>
+<https://docs.openmrs.org/infrastructure/vms.html> and <https://docs.openmrs.org/infrastructure/vms.json>
 
 Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provision-new-machine) and [Guidelines for New Servers](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Guidelines-for-New-Servers) for more details on how to create machines (these docs are not public).
 
@@ -122,7 +122,7 @@ Change `./global-variables` and use your username and (passphrase-less) key. Do 
   - DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
   - Updating a DNS resource doesn't work in terraform, it appears to be a bug. You need to either delete and create, or change manually.
   - Don't use the DNS redirect. It doesn't support HTTPS.
-  - Use _/etc/ansible/facts.d/_ files to export data to ansible. If the files should be modified, you can do it manually. 
+  - Use _/etc/ansible/facts.d/_ files to export data to ansible. If the files should be modified, you can do it manually.
 
 # Resources needed by Terraform
 Some resources are necessary to run terraform, so they were created manually:

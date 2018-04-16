@@ -5,3 +5,4 @@ openrc-personal
 *.tfstate
 terraform.plan
 docs/vms.html
+docs/vms.json

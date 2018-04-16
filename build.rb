@@ -4,6 +4,7 @@ require "thor"
 require 'rbconfig'
 require 'fileutils'
 require 'json'
+require 'erb'
 
 def os
   case RbConfig::CONFIG['host_os']
@@ -150,13 +151,23 @@ class Build < Thor
       }
     }
 
+
+    file_output = "docs/vms.html"
+    erb_str = File.read('conf/docs.erb')
+    File.open(file_output, 'w') do |f|
+      f.write(ERB.new(erb_str).result())
+    end
+    puts "File generated in #{file_output}."
+
+
     file_output = "docs/vms.json"
     File.open(file_output, 'w') do |f|
       f.write(JSON.pretty_generate($vms))
     end
+    puts "File generated in #{file_output}."
 
     puts "\n\n\n\n"
-    puts "File generated in #{file_output}. Update stack <docs> to upload it to S3. "
+    puts "Update stack <docs> to upload it to S3. "
   end
 
 end
