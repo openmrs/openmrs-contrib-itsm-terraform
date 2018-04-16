@@ -4,7 +4,6 @@ require "thor"
 require 'rbconfig'
 require 'fileutils'
 require 'json'
-require 'erb'
 
 def os
   case RbConfig::CONFIG['host_os']
@@ -120,7 +119,7 @@ class Build < Thor
   def docs
     $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
 
-    $vms = {}
+    $vms = []
 
     File.open(".tmp/docs.md", 'w') { |file|
       (Dir["*/"] - $extra_excluded_dirs).each { |d|
@@ -132,32 +131,28 @@ class Build < Thor
         if provisioner == "terraform"
           vm_name = d.chomp("/")
           puts "Found terraformed machine #{vm_name}"
-          $vms[vm_name] = {
-            "Environment" => outputs_parsed['ansible_inventory']['value'],
-            "Datacenter"  => outputs_parsed['region']['value'],
-            "Size"        => outputs_parsed['flavor']['value'],
-            "Backup"      => outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No",
-            "Data Volume" => outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No",
-            "IP"          => outputs_parsed['ip_address']['value'],
-            "DNS"         => outputs_parsed['dns_entries']['value'],
-            "Description" => outputs_parsed['description']['value'],
+          vm = {
+            "name"        => vm_name,
+            "environment" => outputs_parsed['ansible_inventory']['value'],
+            "data_center" => outputs_parsed['region']['value'],
+            "size"        => outputs_parsed['flavor']['value'],
+            "backup"      => outputs_parsed['has_backup']['value'] == "1" ? "Yes" : "No",
+            "data_volume" => outputs_parsed['has_data_volume']['value'] == "1" ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : "No",
+            "ip"          => outputs_parsed['ip_address']['value'],
+            "dns"         => outputs_parsed['dns_entries']['value'],
+            "description" => outputs_parsed['description']['value'],
           }
-
           if outputs_parsed['dns_manual_entries']
-            $vms[vm_name]["Manual DNS"] = outputs_parsed['dns_manual_entries']['value']
+            vm["manual_dns"] = outputs_parsed['dns_manual_entries']['value']
           end
+          $vms.push(vm)
         end
       }
     }
 
-    # puts $vms
-
-    file_output = "docs/vms.html"
-    erb_file = 'conf/docs.erb'
-    erb_str = File.read(erb_file)
-    result = ERB.new(erb_str).result()
+    file_output = "docs/vms.json"
     File.open(file_output, 'w') do |f|
-      f.write(result)
+      f.write(JSON.pretty_generate($vms))
     end
 
     puts "\n\n\n\n"
