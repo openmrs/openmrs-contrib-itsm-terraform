@@ -12,6 +12,7 @@ echo "Repo: ${ansible_repo}, Inv: ${ansible_inventory}, Host: ${hostname}"
 
 fgrep -q "github.com" ~/.ssh/known_hosts || ssh-keyscan github.com >> ~/.ssh/known_hosts
 rm -rf /tmp/ansible
+chmod 600 /root/.ssh/id_rsa
 git clone -q ${ansible_repo} /tmp/ansible
 cd /tmp/ansible/ansible
 git crypt unlock
