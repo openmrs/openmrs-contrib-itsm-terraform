@@ -43,5 +43,5 @@ output "provisioner" {
 }
 
 output "description" {
-  value = "LDAP server"
+  value = "${var.description}"
 }

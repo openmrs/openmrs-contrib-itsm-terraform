@@ -46,5 +46,5 @@ variable "bamboo_remote_agent_port" {
 }
 
 variable "description" {
-  default = ""
+  default = "CI server"
 }

@@ -42,5 +42,5 @@ variable "dns_cnames" {
 }
 
 variable "description" {
-  default = ""
+  default = "Addons"
 }
