@@ -39,7 +39,7 @@ variable "has_backup" {
 
 # using openconceptlab.org instead, manually
 variable "dns_cnames" {
-  default = []
+  default = ["qa.oclclient"]
 }
 
 variable "description" {
