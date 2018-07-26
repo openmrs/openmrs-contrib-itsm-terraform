@@ -32,7 +32,7 @@ output "dns_entries" {
 }
 
 output "dns_manual_entries" {
-  value = ["staging.openconceptlab.org", "api.staging.openconceptlab.org", "flower.staging.openconceptlab.org"]
+  value = ["dev.openconceptlab.org", "api.dev.openconceptlab.org", "flower.dev.openconceptlab.org","staging.openconceptlab.org", "api.staging.openconceptlab.org", "flower.staging.openconceptlab.org"]
 }
 
 output "ansible_inventory" {
