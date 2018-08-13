@@ -86,7 +86,7 @@ To completely destroy a VM (and its data volume):
 - Edit `modules/single-machine/vm.tf` and edit `prevent_destroy = true` to `prevent_destroy = false`
 - Run:
 ```
-$ ./build terraform <stack> "destroy"
+$ ./build.rb terraform <stack> "destroy"
 ```
 - Undo changes to `modules/single-machine/vm.tf`
 
