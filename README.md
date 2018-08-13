@@ -68,7 +68,7 @@ $ ./build.rb
 ```
 
 
-Forcing a VM to be reprovisioned:
+Forcing a VM to be reprovisioned (and keep the data volume):
 ```
 $ ./build.rb taint-vm <stack>
 $ ./build.rb plan <stack>
@@ -80,6 +80,15 @@ To SSH a machine before running ansible:
 $ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 ```
 After ansible, you should use your regular user.
+
+To completely destroy a VM (and its data volume):
+
+- Edit `modules/single-machine/vm.tf` and edit `prevent_destroy = true` to `prevent_destroy = false`
+- Run:
+```
+$ ./build terraform <stack> "destroy"
+```
+- Undo changes to `modules/single-machine/vm.tf`
 
 
 To generate and update VM documentation:
