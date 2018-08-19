@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["talk-new"]
+  default = ["talk"]
 }
 
 variable "description" {
