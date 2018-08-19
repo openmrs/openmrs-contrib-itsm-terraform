@@ -1,12 +1,4 @@
-# state file stored in S3
-terraform {
-  backend "s3" {
-    bucket = "openmrs-terraform-state-files"
-    key    = "talk.tfstate"
-  }
-}
-
-# For now, only backups buckets on S3
+# discourse uploads its backup straight to S3
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"
   lifecycle_rule {
@@ -27,19 +19,22 @@ resource "aws_s3_bucket" "talk-backups" {
   tags {
     Terraform        = "${var.hostname}"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
-resource "aws_iam_user" "backup-user" {
-  name = "backup-${var.hostname}"
+resource "aws_iam_user" "talk-backup-user" {
+  name = "backup-talk"
 }
 
-resource "aws_iam_access_key" "backup-user-key" {
-  user = "${aws_iam_user.backup-user.name}"
+resource "aws_iam_access_key" "talk-backup-user-key" {
+  user = "${aws_iam_user.talk-backup-user.name}"
 }
 
-resource "aws_iam_user_policy" "backup-user-policy" {
-  name = "backup_${var.hostname}"
-  user = "${aws_iam_user.backup-user.name}"
+resource "aws_iam_user_policy" "talk-backup-user-policy" {
+  name = "backup_talk-policy"
+  user = "${aws_iam_user.talk-backup-user.name}"
   policy = <<EOF
 {
   "Version": "2012-10-17",

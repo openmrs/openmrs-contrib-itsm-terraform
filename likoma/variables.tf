@@ -33,6 +33,8 @@ variable "data_volume_size" {
   default = 60
 }
 
+# backups straight from discourse
+# but keeping it in case it's needed
 variable "has_backup" {
   default = true
 }
