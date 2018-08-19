@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.small"
+  default = "m1.medium"
 }
 
 variable "region" {
@@ -30,7 +30,7 @@ variable "has_data_volume" {
 }
 
 variable "data_volume_size" {
-  default = 20
+  default = 40
 }
 
 variable "has_backup" {
@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["atlas-stg"]
+  default = ["site-stg"]
 }
 
 variable "description" {
-  default = "Atlas staging machine"
+  default = "Website staging machine"
 }
