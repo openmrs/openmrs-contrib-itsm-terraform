@@ -6,14 +6,6 @@ output "backup_access_key_secret" {
   value = "${module.single-machine.backup_access_key_secret}"
 }
 
-output "site_backup_access_key_id" {
-  value = "${aws_iam_access_key.site-backup-user-key.id}"
-}
-
-output "site_backup_access_key_secret" {
-  value = "${aws_iam_access_key.site-backup-user-key.secret}"
-}
-
 output "ip_address" {
   value = "${module.single-machine.address}"
 }

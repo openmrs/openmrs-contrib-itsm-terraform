@@ -155,44 +155,6 @@ resource "aws_iam_user_policy" "bamboo-user-policy" {
 EOF
 }
 
-
-resource "aws_iam_user" "website-assets-user" {
-  name  = "website-assets"
-}
-
-resource "aws_iam_access_key" "website-assets-key" {
-  user = "${aws_iam_user.website-assets-user.name}"
-}
-
-resource "aws_iam_user_policy" "website-assets-user-policy" {
-  name  = "upload_website_assets_docs"
-  user  = "${aws_iam_user.website-assets-user.name}"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["s3:ListAllMyBuckets", "s3:GetBucketLocation"],
-      "Resource": ["*"]
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
-      "Resource": ["${aws_s3_bucket.docs-s3.arn}"]
-    },
-    {
-      "Action": [
-        "s3:*"
-      ],
-      "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.docs-s3.arn}/website/*"
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_s3_bucket_object" "vms-inventory-json" {
   bucket       = "${var.bucket_name}"
   key          = "infrastructure/vms.json"
