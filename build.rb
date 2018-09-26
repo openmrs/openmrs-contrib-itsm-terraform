@@ -83,13 +83,13 @@ class Build < Thor
     puts "Running terraform taint on #{dir} (vm resources)"
     system("""source conf/openrc && cd #{dir} \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_instance_v2.vm \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_volume_attach_v2.attach_data_volume \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_volume_attach_v2.attach_data_volume || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.setup-dns \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key || true \
     """) or abort
   end
 
