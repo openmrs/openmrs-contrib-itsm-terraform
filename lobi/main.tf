@@ -106,6 +106,14 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     ip_protocol = "tcp"
     cidr        = "149.165.168.182/32"
   }
+
+  # xindi jetstream
+  rule {
+    from_port   = "${var.bamboo_remote_agent_port}"
+    to_port     = "${var.bamboo_remote_agent_port}"
+    ip_protocol = "tcp"
+    cidr        = "149.165.171.67/32"
+  }
 }
 
 resource "dme_record" "alias-dns" {
