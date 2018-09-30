@@ -122,7 +122,7 @@ resource "null_resource" "upgrade" {
 }
 
 resource "null_resource" "add_github_key" {
-  count      = "${var.add_github_key}"
+  count      = "${var.leave_github_creds}"
   depends_on = ["null_resource.upgrade"]
 
   connection {
@@ -145,6 +145,23 @@ resource "null_resource" "add_github_key" {
       "sudo mv /tmp/github_id_rsa /root/.ssh/github_id_rsa",
       "sudo chmod 600 /root/.ssh/github_id_rsa"
     ]
+  }
+}
+
+
+resource "null_resource" "add_gitcrypt_key" {
+  count      = "${var.leave_github_creds}"
+  depends_on = ["null_resource.upgrade"]
+
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    source      = "../conf/provisioning/ansible"
+    destination = "/root/ansible-gnupg"
   }
 }
 
@@ -253,12 +270,8 @@ resource "null_resource" "ansible" {
       "set -e",
       "set -u",
       "set -x",
-      "yes | DEBIAN_FRONTEND=noninteractive aptdcon --hide-terminal -i git-crypt python-dev libffi-dev",
       "chmod a+x /tmp/ansible.sh",
-      "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}",
-      "rm -rf /tmp/ansible",
-      "rm /root/.ssh/id_rsa",
-      "rm -rf /root/.gnupg"
+      "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}"
     ]
   }
 }

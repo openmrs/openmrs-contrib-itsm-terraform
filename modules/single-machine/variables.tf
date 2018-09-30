@@ -73,8 +73,9 @@ variable "allow_web" {
   default = "true"
 }
 
-# [Optional] If it should create a /root/.ssh/
-variable "add_github_key" {
+# [Optional] If it should create a credentials to clone git repositories
+# from github and decrypt using git-crypt
+variable "leave_github_creds" {
   default = false
 }
 
