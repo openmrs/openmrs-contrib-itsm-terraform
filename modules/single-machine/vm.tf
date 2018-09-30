@@ -255,7 +255,7 @@ resource "null_resource" "copy_facts_backups" {
 # global-variables need to use personal creds instead
 resource "null_resource" "ansible" {
   count      = "${var.use_ansible}"
-  depends_on = ["null_resource.add_github_key", "null_resource.copy_facts", "null_resource.copy_facts_backups"]
+  depends_on = ["null_resource.add_github_key", "null_resource.add_gitcrypt_key", "null_resource.copy_facts", "null_resource.copy_facts_backups"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
