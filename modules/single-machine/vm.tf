@@ -170,9 +170,7 @@ resource "null_resource" "add_gitcrypt_key" {
       "set -u",
       "set -x",
       "sudo mv /tmp/ansible-gnupg /root/ansible-gnupg",
-      "sudo chown -R root:root /root/ansible-gnupg/",
-      "sudo chmod 600 /root/ansible-gnupg",
-      "sudo chmod 700 /root/ansible-gnupg/*"
+      "sudo chown -R root:root /root/ansible-gnupg/"
     ]
   }
 }
