@@ -35,7 +35,7 @@ module "single-machine" {
   data_volume_size      = "${var.data_volume_size}"
   has_backup            = "${var.has_backup}"
   dns_cnames            = "${var.dns_cnames}"
-  leave_github_creds    = true
+  leave_git_clone_creds = true
   allow_web             = false
   extra_security_groups = ["${data.terraform_remote_state.base.secgroup-bamboo-remote-agent-name}"]
 

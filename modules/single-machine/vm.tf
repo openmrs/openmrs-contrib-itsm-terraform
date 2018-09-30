@@ -122,7 +122,7 @@ resource "null_resource" "upgrade" {
 }
 
 resource "null_resource" "add_github_key" {
-  count      = "${var.leave_github_creds}"
+  count      = "${var.leave_git_clone_creds}"
   depends_on = ["null_resource.upgrade"]
 
   connection {
@@ -150,7 +150,7 @@ resource "null_resource" "add_github_key" {
 
 
 resource "null_resource" "add_gitcrypt_key" {
-  count      = "${var.leave_github_creds}"
+  count      = "${var.leave_git_clone_creds}"
   depends_on = ["null_resource.upgrade"]
 
   connection {
@@ -161,7 +161,16 @@ resource "null_resource" "add_gitcrypt_key" {
 
   provisioner "file" {
     source      = "../conf/provisioning/ansible"
-    destination = "/root/ansible-gnupg"
+    destination = "/tmp/ansible-gnupg"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "sudo mv /tmp/ansible-gnupg /root/ansible-gnupg"
+    ]
   }
 }
 

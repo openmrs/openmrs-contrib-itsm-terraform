@@ -75,7 +75,7 @@ variable "allow_web" {
 
 # [Optional] If it should create a credentials to clone git repositories
 # from github and decrypt using git-crypt
-variable "leave_github_creds" {
+variable "leave_git_clone_creds" {
   default = false
 }
 
