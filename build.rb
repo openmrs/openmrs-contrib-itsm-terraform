@@ -122,7 +122,7 @@ class Build < Thor
     $vms = []
 
     File.open('.tmp/docs.md', 'w') do |_file|
-      (Dir['*/'] - $extra_excluded_dirs).each do |d|
+      (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
         outputs_parsed = JSON.parse(outputs)
