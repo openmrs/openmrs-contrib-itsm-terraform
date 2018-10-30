@@ -2,15 +2,15 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.small"
+  default = "m1.medium"
 }
 
 variable "region" {
-  default = "iu"
+  default = "tacc"
 }
 
 variable "hostname" {
-  default = "xindi"
+  default = "gede"
 }
 
 variable "update_os" {
@@ -22,15 +22,15 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier2"
+  default = "staging"
 }
 
 variable "has_data_volume" {
-  default = false
+  default = true
 }
 
 variable "data_volume_size" {
-  default = 10
+  default = 40
 }
 
 variable "has_backup" {
@@ -42,5 +42,5 @@ variable "dns_cnames" {
 }
 
 variable "description" {
-  default = "Bamboo agent"
+  default = "Crowd/authentication applications staging"
 }
