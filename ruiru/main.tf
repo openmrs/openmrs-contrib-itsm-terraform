@@ -56,3 +56,14 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_internet" 
   remote_ip_prefix  = "129.114.17.240/32"
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
+
+# Ruiru (itself)
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_dashboard" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 636
+  port_range_max    = 636
+  remote_ip_prefix  = "${module.single-machine.address}/32"
+  security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
+}
