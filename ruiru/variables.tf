@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ldap-stg", "authentication-stg"]
+  default = ["ldap-stg", "authentication-stg", "id-stg"]
 }
 
 variable "description" {
-  default = "LDAP staging"
+  default = "LDAP and ID staging"
 }
