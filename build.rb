@@ -89,8 +89,20 @@ class Build < Thor
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module module.single-machine.null_resource.copy_facts_backups || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module module.single-machine.template_file.provisioning_file_backup || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_gitcrypt_key || true \
+    "'') || abort
+  end
+
+  desc 'taint-data DIR', 'mark data storage for recreation in DIR'
+  def taint_data(dir)
+    puts "Running terraform taint on #{dir} (data resources)"
+    system(''"source conf/openrc && cd #{dir} \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_blockstorage_volume_v2.data_volume \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_volume_attach_v2.attach_data_volume || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume || true
     "'') || abort
   end
 
