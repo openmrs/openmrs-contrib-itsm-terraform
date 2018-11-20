@@ -19,7 +19,7 @@ def os
   end
 end
 
-$terraform_version = '0.11.0'
+$terraform_version = '0.11.10'
 $terraform_url = "https://releases.hashicorp.com/terraform/#{$terraform_version}/terraform_#{$terraform_version}_#{os}_amd64.zip"
 $tmp_dir = '.tmp/bin'
 $excluded_dirs = ['conf/', 'modules/']
@@ -51,14 +51,14 @@ class Build < Thor
   def init_all
     (Dir['*/'] - $excluded_dirs).each do |d|
       puts "Running terraform init on #{d}"
-      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -force-copy") || abort
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
     end
   end
 
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
     puts "Running terraform init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
