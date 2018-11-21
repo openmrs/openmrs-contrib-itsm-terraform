@@ -49,7 +49,7 @@ class Build < Thor
 
   desc 'init_all', 'Run terraform init in all subfolders'
   def init_all
-    (Dir['*/'] - $excluded_dirs).each do |d|
+    (Dir['*/'] - $excluded_dirs).sort.each do |d|
       puts "Running terraform init on #{d}"
       system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
     end
