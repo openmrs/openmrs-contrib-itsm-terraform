@@ -89,8 +89,8 @@ class Build < Thor
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module module.single-machine.null_resource.copy_facts_backups || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module module.single-machine.template_file.provisioning_file_backup || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts_backups || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine template_file.provisioning_file_backup || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_gitcrypt_key || true \
     "'') || abort
