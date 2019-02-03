@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sync1", "sync2", "sync3", "sync4"]
+  default = ["sync1", "sync2", "sync3", "sync4", "sync-legacy1", "sync-legacy2"]
 }
 
 variable "description" {
