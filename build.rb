@@ -78,7 +78,7 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply terraform.plan") || abort
   end
 
-  desc 'taint-vm DIR', 'mark virtual machine for recreation in DIR'
+  desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
   def taint_vm(dir)
     puts "Running terraform taint on #{dir} (vm resources)"
     system(''"source conf/openrc && cd #{dir} \
@@ -96,7 +96,7 @@ class Build < Thor
     "'') || abort
   end
 
-  desc 'taint-data DIR', 'mark data storage for recreation in DIR'
+  desc 'taint-data DIR', 'mark data storage for re creation in DIR'
   def taint_data(dir)
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
