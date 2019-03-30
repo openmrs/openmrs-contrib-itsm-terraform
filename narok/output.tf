@@ -16,7 +16,7 @@ output "dns_entries" {
 }
 
 output "dns_manual_entries" {
-  value = ["qa.openconceptlab.org", "api.qa.openconceptlab.org", "flower.qa.openconceptlab.org"]
+  value = ["qa.openconceptlab.org", "api.qa.openconceptlab.org", "flower.qa.openconceptlab.org", "openmrs.qa.openconceptlab.org"]
 }
 
 output "ansible_inventory" {
