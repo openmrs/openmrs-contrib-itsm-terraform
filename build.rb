@@ -86,7 +86,7 @@ class Build < Thor
     return unless prompt == 'y'
 
     puts "Running terraform destroy on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform destroy #{dir}") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform destroy") || abort
   end
 
   desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
