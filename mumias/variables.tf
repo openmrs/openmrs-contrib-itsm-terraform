@@ -41,6 +41,10 @@ variable "dns_cnames" {
   default = ["wiki-stg", "issues-stg"]
 }
 
+variable "power_state" {
+  default = "shutoff"
+}
+
 variable "description" {
   default = "Issue tracker and wiki staging machine"
 }

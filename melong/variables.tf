@@ -41,6 +41,10 @@ variable "dns_cnames" {
   default = ["issues"]
 }
 
+output "power_state" {
+  value = "${module.single-machine.power_state}"
+}
+
 variable "description" {
   default = "Issue tracker"
 }

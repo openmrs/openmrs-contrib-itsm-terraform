@@ -38,6 +38,10 @@ output "region" {
   value = "${var.region}"
 }
 
+output "power_state" {
+  value = "${var.power_state}"
+}
+
 output "provisioner" {
   value = "terraform"
 }

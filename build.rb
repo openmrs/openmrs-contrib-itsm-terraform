@@ -78,6 +78,17 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply terraform.plan") || abort
   end
 
+  desc 'destroy DIR', 'completely deletes VM and data'
+  def destroy(dir)
+    puts "Make sure to change prevent_destroy to true following README file."
+    printf "Do you really want to delete stack #{dir}? [y/N]:  "
+    prompt = STDIN.gets.chomp
+    return unless prompt == 'y'
+
+    puts "Running terraform destroy on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform destroy #{dir}") || abort
+  end
+
   desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
   def taint_vm(dir)
     puts "Running terraform taint on #{dir} (vm resources)"
@@ -152,6 +163,7 @@ class Build < Thor
           'data_volume' => outputs_parsed['has_data_volume']['value'] == '1' ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
           'ip'          => outputs_parsed['ip_address']['value'],
           'dns'         => outputs_parsed['dns_entries']['value'],
+          'power_state' => outputs_parsed['power_state']['value'],
           'description' => outputs_parsed['description']['value']
         }
         if outputs_parsed['dns_manual_entries']

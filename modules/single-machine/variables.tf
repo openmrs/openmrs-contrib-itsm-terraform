@@ -79,7 +79,10 @@ variable "leave_git_clone_creds" {
   default = false
 }
 
-
+# [Optional] To leave machine running (active) or powered off (shutoff)
+variable "power_state" {
+  default = "active"
+}
 
 ######  DO NOT CHANGE variables below ######
 ########  Check global-variables for their values. ########

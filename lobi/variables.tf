@@ -41,6 +41,10 @@ variable "dns_cnames" {
   default = []
 }
 
+output "power_state" {
+  value = "${module.single-machine.power_state}"
+}
+
 variable "bamboo_remote_agent_port" {
   default = "54663"
 }

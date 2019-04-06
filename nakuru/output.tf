@@ -63,6 +63,10 @@ output "provisioner" {
   value = "terraform"
 }
 
+output "power_state" {
+  value = "${module.single-machine.power_state}"
+}
+
 output "description" {
   value = "${var.description}"
 }

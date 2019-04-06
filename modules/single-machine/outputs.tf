@@ -25,3 +25,7 @@ output "dns_entries" {
 output "private-dns" {
   value = "${element(concat(dme_record.private_hostname.*.name, list("")), 0)}"
 }
+
+output "power_state" {
+  value = "${openstack_compute_instance_v2.vm.power_state}"
+}

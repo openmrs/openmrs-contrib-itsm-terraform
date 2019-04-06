@@ -41,6 +41,10 @@ variable "dns_cnames" {
   default = []
 }
 
+variable "power_state" {
+  default = "shutoff"
+}
+
 variable "description" {
   default = "Crowd/authentication applications staging"
 }

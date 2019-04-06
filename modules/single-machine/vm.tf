@@ -6,6 +6,7 @@ resource "openstack_compute_instance_v2" "vm" {
   name            = "${var.project_name}-${var.hostname}"
   image_id        = "${var.image}"
   flavor_name     = "${var.flavor}"
+  power_state     = "${var.power_state}"
   key_pair        = "${data.terraform_remote_state.base.key-pair-name}"
   security_groups = ["${
     compact(
@@ -34,8 +35,10 @@ resource "openstack_blockstorage_volume_v2" "data_volume" {
   name   = "${var.project_name}-data_volume"
   size   = "${var.data_volume_size}"
 
+  # this cannot be a variable!!!!!!
+  # https://github.com/hashicorp/terraform/issues/3116
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
