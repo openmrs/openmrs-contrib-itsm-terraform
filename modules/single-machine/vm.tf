@@ -38,7 +38,8 @@ resource "openstack_blockstorage_volume_v2" "data_volume" {
   # this cannot be a variable!!!!!!
   # https://github.com/hashicorp/terraform/issues/3116
   lifecycle {
-    prevent_destroy = false
+    # prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
