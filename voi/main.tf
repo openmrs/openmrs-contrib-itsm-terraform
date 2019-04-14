@@ -38,21 +38,3 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-resource "dme_record" "short-dns" {
-  domainid    = "${var.domain_dns[var.dns_domain]}"
-  name        = ""
-  type        = "ANAME"
-  value       = "${var.hostname}.${var.main_domain_dns}."
-  ttl         = 3600
-  gtdLocation = "DEFAULT"
-}
-
-resource "dme_record" "short-dns-wildcard" {
-  domainid    = "${var.domain_dns[var.dns_domain]}"
-  name        = "*"
-  type        = "ANAME"
-  value       = "${var.hostname}.${var.main_domain_dns}."
-  ttl         = 3600
-  gtdLocation = "DEFAULT"
-}

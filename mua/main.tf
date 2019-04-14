@@ -39,6 +39,24 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
 }
 
+# Terraform provider bug doesn't allow to update APEX
+resource "dme_record" "short-dns" {
+  domainid    = "${var.domain_dns[var.dns_domain]}"
+  name        = ""
+  type        = "ANAME"
+  value       = "${var.hostname}.${var.main_domain_dns}."
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
+
+resource "dme_record" "short-dns-wildcard" {
+  domainid    = "${var.domain_dns[var.dns_domain]}"
+  name        = "*"
+  type        = "ANAME"
+  value       = "${var.hostname}.${var.main_domain_dns}."
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
 
 # Terraform provider bug doesn't allow to update APEX
 # resource "dme_record" "apex" {

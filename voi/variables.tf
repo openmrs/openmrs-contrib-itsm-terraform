@@ -38,7 +38,8 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["shortener", "atlas"]
+  #default = ["shortener", "atlas"]
+  default = []
 }
 
 variable "dns_domain" {

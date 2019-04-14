@@ -38,7 +38,11 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["site", "www"]
+  default = ["site", "www", "shortener"]
+}
+
+variable "dns_domain" {
+  default = "om.rs"
 }
 
 variable "description" {
