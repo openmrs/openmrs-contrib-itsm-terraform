@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder"]
+  default = ["mdsbuilder", "ebola-demo"]
 }
 
 variable "description" {
-  default = "OpenMRS Platform"
+  default = "OpenMRS Platform and Refapp environments"
 }
