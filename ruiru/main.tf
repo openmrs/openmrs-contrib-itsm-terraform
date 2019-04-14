@@ -46,14 +46,26 @@ resource "openstack_networking_secgroup_v2" "secgroup_ldap" {
   description           = "Allow ldap staging clients to connect to server (terraform)"
 }
 
-# kisumu
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_internet" {
+
+# lamu (atlas-stg)
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_atlas" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 636
   port_range_max    = 636
-  remote_ip_prefix  = "129.114.17.240/32"
+  remote_ip_prefix  = "129.114.18.77/32"
+  security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
+}
+
+# gede (Crowd-stg)
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_crowd" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 636
+  port_range_max    = 636
+  remote_ip_prefix  = "129.114.17.122/32"
   security_group_id = "${openstack_networking_secgroup_v2.secgroup_ldap.id}"
 }
 
