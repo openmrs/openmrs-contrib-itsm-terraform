@@ -46,5 +46,5 @@ variable "dns_domain" {
 }
 
 variable "description" {
-  default = "OpenMRS site"
+  default = "OpenMRS community applications"
 }

@@ -42,5 +42,5 @@ variable "dns_cnames" {
 }
 
 variable "description" {
-  default = "Addons staging server"
+  default = "Addons and atlas staging server"
 }
