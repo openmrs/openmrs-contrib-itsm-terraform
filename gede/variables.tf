@@ -38,11 +38,11 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = []
+  default = ["crowd-stg"]
 }
 
 variable "power_state" {
-  default = "shutoff"
+  default = "active"
 }
 
 variable "description" {
