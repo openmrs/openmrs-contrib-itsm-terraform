@@ -35,6 +35,10 @@ module "single-machine" {
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
+  allow_web         = false
+  has_private_dns   = true
+
+  extra_security_groups = ["${openstack_networking_secgroup_v2.secgroup_database.name}"]
 
 
   # Global variables
@@ -48,14 +52,14 @@ module "single-machine" {
 }
 
 
-# resource "dme_record" "private-dns" {
-#   domainid    = "${var.domain_dns["openmrs.org"]}"
-#   name        = "db-stg-internal"
-#   type        = "CNAME"
-#   value       = "${module.single-machine.private-dns}"
-#   ttl         = 300
-#   gtdLocation = "DEFAULT"
-# }
+resource "dme_record" "private-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "database-stg-internal"
+  type        = "CNAME"
+  value       = "${module.single-machine.private-dns}"
+  ttl         = 300
+  gtdLocation = "DEFAULT"
+}
 
 
 resource "openstack_networking_secgroup_v2" "secgroup_database" {
