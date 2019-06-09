@@ -41,6 +41,10 @@ variable "dns_cnames" {
   default = ["talk-stg"]
 }
 
+variable "power_state" {
+  default = "shutoff"
+}
+
 variable "description" {
   default = "Discourse/forum server staging"
 }
