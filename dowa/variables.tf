@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder"]
+  default = ["mdsbuilder", "bootstrapmigration"]
 }
 
 variable "description" {
