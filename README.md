@@ -102,7 +102,7 @@ $ ./build apply docs
   - _build.rb_: build helper (thor) file
   - _conf/_ : configuration files and authentication files
   - _conf/template-stack_: base files used when creating new stacks
-  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine. Each
+  - _conf/provisioning_: keys and helpers to run ansible when provisioning a machine. Each folder should be a different state/stack file.
   - _modules/_: terraform modules
   - _modules/single-machine_: terraform module to generate a machine, with a A DNS record.
   - _global-variables.tf_: global terraform variables symlinked on each stack
