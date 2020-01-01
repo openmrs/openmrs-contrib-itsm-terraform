@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.small"
+  default = "m1.medium"
 }
 
 variable "region" {
@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder"]
+  default = ["mdsbuilder", "uat-platform"]
 }
 
 variable "description" {
