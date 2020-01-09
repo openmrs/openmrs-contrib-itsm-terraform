@@ -17,8 +17,12 @@ chmod 600 /root/.ssh/id_rsa
 
 git clone -q ${ansible_repo} /tmp/ansible
 cd /tmp/ansible/ansible
+
+# temp branch to upgrade ansible
+git checkout ITSM-3933
 git crypt unlock
-pip install -q "ansible==2.2.3"
+
+pip install -q "ansible==2.9.2"
 ansible-galaxy install -p roles -r requirements.yml --force
 ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org -c local site.yml || true
 
