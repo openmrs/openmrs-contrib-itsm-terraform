@@ -1,5 +1,5 @@
 variable "image" {
-  default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
+  default = "64ad3b27-4d95-4c12-9c7f-1a85a73fdeff"
 }
 
 variable "ssh_key_file" {
