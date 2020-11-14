@@ -18,7 +18,7 @@ chmod 600 /root/.ssh/id_rsa
 git clone -q ${ansible_repo} /tmp/ansible
 cd /tmp/ansible/ansible
 git crypt unlock
-pip install -q "ansible==2.9.6"
+pip install -q "ansible==2.10.3"
 ansible-galaxy install -p roles -r requirements.yml --force
 ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org -c local site.yml || true
 
