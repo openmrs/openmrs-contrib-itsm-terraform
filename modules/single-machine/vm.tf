@@ -75,7 +75,9 @@ resource "null_resource" "mount_data_volume" {
   }
 }
 
+
 resource "null_resource" "setup-dns" {
+  count      = "${var.configure_dns}"
   depends_on  = ["null_resource.mount_data_volume"]
   connection {
     user        = "${var.ssh_username}"
