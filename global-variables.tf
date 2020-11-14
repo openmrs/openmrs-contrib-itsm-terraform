@@ -1,5 +1,5 @@
 variable "image" {
-  default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
+  default = "46794408-6a80-44b1-bf5a-405127753f43"
 }
 
 variable "ssh_key_file" {
@@ -12,7 +12,7 @@ variable "ansible_repo" {
 }
 
 variable "ssh_username" {
-  default = "root"
+  default = "ubuntu"
 }
 
 variable "project_name" {

@@ -6,3 +6,11 @@ data "terraform_remote_state" "base" {
         key    = "basic-network-setup.tfstate"
     }
 }
+
+provider "dme" {
+    version = "0.1.0"
+}
+
+provider "null" {
+    version = "1.0.0"
+}
