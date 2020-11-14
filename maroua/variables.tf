@@ -25,10 +25,6 @@ variable "ansible_inventory" {
   default = "prod-tier1"
 }
 
-variable "configure_dns" {
-  default = false
-}
-
 variable "has_data_volume" {
   default = true
 }

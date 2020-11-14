@@ -37,5 +37,5 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
-  configure_dns     = "${var.configure_dns}"
+  configure_dns     = false
 }
