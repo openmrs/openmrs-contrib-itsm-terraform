@@ -23,6 +23,7 @@ You need to have installed:
   - [git-crypt](https://github.com/AGWA/git-crypt/blob/master/INSTALL.md)
   - ruby (2.0+)
   - thor (`gem install thor`)
+  - `wget`
 
 # Development environment setup
 To install terraform and initial setup (needed only once)
