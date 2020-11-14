@@ -31,10 +31,11 @@ module "single-machine" {
 
   # Global variables
   # Don't change values below
-  image             = "${var.image}"
+  image             = "${var.image_ubuntu_20}"
   project_name      = "${var.project_name}"
-  ssh_username      = "${var.ssh_username}"
+  ssh_username      = "${var.ssh_username_ubuntu_20}"
   ssh_key_file      = "${var.ssh_key_file}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
+  configure_dns     = "${var.configure_dns}"
 }

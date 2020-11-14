@@ -1,4 +1,10 @@
+# ubuntu 16
 variable "image" {
+  default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
+}
+
+# ubuntu_20
+variable "image_ubuntu_20" {
   default = "46794408-6a80-44b1-bf5a-405127753f43"
 }
 
@@ -12,7 +18,15 @@ variable "ansible_repo" {
 }
 
 variable "ssh_username" {
+  default = "root"
+}
+
+variable "ssh_username_ubuntu_20" {
   default = "ubuntu"
+}
+
+variable "configure_dns" {
+  default = true
 }
 
 variable "project_name" {

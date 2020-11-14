@@ -21,6 +21,10 @@ variable "use_ansible" {
   default = false
 }
 
+variable "configure_dns" {
+  default = false
+}
+
 variable "ansible_inventory" {
   default = "production"
 }

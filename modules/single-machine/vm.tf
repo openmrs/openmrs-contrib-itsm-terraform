@@ -75,8 +75,35 @@ resource "null_resource" "mount_data_volume" {
   }
 }
 
+
+resource "null_resource" "setup-dns" {
+  count      = "${var.configure_dns}"
+  depends_on  = ["null_resource.mount_data_volume"]
+  connection {
+    user        = "${var.ssh_username}"
+    private_key = "${file(var.ssh_key_file)}"
+    host        = "${openstack_compute_floatingip_v2.ip.address}"
+  }
+
+  provisioner "file" {
+    source      = "../conf/provisioning/configure-dns.sh"
+    destination = "/tmp/configure-dns.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "set -e",
+      "set -u",
+      "set -x",
+      "chmod a+x /tmp/configure-dns.sh",
+      "sudo /tmp/configure-dns.sh",
+    ]
+  }
+}
+
 resource "null_resource" "upgrade" {
   count = "${var.update_os}"
+  depends_on = ["null_resource.setup-dns"]
   connection {
     user        = "${var.ssh_username}"
     private_key = "${file(var.ssh_key_file)}"
