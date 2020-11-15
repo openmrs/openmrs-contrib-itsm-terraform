@@ -49,3 +49,13 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
   configure_dns     = false
 }
+
+# this needs to be aname for some reason?
+resource "dme_record" "alias-dns" {
+  domainid    = "${var.domain_dns["openmrs.org"]}"
+  name        = "tickets"
+  type        = "ANAME"
+  value       = "${var.hostname}"
+  ttl         = 3600
+  gtdLocation = "DEFAULT"
+}
