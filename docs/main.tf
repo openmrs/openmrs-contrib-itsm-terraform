@@ -6,6 +6,14 @@ terraform {
   }
 }
 
+provider "dme" {
+    version = "0.1.0"
+}
+
+provider "null" {
+    version = "1.0.0"
+}
+
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "openmrs-docs-logs"
   acl    = "log-delivery-write"
