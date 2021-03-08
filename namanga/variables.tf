@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["openhim","hapifhir"]
+  default = ["openhim","hapifhir", "openhimcore", "openhimclientport"]
 }
 
 variable "description" {
