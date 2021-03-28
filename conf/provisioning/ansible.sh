@@ -10,7 +10,8 @@ hostname="$3"
 
 echo "Repo: ${ansible_repo}, Inv: ${ansible_inventory}, Host: ${hostname}"
 
-yes | DEBIAN_FRONTEND=noninteractive aptdcon --hide-terminal -i git-crypt python-dev libffi-dev
+export DEBIAN_FRONTEND=noninteractive
+apt-get -yq install git-crypt python3-dev python3-pip libffi-dev
 fgrep -q "github.com" ~/.ssh/known_hosts || ssh-keyscan github.com >> ~/.ssh/known_hosts
 rm -rf /tmp/ansible
 chmod 600 /root/.ssh/id_rsa
@@ -18,7 +19,7 @@ chmod 600 /root/.ssh/id_rsa
 git clone -q ${ansible_repo} /tmp/ansible
 cd /tmp/ansible/ansible
 git crypt unlock
-pip install -q "ansible==2.10.3"
+pip3 install -q "ansible==2.10.3"
 ansible-galaxy install -p roles -r requirements.yml --force
 ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org -c local site.yml || true
 
