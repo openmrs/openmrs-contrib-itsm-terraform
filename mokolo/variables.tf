@@ -38,9 +38,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sonar", "implementation", "notes-new", "quizgrader", "pmtool", "shields"]
+  default = ["sonar", "implementation", "notes-new", "quizgrader", "shields"]
 }
 
 variable "description" {
-  default = "Sonarqube, implementation ID, notes, /dev/1 quiz grader, shields, & PM Tool for OpenMRS"
+  default = "Sonarqube, implementation ID, notes, /dev/1 quiz grader & shields for OpenMRS"
 }
