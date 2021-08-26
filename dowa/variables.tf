@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder", "uat-platform"]
+  default = ["dev3", "mdsbuilder", "uat-platform"]
 }
 
 variable "description" {
