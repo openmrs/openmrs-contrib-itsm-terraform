@@ -8,9 +8,9 @@ data "terraform_remote_state" "base" {
 }
 
 provider "dme" {
-    version = "0.1.0"
+    version = "0.1.3"
 }
 
 provider "null" {
-    version = "1.0.0"
+    version = "3.1.0"
 }
