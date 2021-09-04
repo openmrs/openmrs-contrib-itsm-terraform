@@ -3,8 +3,8 @@ resource "aws_s3_bucket" "ocl-bucket" {
   versioning {
     enabled = true
   }
-  tags {
-    Terraform        = "${var.hostname}"
+  tags = {
+    Terraform = var.hostname
   }
   lifecycle {
     prevent_destroy = true
@@ -12,16 +12,16 @@ resource "aws_s3_bucket" "ocl-bucket" {
 }
 
 resource "aws_iam_user" "ocl-user" {
-  name  = "ocl-qa-${var.hostname}"
+  name = "ocl-qa-${var.hostname}"
 }
 
 resource "aws_iam_access_key" "ocl-user-key" {
-  user = "${aws_iam_user.ocl-user.name}"
+  user = aws_iam_user.ocl-user.name
 }
 
 resource "aws_iam_user_policy" "ocl-user-policy" {
-  name  = "ocl_qa"
-  user  = "${aws_iam_user.ocl-user.name}"
+  name   = "ocl_qa"
+  user   = aws_iam_user.ocl-user.name
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -45,4 +45,6 @@ resource "aws_iam_user_policy" "ocl-user-policy" {
   ]
 }
 EOF
+
 }
+
