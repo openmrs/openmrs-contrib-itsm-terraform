@@ -53,7 +53,7 @@ variable "has_backup" {
 
 # [Optional] extra CNAMES to create on DNS
 variable "dns_cnames" {
-  type    = "list"
+  type    = list
   default = []
 }
 
@@ -64,7 +64,7 @@ variable "has_private_dns" {
 
 # [Optional] extra security_groups to apply to VM
 variable "extra_security_groups" {
-  type    = "list"
+  type    = list
   default = []
 }
 
@@ -106,7 +106,7 @@ variable "ssh_username" { }
 variable "ssh_key_file" { }
 
 # DNS domains in our DNS provider
-variable "domain_dns" { type = "map" }
+variable "domain_dns" { type = map }
 
 # repository where to download ansible code
 variable "ansible_repo" {  }
@@ -115,3 +115,7 @@ variable "ansible_repo" {  }
 variable "pool" {
   default = "public"
 }
+
+variable "dme_apikey" {}
+
+variable "dme_secretkey" {}

@@ -25,7 +25,7 @@ resource "aws_iam_user_policy" "backup-user-policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["${data.terraform_remote_state.base.backup-bucket-arn}"]
+      "Resource": ["${data.terraform_remote_state.base.outputs.backup-bucket-arn}"]
     },
     {
       "Action": [
@@ -34,7 +34,7 @@ resource "aws_iam_user_policy" "backup-user-policy" {
         "s3:AbortMultipartUpload"
       ],
       "Effect": "Allow",
-      "Resource": "${data.terraform_remote_state.base.backup-bucket-arn}/${var.hostname}/*"
+      "Resource": "${data.terraform_remote_state.base.outputs.backup-bucket-arn}/${var.hostname}/*"
     }
   ]
 }

@@ -167,7 +167,7 @@ resource "aws_s3_bucket_object" "vms-inventory-json" {
   bucket       = "${var.bucket_name}"
   key          = "infrastructure/vms.json"
   source       = "vms.json"                          # use './build docs' to generate it
-  etag         = "${md5(file("vms.json"))}"
+  etag         = md5(file("vms.json"))
   content_type = "application/json"
 }
 
@@ -175,6 +175,6 @@ resource "aws_s3_bucket_object" "vms-inventory" {
   bucket       = "${var.bucket_name}"
   key          = "infrastructure/vms.html"
   source       = "vms.html"                        # use './build docs' to generate it
-  etag         = "${md5(file("vms.html"))}"
+  etag         = md5(file("vms.html"))
   content_type = "text/html"
 }

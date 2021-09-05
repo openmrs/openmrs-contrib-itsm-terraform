@@ -36,5 +36,7 @@ module "single-machine" {
   ssh_key_file = var.ssh_key_file
   domain_dns   = var.domain_dns
   ansible_repo = var.ansible_repo
+  dme_apikey   = var.dme_apikey
+  dme_secretkey = var.dme_secretkey
 }
 

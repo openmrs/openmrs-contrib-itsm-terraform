@@ -48,9 +48,11 @@ variable "main_domain_dns" {
   default = "openmrs.org"
 }
 
-variable "tacc_url" {
-}
+variable "tacc_url" {}
 
-variable "iu_url" {
-}
+variable "iu_url" {}
+
+variable "dme_apikey" {}
+
+variable "dme_secretkey" {}
 
