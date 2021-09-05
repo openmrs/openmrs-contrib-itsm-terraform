@@ -12,25 +12,6 @@ provider "openstack" {
   version = "1.43"
 }
 
-provider "dme" {
-    version = "0.1.3"
-    api_key    = var.dme_apikey
-    secret_key = var.dme_secretkey
-}
-
-provider "aws" {
-    version = "3.57.0"
-    max_retries = 100
-}
-
-provider "template" {
-    version = "2.2"
-}
-
-provider "null" {
-    version = "3.0.0"
-}
-
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {
@@ -50,11 +31,14 @@ module "single-machine" {
 
   # Global variables
   # Don't change values below
-  image        = var.image
-  project_name = var.project_name
-  ssh_username = var.ssh_username
-  ssh_key_file = var.ssh_key_file
-  domain_dns   = var.domain_dns
-  ansible_repo = var.ansible_repo
+  image         = var.image
+  project_name  = var.project_name
+  ssh_username  = var.ssh_username
+  ssh_key_file  = var.ssh_key_file
+  domain_dns    = var.domain_dns
+  ansible_repo  = var.ansible_repo
+  dme_apikey    = var.dme_apikey
+  dme_secretkey = var.dme_secretkey
+
 }
 

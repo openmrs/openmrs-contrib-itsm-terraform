@@ -116,3 +116,6 @@ variable "pool" {
   default = "public"
 }
 
+variable "dme_apikey" {}
+
+variable "dme_secretkey" {}
