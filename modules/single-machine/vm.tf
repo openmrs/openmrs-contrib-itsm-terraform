@@ -101,7 +101,7 @@ resource "null_resource" "setup-dns" {
 }
 
 resource "null_resource" "upgrade" {
-  count = var.update_os
+  count = var.update_os? 1 : 0
   depends_on = [null_resource.setup-dns]
   connection {
     user        = var.ssh_username
@@ -127,7 +127,7 @@ resource "null_resource" "upgrade" {
 }
 
 resource "null_resource" "add_github_key" {
-  count      = var.leave_git_clone_creds
+  count      = var.leave_git_clone_creds? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -155,7 +155,7 @@ resource "null_resource" "add_github_key" {
 
 
 resource "null_resource" "add_gitcrypt_key" {
-  count      = var.leave_git_clone_creds
+  count      = var.leave_git_clone_creds? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -191,7 +191,7 @@ data "template_file" "provisioning_file" {
 
 
 resource "null_resource" "copy_facts" {
-  count      = var.copy_ansible_facts
+  count      = var.copy_ansible_facts? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -218,7 +218,7 @@ resource "null_resource" "copy_facts" {
 }
 
 data "template_file" "provisioning_file_backup" {
-  count    = var.has_backup
+  count    = var.has_backup? 1 : 0
   template = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
     aws_access_key_id     = "${aws_iam_access_key.backup-user-key[count.index].id}"
     aws_secret_access_key = "${aws_iam_access_key.backup-user-key[count.index].secret}"
@@ -226,7 +226,7 @@ data "template_file" "provisioning_file_backup" {
 }
 
 resource "null_resource" "copy_facts_backups" {
-  count = var.has_backup
+  count = var.has_backup? 1 : 0
   depends_on = [null_resource.copy_facts]
 
   connection {
@@ -254,7 +254,7 @@ resource "null_resource" "copy_facts_backups" {
 # ssh/scp from terraform stops working after this step
 # global-variables need to use personal creds instead
 resource "null_resource" "ansible" {
-  count      = var.use_ansible
+  count      = var.use_ansible? 1 : 0
   depends_on = [null_resource.add_github_key, null_resource.add_gitcrypt_key, null_resource.copy_facts, null_resource.copy_facts_backups]
   connection {
     user        = var.ssh_username
