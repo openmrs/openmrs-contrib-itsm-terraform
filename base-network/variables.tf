@@ -5,3 +5,4 @@ variable "external_gateway_tacc" {
 variable "external_gateway_iu" {
   default = "4367cd20-722f-4dc2-97e8-90d98c25f12e"
 }
+

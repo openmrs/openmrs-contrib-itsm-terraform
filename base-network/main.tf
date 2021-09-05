@@ -7,11 +7,14 @@ terraform {
 }
 
 provider "openstack" {
-  auth_url = "${var.iu_url}"
+  auth_url = var.iu_url
   alias    = "iu"
+  version = "1.43"
 }
 
 provider "openstack" {
-  auth_url = "${var.tacc_url}"
+  auth_url = var.tacc_url
   alias    = "tacc"
+  version = "1.43"
 }
+
