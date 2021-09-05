@@ -42,9 +42,10 @@ variable "dns_cnames" {
 }
 
 output "power_state" {
-  value = "${module.single-machine.power_state}"
+  value = module.single-machine.power_state
 }
 
 variable "description" {
   default = "ID dashboard"
 }
+
