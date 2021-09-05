@@ -9,7 +9,6 @@ terraform {
 # Change to ${var.iu_url} if using iu datacenter
 provider "openstack" {
   auth_url = var.iu_url
-  version = "1.43"
 }
 
 # Description of arguments can be found in
