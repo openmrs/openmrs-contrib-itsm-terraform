@@ -38,9 +38,10 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mdsbuilder", "uat-platform","dev3"]
+  default = ["mdsbuilder", "uat-platform", "dev3"]
 }
 
 variable "description" {
   default = "OpenMRS Platform and Refapp environments"
 }
+
