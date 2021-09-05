@@ -30,7 +30,7 @@ resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
 }
 
 resource "openstack_blockstorage_volume_v2" "data_volume" {
-  count  = var.has_data_volume
+  count  = var.has_data_volume? 1 : 0
   name   = "${var.project_name}-data_volume"
   size   = var.data_volume_size
 
@@ -43,14 +43,14 @@ resource "openstack_blockstorage_volume_v2" "data_volume" {
 }
 
 resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
-  count       = var.has_data_volume
+  count       = var.has_data_volume? 1 : 0
   depends_on  = [openstack_blockstorage_volume_v2.data_volume, openstack_compute_instance_v2.vm]
   instance_id = openstack_compute_instance_v2.vm.id
   volume_id   = openstack_blockstorage_volume_v2.data_volume[count.index].id
 }
 
 resource "null_resource" "mount_data_volume" {
-  count       = var.has_data_volume
+  count       = var.has_data_volume? 1 : 0
   depends_on  = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
@@ -76,7 +76,7 @@ resource "null_resource" "mount_data_volume" {
 
 
 resource "null_resource" "setup-dns" {
-  count      = var.configure_dns
+  count      = var.configure_dns? 1 : 0
   depends_on  = [null_resource.mount_data_volume]
   connection {
     user        = var.ssh_username

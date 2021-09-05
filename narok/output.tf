@@ -1,10 +1,10 @@
-output "ocl_access_key_id" {
-  value = aws_iam_access_key.ocl-user-key.id
-}
+# output "ocl_access_key_id" {
+#   value = aws_iam_access_key.ocl-user-key.id
+# }
 
-output "ocl_access_key_secret" {
-  value = aws_iam_access_key.ocl-user-key.secret
-}
+# output "ocl_access_key_secret" {
+#   value = aws_iam_access_key.ocl-user-key.secret
+# }
 
 output "ip_address" {
   value = module.single-machine.address

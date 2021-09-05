@@ -7,7 +7,7 @@ resource "dme_dns_record" "hostname" {
 }
 
 resource "dme_dns_record" "private_hostname" {
-  count       = var.has_private_dns
+  count       = var.has_private_dns? 1 : 0
   domain_id    = var.domain_dns["openmrs.org"]
   name        = "${var.hostname}-internal"
   type        = "A"
