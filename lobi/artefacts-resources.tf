@@ -3,8 +3,8 @@ resource "aws_s3_bucket" "bamboo-artefacts-bucket" {
   versioning {
     enabled = true
   }
-  tags {
-    Terraform        = "${var.hostname}"
+  tags = {
+    Terraform = var.hostname
   }
   lifecycle {
     prevent_destroy = true
@@ -12,16 +12,16 @@ resource "aws_s3_bucket" "bamboo-artefacts-bucket" {
 }
 
 resource "aws_iam_user" "bamboo-artefacts-user" {
-  name  = "bamboo-artefacts-${var.hostname}"
+  name = "bamboo-artefacts-${var.hostname}"
 }
 
 resource "aws_iam_access_key" "bamboo-artefacts-user-key" {
-  user = "${aws_iam_user.bamboo-artefacts-user.name}"
+  user = aws_iam_user.bamboo-artefacts-user.name
 }
 
 resource "aws_iam_user_policy" "bamboo-artefacts-user-policy" {
-  name  = "bamboo-artefacts"
-  user  = "${aws_iam_user.bamboo-artefacts-user.name}"
+  name   = "bamboo-artefacts"
+  user   = aws_iam_user.bamboo-artefacts-user.name
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -45,4 +45,6 @@ resource "aws_iam_user_policy" "bamboo-artefacts-user-policy" {
   ]
 }
 EOF
+
 }
+

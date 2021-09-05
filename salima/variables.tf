@@ -33,7 +33,7 @@ variable "has_data_volume" {
 # as using terraform would destroy the volume. 
 # https://issues.openmrs.org/browse/ITSM-4211?focusedCommentId=272011&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-272011
 variable "data_volume_size" {
-  default = 40
+  default = 80
 }
 
 variable "has_backup" {
@@ -47,3 +47,4 @@ variable "dns_cnames" {
 variable "description" {
   default = "Database"
 }
+

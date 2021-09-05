@@ -1,39 +1,38 @@
 resource "openstack_compute_floatingip_v2" "ip" {
-  pool       = "${var.pool}"
+  pool       = var.pool
 }
 
 resource "openstack_compute_instance_v2" "vm" {
   name            = "${var.project_name}-${var.hostname}"
-  image_id        = "${var.image}"
-  flavor_name     = "${var.flavor}"
-  power_state     = "${var.power_state}"
-  key_pair        = "${data.terraform_remote_state.base.key-pair-name}"
-  security_groups = ["${
-    compact(
+  image_id        = var.image
+  flavor_name     = var.flavor
+  power_state     = var.power_state
+  key_pair        = data.terraform_remote_state.base.outputs.key-pair-name
+  security_groups = compact(
       concat(
           list(
-            data.terraform_remote_state.base.secgroup-ssh-name,
-            var.allow_web? data.terraform_remote_state.base.secgroup-http-name:""
+            data.terraform_remote_state.base.outputs.secgroup-ssh-name,
+            var.allow_web? data.terraform_remote_state.base.outputs.secgroup-http-name:""
           ),
           var.extra_security_groups
       )
-    )
-  }"]
+  )
+  
 
   network {
-    uuid = "${data.terraform_remote_state.base.network-id[var.region]}"
+    uuid = data.terraform_remote_state.base.outputs.network-id[var.region]
   }
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
-  floating_ip = "${openstack_compute_floatingip_v2.ip.address}"
-  instance_id = "${openstack_compute_instance_v2.vm.id}"
+  floating_ip = openstack_compute_floatingip_v2.ip.address
+  instance_id = openstack_compute_instance_v2.vm.id
 }
 
 resource "openstack_blockstorage_volume_v2" "data_volume" {
-  count  = "${var.has_data_volume}"
+  count  = var.has_data_volume? 1 : 0
   name   = "${var.project_name}-data_volume"
-  size   = "${var.data_volume_size}"
+  size   = var.data_volume_size
 
   # this cannot be a variable!!!!!!
   # https://github.com/hashicorp/terraform/issues/3116
@@ -44,19 +43,19 @@ resource "openstack_blockstorage_volume_v2" "data_volume" {
 }
 
 resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
-  count       = "${var.has_data_volume}"
-  depends_on  = ["openstack_blockstorage_volume_v2.data_volume", "openstack_compute_instance_v2.vm"]
-  instance_id = "${openstack_compute_instance_v2.vm.id}"
-  volume_id   = "${openstack_blockstorage_volume_v2.data_volume.id}"
+  count       = var.has_data_volume? 1 : 0
+  depends_on  = [openstack_blockstorage_volume_v2.data_volume, openstack_compute_instance_v2.vm]
+  instance_id = openstack_compute_instance_v2.vm.id
+  volume_id   = openstack_blockstorage_volume_v2.data_volume[count.index].id
 }
 
 resource "null_resource" "mount_data_volume" {
-  count       = "${var.has_data_volume}"
-  depends_on  = ["openstack_compute_floatingip_associate_v2.fip_vm", "openstack_compute_volume_attach_v2.attach_data_volume"]
+  count       = var.has_data_volume? 1 : 0
+  depends_on  = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -77,12 +76,12 @@ resource "null_resource" "mount_data_volume" {
 
 
 resource "null_resource" "setup-dns" {
-  count      = "${var.configure_dns}"
-  depends_on  = ["null_resource.mount_data_volume"]
+  count      = var.configure_dns? 1 : 0
+  depends_on  = [null_resource.mount_data_volume]
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -102,12 +101,12 @@ resource "null_resource" "setup-dns" {
 }
 
 resource "null_resource" "upgrade" {
-  count = "${var.update_os}"
-  depends_on = ["null_resource.setup-dns"]
+  count = var.update_os? 1 : 0
+  depends_on = [null_resource.setup-dns]
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
 
@@ -128,13 +127,13 @@ resource "null_resource" "upgrade" {
 }
 
 resource "null_resource" "add_github_key" {
-  count      = "${var.leave_git_clone_creds}"
-  depends_on = ["null_resource.upgrade"]
+  count      = var.leave_git_clone_creds? 1 : 0
+  depends_on = [null_resource.upgrade]
 
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -156,13 +155,13 @@ resource "null_resource" "add_github_key" {
 
 
 resource "null_resource" "add_gitcrypt_key" {
-  count      = "${var.leave_git_clone_creds}"
-  depends_on = ["null_resource.upgrade"]
+  count      = var.leave_git_clone_creds? 1 : 0
+  depends_on = [null_resource.upgrade]
 
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -182,28 +181,27 @@ resource "null_resource" "add_gitcrypt_key" {
 }
 
 data "template_file" "provisioning_file" {
-  template = "${file("${path.module}/templates/provisioning_facts.tpl")}"
-
-  vars {
-    ansible_inventory = "${var.ansible_inventory}"
-    region            = "${var.region}"
-    has_backup        = "${var.has_backup}"
-  }
+  template = templatefile("${path.module}/templates/provisioning_facts.tpl",
+    {
+      ansible_inventory = var.ansible_inventory
+      region            = var.region
+      has_backup        = var.has_backup
+    })
 }
 
 
 resource "null_resource" "copy_facts" {
-  count      = "${var.copy_ansible_facts}"
-  depends_on = ["null_resource.upgrade"]
+  count      = var.copy_ansible_facts? 1 : 0
+  depends_on = [null_resource.upgrade]
 
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
-    content      = "${data.template_file.provisioning_file.rendered}"
+    content      = data.template_file.provisioning_file.rendered
     destination = "/tmp/provisioning.fact"
   }
 
@@ -220,27 +218,25 @@ resource "null_resource" "copy_facts" {
 }
 
 data "template_file" "provisioning_file_backup" {
-  count = "${var.has_backup}"
-  template = "${file("${path.module}/templates/provisioning_aws_facts.tpl")}"
-
-  vars {
-    aws_access_key_id     = "${aws_iam_access_key.backup-user-key.id}"
-    aws_secret_access_key = "${aws_iam_access_key.backup-user-key.secret}"
-  }
+  count    = var.has_backup? 1 : 0
+  template = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
+    aws_access_key_id     = "${aws_iam_access_key.backup-user-key[count.index].id}"
+    aws_secret_access_key = "${aws_iam_access_key.backup-user-key[count.index].secret}"
+  })
 }
 
 resource "null_resource" "copy_facts_backups" {
-  count = "${var.has_backup}"
-  depends_on = ["null_resource.copy_facts"]
+  count = var.has_backup? 1 : 0
+  depends_on = [null_resource.copy_facts]
 
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {
-    content      = "${data.template_file.provisioning_file_backup.rendered}"
+    content      = data.template_file.provisioning_file_backup[count.index].rendered
     destination = "/tmp/aws.fact"
   }
 
@@ -258,12 +254,12 @@ resource "null_resource" "copy_facts_backups" {
 # ssh/scp from terraform stops working after this step
 # global-variables need to use personal creds instead
 resource "null_resource" "ansible" {
-  count      = "${var.use_ansible}"
-  depends_on = ["null_resource.add_github_key", "null_resource.add_gitcrypt_key", "null_resource.copy_facts", "null_resource.copy_facts_backups"]
+  count      = var.use_ansible? 1 : 0
+  depends_on = [null_resource.add_github_key, null_resource.add_gitcrypt_key, null_resource.copy_facts, null_resource.copy_facts_backups]
   connection {
-    user        = "${var.ssh_username}"
-    private_key = "${file(var.ssh_key_file)}"
-    host        = "${openstack_compute_floatingip_v2.ip.address}"
+    user        = var.ssh_username
+    private_key = file(var.ssh_key_file)
+    host        = openstack_compute_floatingip_v2.ip.address
   }
 
   provisioner "file" {

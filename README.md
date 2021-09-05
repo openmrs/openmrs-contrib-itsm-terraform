@@ -26,11 +26,11 @@ You need to have installed:
   - `wget`
 
 # Development environment setup
-To install terraform and initial setup (needed only once)
+To install terraform, run git crypto and initial setup (needed only once after cloning repo)
 ```
 $ ./build.rb install
 
-# add your TACC credentials to conf/openrc-personal
+# edit conf/openrc-personal and add your TACC credentials to 
 $ vi conf/openrc-personal
 
 # verify file is not encrypted

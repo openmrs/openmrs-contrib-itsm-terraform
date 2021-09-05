@@ -18,7 +18,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = false  # VM created before this integration
+  default = false # VM created before this integration
 }
 
 variable "ansible_inventory" {
@@ -44,3 +44,4 @@ variable "dns_cnames" {
 variable "description" {
   default = "Addons and atlas staging server"
 }
+

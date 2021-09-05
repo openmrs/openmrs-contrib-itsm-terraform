@@ -1,29 +1,26 @@
-resource "dme_record" "hostname" {
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "${var.hostname}"
+resource "dme_dns_record" "hostname" {
+  domain_id    = var.domain_dns["openmrs.org"]
+  name        = var.hostname
   type        = "A"
-  value       = "${openstack_compute_floatingip_v2.ip.address}"
+  value       = openstack_compute_floatingip_v2.ip.address
   ttl         = 300
-  gtdLocation = "DEFAULT"
 }
 
-resource "dme_record" "private_hostname" {
-  count       = "${var.has_private_dns}"
-  domainid    = "${var.domain_dns["openmrs.org"]}"
+resource "dme_dns_record" "private_hostname" {
+  count       = var.has_private_dns? 1 : 0
+  domain_id    = var.domain_dns["openmrs.org"]
   name        = "${var.hostname}-internal"
   type        = "A"
-  value       = "${openstack_compute_instance_v2.vm.network.0.fixed_ip_v4}"
+  value       = openstack_compute_instance_v2.vm.network.0.fixed_ip_v4
   ttl         = 300
-  gtdLocation = "DEFAULT"
 }
 
 
-resource "dme_record" "cnames" {
-  count       = "${length(var.dns_cnames)}"
-  domainid    = "${var.domain_dns["openmrs.org"]}"
-  name        = "${element(var.dns_cnames, count.index)}"
+resource "dme_dns_record" "cnames" {
+  count       = length(var.dns_cnames)
+  domain_id    = var.domain_dns["openmrs.org"]
+  name        = element(var.dns_cnames, count.index)
   type        = "CNAME"
-  value       = "${var.hostname}"
+  value       = var.hostname
   ttl         = 3600
-  gtdLocation = "DEFAULT"
 }

@@ -9,6 +9,7 @@ terraform {
 # Change to ${var.tacc_url} if using tacc datacenter
 provider "openstack" {
   auth_url = "${var.iu_url}"
+  version = "1.43"
 }
 
 # Description of arguments can be found in
@@ -38,4 +39,6 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
   configure_dns     = false
+  dme_apikey        = var.dme_apikey
+  dme_secretkey     = var.dme_secretkey
 }

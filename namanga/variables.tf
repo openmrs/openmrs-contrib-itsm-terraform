@@ -4,7 +4,7 @@
 variable "flavor" {
   default = "m1.medium"
 }
- 
+
 variable "region" {
   default = "iu"
 }
@@ -38,9 +38,10 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["openhim","hapifhir", "openhimcore", "openhimclientport"]
+  default = ["openhim", "hapifhir", "openhimcore", "openhimclientport"]
 }
 
 variable "description" {
   default = "PLIR PoC Test Servers"
 }
+

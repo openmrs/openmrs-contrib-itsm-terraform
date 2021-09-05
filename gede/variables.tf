@@ -48,3 +48,4 @@ variable "power_state" {
 variable "description" {
   default = "Crowd/authentication applications staging"
 }
+
