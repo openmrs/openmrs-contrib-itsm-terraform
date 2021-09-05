@@ -46,3 +46,4 @@ variable "dns_cnames" {
 variable "description" {
   default = "Discourse/forum server"
 }
+

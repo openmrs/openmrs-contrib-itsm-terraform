@@ -19,12 +19,12 @@ resource "aws_s3_bucket" "talk-backups" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
-  tags {
-    Terraform        = "${var.hostname}"
+  tags = {
+    Terraform = var.hostname
   }
   lifecycle {
     prevent_destroy = true
@@ -36,12 +36,12 @@ resource "aws_iam_user" "talk-backup-user" {
 }
 
 resource "aws_iam_access_key" "talk-backup-user-key" {
-  user = "${aws_iam_user.talk-backup-user.name}"
+  user = aws_iam_user.talk-backup-user.name
 }
 
 resource "aws_iam_user_policy" "talk-backup-user-policy" {
-  name = "backup_talk-policy"
-  user = "${aws_iam_user.talk-backup-user.name}"
+  name   = "backup_talk-policy"
+  user   = aws_iam_user.talk-backup-user.name
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -63,4 +63,6 @@ resource "aws_iam_user_policy" "talk-backup-user-policy" {
   ]
 }
 EOF
+
 }
+
