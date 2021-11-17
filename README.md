@@ -16,6 +16,7 @@ Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmres
 Before you can use this repository, you need:
   - TACC (Jetstream) credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
+  - Add conf/provisioning/ssh/terraform-api.key.pub to https://iu.jetstream-cloud.org and https://tacc.jetstream-cloud.org/ (using "tacc" as the domain and your TACC credentials) under Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key"
 
 
 ## Software
