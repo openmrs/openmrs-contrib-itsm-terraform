@@ -93,17 +93,17 @@ class Build < Thor
   def taint_vm(dir)
     puts "Running terraform taint on #{dir} (vm resources)"
     system(''"source conf/openrc && cd #{dir} \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_instance_v2.vm \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_volume_attach_v2.attach_data_volume || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.setup-dns \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.upgrade \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.ansible || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.copy_facts_backups || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine template_file.provisioning_file_backup || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_github_key || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.add_gitcrypt_key || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.setup-dns[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.upgrade[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.copy_facts[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.ansible[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.copy_facts_backups[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.template_file.provisioning_file_backup[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.add_github_key[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.add_gitcrypt_key[0] || true \
     "'') || abort
   end
 
@@ -111,9 +111,9 @@ class Build < Thor
   def taint_data(dir)
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_blockstorage_volume_v2.data_volume \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine openstack_compute_volume_attach_v2.attach_data_volume || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -module single-machine null_resource.mount_data_volume || true
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_blockstorage_volume_v2.data_volume[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true
     "'') || abort
   end
 
