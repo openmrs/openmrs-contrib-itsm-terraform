@@ -97,7 +97,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     from_port   = var.bamboo_remote_agent_port
     to_port     = var.bamboo_remote_agent_port
     ip_protocol = "tcp"
-    cidr        = "149.165.169.187/32"
+    cidr        = "149.165.170.92/32"
   }
 
   # yue jetstream
@@ -106,14 +106,6 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     to_port     = var.bamboo_remote_agent_port
     ip_protocol = "tcp"
     cidr        = "149.165.168.182/32"
-  }
-
-  # xindi jetstream
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.171.67/32"
   }
 }
 
