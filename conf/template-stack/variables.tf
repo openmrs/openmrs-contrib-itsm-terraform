@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m1.small"
+  default = "m3.small"
 }
 
 variable "region" {

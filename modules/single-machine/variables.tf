@@ -2,6 +2,7 @@
 # Check https://iujetstream.atlassian.net/wiki/x/G4AKAQ for options
 variable "flavor" { }
 
+# To be deprecated with Jetstream 2
 # [Optional] Where the VM should be created.
 # Values could be 'ui' or 'tacc'
 variable "region" {

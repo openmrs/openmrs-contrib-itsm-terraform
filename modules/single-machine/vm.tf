@@ -264,12 +264,12 @@ resource "null_resource" "ansible" {
 
   provisioner "file" {
     source      = "../conf/provisioning/github/github.key"
-    destination = "/root/.ssh/id_rsa"
+    destination = "/tmp/ssh_id_rsa"
   }
 
   provisioner "file" {
     source      = "../conf/provisioning/ansible"
-    destination = "/root/.gnupg"
+    destination = "/tmp/.gnupg"
   }
 
   provisioner "file" {
@@ -283,7 +283,13 @@ resource "null_resource" "ansible" {
       "set -u",
       "set -x",
       "chmod a+x /tmp/ansible.sh",
-      "/tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}"
+      "sudo mkdir -p /root/.ssh",
+      "sudo mv /tmp/ssh_id_rsa /root/.ssh/id_rsa",
+      "sudo chown -R root:root /root/.ssh",
+      "sudo rm -rf /root/.gnupg",
+      "sudo mv /tmp/.gnupg /root/.gnupg",
+      "sudo chown -R root:root /root/.gnupg",
+      "sudo /tmp/ansible.sh \"${var.ansible_repo}\" ${var.ansible_inventory} ${var.hostname}"
     ]
   }
 }
