@@ -6,7 +6,7 @@ variable "flavor" {
 }
 
 variable "region" {
-  default = "iu"
+  default = "v2"
 }
 
 variable "hostname" {
@@ -22,7 +22,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "production"
+  default = "prod-tier4"
 }
 
 variable "has_data_volume" {

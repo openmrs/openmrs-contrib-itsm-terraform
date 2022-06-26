@@ -8,12 +8,9 @@ terraform {
 
 # Change to ${var.tacc_url} if using tacc datacenter
 provider "openstack" {
-  auth_url = "${var.iu_url}"
   version = "1.43"
-  project_domain_name = "tacc"
-  user_domain_name = "tacc"
-  user_name = var.OS_USERNAME
-  password = var.OS_PASSWORD
+  application_credential_id = var.OS_APPLICATION_CREDENTIAL_ID
+  application_credential_secret = var.OS_APPLICATION_CREDENTIAL_SECRET
 }
 
 # Description of arguments can be found in
@@ -36,10 +33,10 @@ module "single-machine" {
 
   # Global variables
   # Don't change values below
-  image             = "${var.image_ubuntu_20}"
+  image             = "${var.image_ubuntu_22}"
   project_name      = "${var.project_name}"
   ssh_username      = "${var.ssh_username_ubuntu_20}"
-  ssh_key_file      = "${var.ssh_key_file}"
+  ssh_key_file      = "${var.ssh_key_file_v2}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
   configure_dns     = false

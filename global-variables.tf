@@ -29,6 +29,7 @@ variable "ansible_repo" {
   default = "git@github.com:openmrs/openmrs-contrib-itsmresources.git"
 }
 
+# To be deprecated with ubuntu 20/22
 variable "ssh_username" {
   default = "root"
 }
@@ -37,6 +38,7 @@ variable "ssh_username_ubuntu_20" {
   default = "ubuntu"
 }
 
+# To be deprecated with ubuntu 20/22
 variable "configure_dns" {
   default = true
 }

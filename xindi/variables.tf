@@ -14,7 +14,7 @@ variable "hostname" {
 }
 
 variable "update_os" {
-  default = false
+  default = true
 }
 
 variable "use_ansible" {
