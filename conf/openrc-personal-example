@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 
+## Jetstream 1 - deprecated
 export OS_USERNAME=tacc-user
 export OS_PASSWORD=tacc-password
+
+## Jetstream 2
+## TODO: Later we can move away from TF vars
+export TF_VAR_OS_APPLICATION_CREDENTIAL_ID=creds-id
+export TF_VAR_OS_APPLICATION_CREDENTIAL_SECRET=secret

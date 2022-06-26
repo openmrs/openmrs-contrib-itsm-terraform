@@ -10,6 +10,10 @@ terraform {
 provider "openstack" {
   auth_url = var.iu_url
   version = "1.43"
+  project_domain_name = "tacc"
+  user_domain_name = "tacc"
+  user_name = var.OS_USERNAME
+  password = var.OS_PASSWORD
 }
 
 # Description of arguments can be found in

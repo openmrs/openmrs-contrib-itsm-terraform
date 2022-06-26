@@ -1,7 +1,15 @@
+# This file will be completely deprecated
+
+
 resource "openstack_compute_keypair_v2" "default-key-tacc" {
   name       = "${var.project_name}-terraform-key"
   public_key = file("${var.ssh_key_file}.pub")
   provider   = openstack.tacc
+  lifecycle {
+    ignore_changes = [
+      public_key,
+    ]
+  }
 }
 
 resource "openstack_networking_network_v2" "private-net-tacc" {

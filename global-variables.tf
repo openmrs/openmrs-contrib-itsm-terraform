@@ -1,8 +1,10 @@
+# To be deprecated
 # ubuntu 16
 variable "image" {
   default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
 }
 
+# to be deprecated
 # ubuntu_20
 variable "image_ubuntu_20" {
   default = "46794408-6a80-44b1-bf5a-405127753f43"
@@ -48,11 +50,30 @@ variable "main_domain_dns" {
   default = "openmrs.org"
 }
 
+# to be deprecated with Jetstream 1
 variable "tacc_url" {
 }
 
+# to be deprecated with Jetstream 1
 variable "iu_url" {
 }
+
+# to be deprecated with Jetstream 1
+variable "OS_USERNAME" {
+}
+
+# to be deprecated with Jetstream 1
+variable "OS_PASSWORD" {
+}
+
+# to be deprecated after fully migrating to Jetstream 2
+variable "OS_APPLICATION_CREDENTIAL_ID" {
+}
+
+# to be deprecated after fully migrating to Jetstream 2
+variable "OS_APPLICATION_CREDENTIAL_SECRET" {
+}
+
 
 variable "dme_apikey" {
 }
