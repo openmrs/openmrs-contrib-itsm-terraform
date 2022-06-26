@@ -18,7 +18,7 @@ Before you can use this repository, you need:
 `Jetstream 1`
   - TACC (Jetstream) credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
-  - Add conf/provisioning/ssh/terraform-api.key.pub to https://iu.jetstream-cloud.org and https://tacc.jetstream-cloud.org/ (using "tacc" as the domain and your TACC credentials) under Project -> Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key"
+  - Add conf/provisioning/ssh/terraform-api-rsa.key.pub to https://iu.jetstream-cloud.org and https://tacc.jetstream-cloud.org/ (using "tacc" as the domain and your TACC credentials) under Project -> Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key"
 
 `Jetstream 2`
   - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/openrc/) to generate a new application credential with permission `Member`. 

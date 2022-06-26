@@ -1,6 +1,6 @@
 resource "openstack_compute_keypair_v2" "default-key" {
   name       = "${var.project_name}-terraform-key"
-  public_key = file("${var.ssh_key_file}.pub")
+  public_key = file("${var.ssh_key_file_v2}.pub")
   provider   = openstack.v2
 }
 

@@ -1,16 +1,26 @@
-# To be deprecated
+# To be deprecated with Jetstream 1
 # ubuntu 16
 variable "image" {
   default = "87e08a17-eae2-4ce4-9051-c561d9a54bde"
 }
 
-# to be deprecated
-# ubuntu_20
+# to be deprecated with Jetstream 1
 variable "image_ubuntu_20" {
   default = "46794408-6a80-44b1-bf5a-405127753f43"
 }
 
+# Available in Jetstream 2
+variable "image_ubuntu_22" {
+  default = "0053a818-64fb-4879-8d64-5ad49ca5a926"
+}
+
+# to be deprecated with Jetstream 1
 variable "ssh_key_file" {
+  description = "SSH key used to provision VMs"
+  default     = "../conf/provisioning/ssh/terraform-api-rsa.key"
+}
+
+variable "ssh_key_file_v2" {
   description = "SSH key used to provision VMs"
   default     = "../conf/provisioning/ssh/terraform-api.key"
 }
