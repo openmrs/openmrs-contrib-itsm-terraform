@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m3.small"
+  default = "m3.quad"
 }
 
 variable "region" {
@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "xindi"
+  default = "sawla"
 }
 
 variable "update_os" {
@@ -22,7 +22,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier2"
+  default = "prod-tier1"
 }
 
 variable "has_data_volume" {
@@ -30,17 +30,17 @@ variable "has_data_volume" {
 }
 
 variable "data_volume_size" {
-  default = 20
+  default = 80
 }
 
 variable "has_backup" {
-  default = false
+  default = true
 }
 
 variable "dns_cnames" {
-  default = []
+  default = ["db"]
 }
 
 variable "description" {
-  default = "Bamboo agent"
+  default = "Database"
 }
