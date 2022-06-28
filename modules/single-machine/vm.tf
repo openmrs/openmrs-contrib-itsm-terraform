@@ -22,6 +22,14 @@ resource "openstack_compute_instance_v2" "vm" {
   network {
     uuid = data.terraform_remote_state.base.outputs.network-id[var.region]
   }
+
+  # Jetstream has a tendency of deprecating images and not allowing new ones
+  # Not recreating machines just because we changed the image ID
+  lifecycle {
+    ignore_changes = [
+      image_id
+    ]
+  }
 }
 
 resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
