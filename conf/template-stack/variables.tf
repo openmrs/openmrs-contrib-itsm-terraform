@@ -33,6 +33,8 @@ variable "data_volume_size" {
   default = 10
 }
 
+# If enabling this, make sure to uncomment the two outputs related to backup
+# Those outputs will be copied over manually to ansible, and stored encrypted
 variable "has_backup" {
   default = false
 }
