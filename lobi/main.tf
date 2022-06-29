@@ -87,7 +87,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     from_group_id = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id-iu
   }
 
-  ##### after migration, the agents shoud connect using the private DNS - ITSM-4090
+  # To be deprecated with Jetstream 1
   # yak jetstream
   rule {
     from_port   = var.bamboo_remote_agent_port
@@ -96,6 +96,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.168.253/32"
   }
 
+  # To be deprecated with Jetstream 1
   # yokobue jetstream
   rule {
     from_port   = var.bamboo_remote_agent_port
@@ -104,6 +105,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.170.92/32"
   }
 
+  # To be deprecated with Jetstream 1
   # yue jetstream
   rule {
     from_port   = var.bamboo_remote_agent_port
@@ -112,12 +114,28 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.168.182/32"
   }
 
+  # xiao jetstream
+  rule {
+    from_port   = var.bamboo_remote_agent_port
+    to_port     = var.bamboo_remote_agent_port
+    ip_protocol = "tcp"
+    cidr        = "149.165.154.41/32"
+  }
+
   # xindi jetstream
   rule {
     from_port   = var.bamboo_remote_agent_port
     to_port     = var.bamboo_remote_agent_port
     ip_protocol = "tcp"
     cidr        = "149.165.152.20/32"
+  }
+
+  # yu jetstream
+  rule {
+    from_port   = var.bamboo_remote_agent_port
+    to_port     = var.bamboo_remote_agent_port
+    ip_protocol = "tcp"
+    cidr        = "149.165.152.37/32"
   }
 }
 

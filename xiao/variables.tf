@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m3.quad"
+  default = "m3.small"
 }
 
 variable "region" {
@@ -10,7 +10,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "goba"
+  default = "xiao"
 }
 
 variable "update_os" {
@@ -18,11 +18,11 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier3"
+  default = "prod-tier2"
 }
 
 variable "has_data_volume" {
@@ -33,14 +33,16 @@ variable "data_volume_size" {
   default = 20
 }
 
+# If enabling this, make sure to uncomment the two outputs related to backup
+# Those outputs will be copied over manually to ansible, and stored encrypted
 variable "has_backup" {
-  default = true
+  default = false
 }
 
 variable "dns_cnames" {
-  default = ["addons-v2.openmrs.org", "modules-v2.openmrs.org", "atlas-v2.openmrs.org", "implementation-v2.openmrs.org", "quizgrader-v2.openmrs.org", "shields-v2.openmrs.org", "radarproxy-v2.openmrs.org"]
+  default = []
 }
 
 variable "description" {
-  default = "Internal community tools"
+  default = "Bamboo agent"
 }
