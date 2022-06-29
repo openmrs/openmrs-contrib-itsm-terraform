@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["addons-v2.openmrs.org", "modules-v2.openmrs.org", "atlas-v2.openmrs.org", "implementation-v2.openmrs.org", "quizgrader-v2.openmrs.org", "shields-v2.openmrs.org", "radarproxy-v2.openmrs.org"]
+  default = ["addons-v2", "modules-v2", "atlas-v2", "implementation-v2", "quizgrader-v2", "shields-v2", "radarproxy-v2"]
 }
 
 variable "description" {

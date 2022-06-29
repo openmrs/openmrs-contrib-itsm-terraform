@@ -136,7 +136,6 @@ Change `./global-variables` and use your username and (passphrase-less) key. Do 
 
 # Gotchas
   - DNS CNAME records cannot be imported by terraform, so they have to be deleted in our DNS server before using them in a stack.
-  - Updating a DNS resource doesn't work in terraform, it appears to be a bug. You need to either delete and create, or change manually.
   - Don't use the DNS redirect. It doesn't support HTTPS.
   - Use _/etc/ansible/facts.d/_ files to export data to ansible. If the files should be modified, you can do it manually.
 
