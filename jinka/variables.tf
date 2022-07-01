@@ -2,7 +2,7 @@
 # ../modules/single-machine/variables.tf in this repository
 
 variable "flavor" {
-  default = "m3.medium"
+  default = "m3.quad"
 }
 
 variable "region" {
