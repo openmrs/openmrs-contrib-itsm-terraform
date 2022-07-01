@@ -40,7 +40,11 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["demo-v2", "mdsbuilder-v2", "o3-v2"]
+  default = ["demo-v2", "mdsbuilder-v2", "o3-v2", "openconceptlab"]
+}
+
+output "dns_manual_entries" {
+  value = []
 }
 
 variable "description" {
