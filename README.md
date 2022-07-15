@@ -7,7 +7,7 @@ You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check t
 This repository can generate documentation for all VMs created, and it's deployed to
 <https://docs.openmrs.org/infrastructure/vms.html> and <https://docs.openmrs.org/infrastructure/vms.json>
 
-Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provision-new-machine) and [Guidelines for New Servers](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Guidelines-for-New-Servers) for more details on how to create machines (these docs are not public).
+Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provision-new-machine) and [Guidelines for New Servers](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Guidelines-for-New-Servers) for more details on how to create machines.
 
 
 
