@@ -13,7 +13,7 @@ variable "image_ubuntu_20" {
 # Very frequently they deprecate older images, and we need to change this
 # terraform is configured to not recreate images if this variable changes
 variable "image_ubuntu_22" {
-  default = "ad7212f5-f406-46b2-bfbc-e6ce6bde051b"
+  default = "661fad9f-361f-4c96-804a-e52b32570286"
 }
 
 # to be deprecated with Jetstream 1
