@@ -18,7 +18,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = false
+  default = true
 }
 
 variable "ansible_inventory" {
@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["modules-refapp-v2", "uat-refapp-v2", "qa-refapp-v2", "uat-platform-v2", "dev3-v2", "qa-v2.oclclient", "openconceptlab-demo", "openconceptlab-staging", "openconceptlab-qa"]
+  default = ["modules-refapp-v2", "uat-refapp-v2", "qa-refapp-v2", "uat-platform-v2", "dev3-v2", "openconceptlab-demo", "openconceptlab-staging", "openconceptlab-qa"]
 }
 
 output "dns_manual_entries" {
