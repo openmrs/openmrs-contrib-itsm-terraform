@@ -102,3 +102,13 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_atlas" {
   security_group_id = openstack_networking_secgroup_v2.secgroup_ldap.id
 }
 
+#adaba
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_id_2" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 636
+  port_range_max    = 636
+  remote_ip_prefix  = "149.165.154.62/32"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_ldap.id
+}
