@@ -12,6 +12,14 @@ provider "openstack" {
   application_credential_secret = var.OS_APPLICATION_CREDENTIAL_SECRET
 }
 
+data "terraform_remote_state" "base" {
+  backend = "s3"
+  config = {
+    bucket = "openmrs-terraform-state-files"
+    key    = "basic-network-setup.tfstate"
+  }
+}
+
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {
@@ -28,6 +36,10 @@ module "single-machine" {
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
+
+  extra_security_groups = [
+    data.terraform_remote_state.base.outputs.secgroup-database-name,
+  ]
 
 
   # Global variables
