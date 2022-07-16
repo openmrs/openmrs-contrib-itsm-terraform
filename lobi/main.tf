@@ -141,7 +141,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
 
 resource "dme_dns_record" "alias-dns" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = "ci"
+  name      = "ci-v1"
   type      = "ANAME"
   value     = var.hostname
   ttl       = 3600
@@ -149,7 +149,7 @@ resource "dme_dns_record" "alias-dns" {
 
 resource "dme_dns_record" "private-dns" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = "ci-internal"
+  name      = "ci-internal-v1"
   type      = "CNAME"
   value     = module.single-machine.private-dns
   ttl       = 300

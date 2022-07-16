@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ci-v2"]
+  default = ["ci"]
 }
 
 variable "bamboo_remote_agent_port" {
