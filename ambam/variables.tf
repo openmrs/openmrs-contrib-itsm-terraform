@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["crowd"]
+  default = ["crowd-v1"]
 }
 
 variable "description" {
