@@ -58,7 +58,7 @@ module "single-machine" {
 # this needs to be aname for some reason?
 resource "dme_dns_record" "alias-dns" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = "tickets"
+  name      = "tickets-v1"
   type      = "ANAME"
   value     = var.hostname
   ttl       = 3600

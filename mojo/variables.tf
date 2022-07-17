@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["issues-v2", "tickets-v2"]
+  default = ["issues", "tickets"]
 }
 
 variable "description" {
