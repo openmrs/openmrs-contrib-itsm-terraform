@@ -28,7 +28,10 @@ module "single-machine" {
   data_volume_size  = "${var.data_volume_size}"
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
-  extra_security_groups = [openstack_networking_secgroup_v2.secgroup_ldap.name]
+  extra_security_groups = [
+    openstack_networking_secgroup_v2.secgroup_ldap.name,
+    data.terraform_remote_state.base.outputs.secgroup-database-name
+  ]
 
 
 
