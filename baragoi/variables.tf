@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["id"]
+  default = ["id-v1"]
 }
 
 output "power_state" {
