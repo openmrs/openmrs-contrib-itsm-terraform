@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["mavenrepo", "mavenrepo-redirect-v1", "help-v1"]
+  default = ["mavenrepo-v1", "mavenrepo-redirect-v1", "help-v1"]
 }
 
 variable "description" {
