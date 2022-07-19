@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["site", "www", "shortener", "beta", "site-legacy"]
+  default = ["site-v1", "www-v1", "shortener-v1", "beta-v1", "site-legacy-v1"]
 }
 
 variable "dns_domain" {

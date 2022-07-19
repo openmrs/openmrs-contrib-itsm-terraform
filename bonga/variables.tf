@@ -44,7 +44,7 @@ variable "dns_cnames" {
 }
 
 output "dns_manual_entries" {
-  value = []
+  value = [ "openmrs.demo.openconceptlab.org", "openmrs.staging.openconceptlab.org", "openmrs.qa.openconceptlab.org", "openmrs.openconceptlab.org"]
 }
 
 variable "description" {

@@ -10,8 +10,18 @@ output "ip_address" {
   value = "${module.single-machine.address}"
 }
 
+# output "dns_entries" {
+#   value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
+# }
+
 output "dns_entries" {
-  value = "${formatlist("%s.%s", var.dns_cnames, var.main_domain_dns)}"
+  value = concat(
+    formatlist("%s.%s", var.dns_cnames, var.main_domain_dns),
+    [
+      var.dns_domain,
+      format("%s.%s", dme_dns_record.short-dns-wildcard.name, var.dns_domain),
+    ],
+  )
 }
 
 output "ansible_inventory" {

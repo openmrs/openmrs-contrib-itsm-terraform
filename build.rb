@@ -64,7 +64,7 @@ class Build < Thor
   desc 'plan DIR', 'run terraform plan on defined directory'
   def plan(dir)
     puts "Running terraform plan on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan -out terraform.plan") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan -out terraform.plan -refresh=false") || abort
   end
 
   desc 'apply DIR', 'run terraform apply on defined directory'

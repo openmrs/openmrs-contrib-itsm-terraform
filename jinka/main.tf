@@ -43,19 +43,27 @@ module "single-machine" {
   dme_secretkey     = var.dme_secretkey
 }
 
-# Terraform provider bug doesn't allow to update APEX
-# resource "dme_dns_record" "short-dns" {
-#   domain_id = var.domain_dns[var.dns_domain]
-#   name      = ""
-#   type      = "ANAME"
-#   value     = "${var.hostname}.${var.main_domain_dns}."
-#   ttl       = 3600
-# }
+resource "dme_dns_record" "short-dns" {
+  domain_id = var.domain_dns[var.dns_domain]
+  name      = ""
+  type      = "ANAME"
+  value     = "${var.hostname}.${var.main_domain_dns}."
+  ttl       = 3600
+}
 
-# resource "dme_dns_record" "short-dns-wildcard" {
-#   domain_id = var.domain_dns[var.dns_domain]
-#   name      = "*"
-#   type      = "ANAME"
-#   value     = "${var.hostname}.${var.main_domain_dns}."
-#   ttl       = 3600
-# }
+resource "dme_dns_record" "short-dns-wildcard" {
+  domain_id = var.domain_dns[var.dns_domain]
+  name      = "*"
+  type      = "ANAME"
+  value     = "${var.hostname}.${var.main_domain_dns}."
+  ttl       = 3600
+}
+
+# Terraform provider bug doesn't allow to update APEX
+resource "dme_dns_record" "apex" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = ""
+  type        = "A"
+  value       = module.single-machine.address
+  ttl         = 300
+}
