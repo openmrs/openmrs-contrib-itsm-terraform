@@ -163,7 +163,6 @@ class Build < Thor
           'data_volume' => outputs_parsed['has_data_volume']['value'] == true ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
           'ip'          => outputs_parsed['ip_address']['value'],
           'dns'         => outputs_parsed['dns_entries']['value'],
-          'power_state' => outputs_parsed['power_state']['value'],
           'description' => outputs_parsed['description']['value']
         }
         if outputs_parsed['dns_manual_entries']

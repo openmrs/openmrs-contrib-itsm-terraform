@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["addons-stg", "modules-stg", "atlas-stg"]
+  default = ["addons-stg-v1", "modules-stg-v1", "atlas-stg-v1"]
 }
 
 variable "description" {
