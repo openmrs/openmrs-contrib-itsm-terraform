@@ -6,13 +6,13 @@ output "backup_access_key_secret" {
   value = module.single-machine.backup_access_key_secret
 }
 
-output "talk_backup_access_key_id" {
-  value = aws_iam_access_key.talk-backup-user-key.id
-}
+# output "talk_backup_access_key_id" {
+#   value = aws_iam_access_key.talk-backup-user-key.id
+# }
 
-output "talk_backup_access_key_secret" {
-  value = aws_iam_access_key.talk-backup-user-key.secret
-}
+# output "talk_backup_access_key_secret" {
+#   value = aws_iam_access_key.talk-backup-user-key.secret
+# }
 
 output "ip_address" {
   value = module.single-machine.address
