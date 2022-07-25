@@ -48,7 +48,7 @@ resource "dme_dns_record" "short-dns" {
   name      = ""
   type      = "ANAME"
   value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = 3600
+  ttl       = 300
 }
 
 resource "dme_dns_record" "short-dns-wildcard" {
@@ -56,7 +56,7 @@ resource "dme_dns_record" "short-dns-wildcard" {
   name      = "*"
   type      = "ANAME"
   value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = 3600
+  ttl       = 300
 }
 
 # Terraform provider bug doesn't allow to update APEX

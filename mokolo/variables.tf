@@ -38,7 +38,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["sonar", "implementation", "notes-new", "quizgrader", "shields", "radarproxy"]
+  default = ["sonar", "implementation-v1", "notes-new", "quizgrader-v1", "shields-v1", "radarproxy-v1"]
 }
 
 variable "description" {

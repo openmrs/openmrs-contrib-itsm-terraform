@@ -22,5 +22,5 @@ resource "dme_dns_record" "cnames" {
   name        = element(var.dns_cnames, count.index)
   type        = "CNAME"
   value       = var.hostname
-  ttl         = 3600
+  ttl         = 300
 }
