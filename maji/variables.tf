@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["talk-v2"]
+  default = ["talk"]
 }
 
 variable "description" {
