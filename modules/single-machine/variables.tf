@@ -88,7 +88,7 @@ variable "power_state" {
 ########  Check global-variables for their values. ########
 
 # Image for the new VM.
-# Automation is only tested for Ubuntu 16.
+# Automation is only tested for Ubuntu 22.
 variable "image" { }
 
 # Jetstream project
@@ -110,7 +110,3 @@ variable "ansible_repo" {  }
 variable "pool" {
   default = "public"
 }
-
-variable "dme_apikey" {}
-
-variable "dme_secretkey" {}
