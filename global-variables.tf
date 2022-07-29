@@ -36,16 +36,6 @@ variable "main_domain_dns" {
   default = "openmrs.org"
 }
 
-
-# to be deprecated after fully migrating to Jetstream 2
-variable "OS_APPLICATION_CREDENTIAL_ID" {
-}
-
-# to be deprecated after fully migrating to Jetstream 2
-variable "OS_APPLICATION_CREDENTIAL_SECRET" {
-}
-
-
 variable "dme_apikey" {
 }
 

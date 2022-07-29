@@ -8,8 +8,6 @@ terraform {
 
 provider "openstack" {
   version = "1.43"
-  application_credential_id = var.OS_APPLICATION_CREDENTIAL_ID
-  application_credential_secret = var.OS_APPLICATION_CREDENTIAL_SECRET
 }
 
 # Description of arguments can be found in
