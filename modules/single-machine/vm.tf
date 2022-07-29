@@ -84,7 +84,7 @@ resource "null_resource" "mount_data_volume" {
 
 resource "null_resource" "upgrade" {
   count = var.update_os? 1 : 0
-  depends_on = [null_resource.mount_data_volume]
+  depends_on = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
