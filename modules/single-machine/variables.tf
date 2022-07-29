@@ -85,11 +85,6 @@ variable "power_state" {
   default = "active"
 }
 
-# [Optional] For DNS changes required in ubuntu 16
-variable "configure_dns" {
-  default = true
-}
-
 ######  DO NOT CHANGE variables below ######
 ########  Check global-variables for their values. ########
 

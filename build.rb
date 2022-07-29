@@ -96,7 +96,6 @@ class Build < Thor
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.setup-dns[0] \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.upgrade[0] \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.copy_facts[0] \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.ansible[0] || true \

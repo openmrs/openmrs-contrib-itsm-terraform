@@ -1,20 +1,15 @@
 #!/usr/bin/env bash
 
-export OS_PROJECT_DOMAIN_NAME=<>
-export OS_USER_DOMAIN_NAME=<>
+## Jetstream
 export OS_PROJECT_NAME=<>
-export OS_IDENTITY_API_VERSION=<>
+export OS_IDENTITY_API_VERSION=3
+export OS_AUTH_URL=<>
 
-export TF_VAR_tacc_url=<>
-export TF_VAR_iu_url=<>
+export AWS_DEFAULT_REGION="<>"
+export AWS_ACCESS_KEY_ID="<>"
+export AWS_SECRET_ACCESS_KEY="<>"
 
-
-export AWS_DEFAULT_REGION=<>
-export AWS_ACCESS_KEY_ID=<>
-export AWS_SECRET_ACCESS_KEY=<>
-
-export DME_USESANDBOX=<>
-export DME_AKEY=<>
-export DME_SKEY=<>
+export TF_VAR_dme_apikey="<>"
+export TF_VAR_dme_secretkey="<>"
 
 source ./conf/openrc-personal
