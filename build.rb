@@ -156,7 +156,6 @@ class Build < Thor
         vm = {
           'name'        => vm_name,
           'environment' => outputs_parsed['ansible_inventory']['value'],
-          'data_center' => outputs_parsed['region']['value'],
           'size'        => outputs_parsed['flavor']['value'],
           'backup'      => outputs_parsed['has_backup']['value'] == true ? 'Yes' : 'No',
           'data_volume' => outputs_parsed['has_data_volume']['value'] == true ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
