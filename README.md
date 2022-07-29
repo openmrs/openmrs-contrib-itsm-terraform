@@ -1,6 +1,6 @@
 # Description
 This repository is the definition of OpenMRS community infrastructure (infra-as-code).
-We are using terraform to generate network infra, Openstack VMs (Jetstream IU and TACC), DNS and backup resources.
+We are using terraform to generate network infra, Openstack VMs (Jetstream), DNS and backup resources.
 
 You can also check <https://github.com/bmamlin/jetstream-api-cli.git> to check the results in Openstack.
 
@@ -16,7 +16,7 @@ Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmres
 Before you can use this repository, you need:
   - Jetstream credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
-  - Add conf/provisioning/ssh/terraform-api-rsa.key.pub to https://iu.jetstream-cloud.org and https://tacc.jetstream-cloud.org/ (using "tacc" as the domain and your TACC credentials) under Project -> Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key"
+  - Add conf/provisioning/ssh/terraform-api-rsa.key.pub to https://js2.jetstream-cloud.org under Project -> Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key" (is this still needed?)
   - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/openrc/) to generate a new application credential with permission `Member`. 
 
 
@@ -32,7 +32,7 @@ To install terraform, run git crypto and initial setup (needed only once after c
 ```
 $ ./build.rb install
 
-# edit conf/openrc-personal and add your TACC and Jetstream 2 credentialss to 
+# edit conf/openrc-personal and add your Jetstream 2 credentials to 
 $ vi conf/openrc-personal
 
 # verify file is not encrypted

@@ -1,17 +1,16 @@
 # [Required] VM size.
-# Check https://iujetstream.atlassian.net/wiki/x/G4AKAQ for options
+# Check https://docs.jetstream-cloud.org/general/vmsizes/ for options
 variable "flavor" { }
-
-# To be deprecated with Jetstream 2
-# [Optional] Where the VM should be created.
-# Values could be 'ui' or 'tacc'
-variable "region" {
-  default = "tacc"
-}
 
 # [Required] VM hostname. Should be unique.
 # Details on the repository README.md file
 variable "hostname" { }
+
+# [Optional] Where the VM should be created.
+# Values could be 'v2' only
+variable "region" {
+  default = "v2"
+}
 
 # [Optional] if OS should be upgraded as part of provisioning
 variable "update_os" {
