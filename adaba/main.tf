@@ -6,10 +6,6 @@ terraform {
   }
 }
 
-provider "openstack" {
-  version = "1.43"
-}
-
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
 module "single-machine" {

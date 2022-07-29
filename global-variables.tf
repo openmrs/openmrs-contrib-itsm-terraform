@@ -65,3 +65,7 @@ provider "null" {
   version = "3.0.0"
 }
 
+provider "openstack" {
+  version = "1.43"
+}
+

@@ -6,11 +6,6 @@ terraform {
   }
 }
 
-provider "openstack" {
-  version = "1.43"
-}
-
-
 data "terraform_remote_state" "base" {
   backend = "s3"
   config = {

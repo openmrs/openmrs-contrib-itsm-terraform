@@ -6,8 +6,3 @@ terraform {
   }
 }
 
-provider "openstack" {
-  version = "1.43"
-  region  = "IU"
-}
-
