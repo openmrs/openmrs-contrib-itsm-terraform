@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["demo", "mdsbuilder", "o3", "openconceptlab"]
+  default = ["demo", "mdsbuilder", "o3", "openconceptlab", "cieladmin"]
 }
 
 output "dns_manual_entries" {
