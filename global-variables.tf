@@ -1,7 +1,7 @@
 # Very frequently they deprecate older images, and we need to change this
 # terraform is configured to not recreate images if this variable changes
 variable "image_ubuntu_22" {
-  default = "10b5ed0c-3d87-4193-b506-f0f246810495"
+  default = "b75fe13c-27ff-403b-84e4-f82e20f72b65"
 }
 
 variable "ssh_key_file_v2" {
