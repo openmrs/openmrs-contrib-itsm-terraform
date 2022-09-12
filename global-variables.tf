@@ -55,6 +55,7 @@ provider "dme" {
 provider "aws" {
   version     = "3.57.0"
   max_retries = 100
+  skip_get_ec2_platforms = true
 }
 
 provider "template" {
