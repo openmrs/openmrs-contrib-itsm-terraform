@@ -110,7 +110,7 @@ class Build < Thor
   def taint_data(dir)
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_blockstorage_volume_v2.data_volume[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_blockstorage_volume_v3.data_volume[0] \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true
     "'') || abort
