@@ -30,7 +30,7 @@ variable "has_data_volume" {
 }
 
 variable "data_volume_size" {
-  default = 20
+  default = 40
 }
 
 variable "has_backup" {
