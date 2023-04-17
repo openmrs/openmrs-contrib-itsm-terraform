@@ -16,9 +16,7 @@ Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmres
 Before you can use this repository, you need:
   - Jetstream credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
-  - Add conf/provisioning/ssh/terraform-api-rsa.key.pub to https://js2.jetstream-cloud.org under Project -> Compute -> Key Pairs -> Import Public Key with the specific name "TG-ASC170002-terraform-key" (is this still needed?)
-  - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/openrc/) to generate a new application credential with permission `Member`. 
-
+  - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/auth/) to obtain your personal `openrc.sh` file.
 
 ## Software
 You need to have installed:
@@ -70,7 +68,6 @@ To see all available commands:
 $ ./build.rb
 ```
 
-
 Forcing a VM to be reprovisioned (and keep the data volume):
 ```
 $ ./build.rb taint-vm <stack>
@@ -100,6 +97,19 @@ $ ./build docs
 $ ./build plan docs
 $ ./build apply docs
 ```
+
+# Run OpenStack commands
+
+Use the embedded Jetstream2 command line interface tool to access Jetstream2 through the command line.
+OpenStack commands may be issued using the "os" alias (e.g., `os server list`).
+
+```
+$ cd cli
+$ ./cli.sh
+```
+
+This will invoke a docker container with the necessary settings to interact directy with Jetsteam's
+OpenStack environment via the command line.
 
 # Repository organisation
   - _build.rb_: build helper (thor) file
