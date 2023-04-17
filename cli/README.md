@@ -2,37 +2,10 @@
 
 Get started quickly with IU Jetstream2's API using Docker. Assuming you have [Docker](https://www.docker.com) and [docker-compose](https://docs.docker.com/compose/install/) installed, you can use the IU Jetstream API without any additional installation.
 
-## Configuration
+## Requirements
 
-You will need a few settings from your openrc files to configure your API access.
-
-First, copy `jetstream.env.sample` to `jetstream.env`. You will need to enter some settings into this file that you can get from your `openrc` file. Per 
-[the Jetstream2 documentation](https://docs.jetstream-cloud.org/ui/cli/auth/), you can obtain your openrc file as follows:
-
-1. Log into
-   [ https://js2.jetstream-cloud.org]( https://js2.jetstream-cloud.org) using XSEDE 
-   Globus Auth authentication. The first time you login, you'll need to grant 
-   permission to Globus. Log in with your XSEDE credentials. You should end up on  
-   the Horizon dashboard.
-2. If it's not already selected, select your allocation within the dropdown at the top.
-3. Navigate to Identity > Application > Create Application Credentials
-4. Enter name like "<Your name> Jetstream2 API credential"
-5. Create a secure secret ([long passphrase](https://www.useapassphrase.com/) or [UUID](https://www.uuidgenerator.net/)). 
-   Don't use a personal password, since this will be stored in free text within your 
-   openrc file.
-6. Set an expiration date (e.g., 1-2 years from now). If you don't set an expiration 
-   date, the credential will only be valid for one day.
-7. Leave Roles and Access Rules blank and Unrestricted unchecked.
-8. Create the application credential and download your openrc file.
-
-Within the `openrc.sh` file, you will find the settings needed for your 
-`jetstream.env` file.
-
-Replace all instances of `???` in the `jetstream.env` file:
-
-- The value of `OS_AUTH_URL` from your `openrc.sh` file
-- The values for `OS_APPLICATION_CREDENTIAL_ID` and `OS_APPLICATION_CREDENTIAL_SECRET` 
-  from your `openrc.sh` file.
+- Assumes you have Jetstream2 access
+- Assumes your personal openrc credentials have been placed into `../conf/openrc-personal`
 
 ## Running OpenStack
 
