@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ## Jetstream
-export OS_PROJECT_NAME=<>
+# export OS_PROJECT_NAME=<> -- omit for Jetstream2 (Burke, April 2023)
 export OS_IDENTITY_API_VERSION=3
 export OS_AUTH_URL=<>
 

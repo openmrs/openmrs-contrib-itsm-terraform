@@ -1,0 +1,8 @@
+source ~/.bashrc
+
+export OS_AUTH_TYPE=v3applicationcredential
+export OS_IDENTITY_API_VERSION=3
+export OS_REGION_NAME="IU"
+export OS_INTERFACE=public
+
+source /conf/openrc

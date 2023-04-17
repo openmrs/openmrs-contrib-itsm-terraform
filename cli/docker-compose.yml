@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  cli:
+    build: .
+    volumes:
+      - ../conf/openrc:/conf/openrc
+      - ../conf/openrc-personal:/conf/openrc-personal
+      - ./bash_aliases:/root/.bash_aliases
+      - ./bash_profile:/root/.bash_profile
