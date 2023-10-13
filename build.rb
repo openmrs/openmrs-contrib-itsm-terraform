@@ -22,7 +22,7 @@ end
 $terraform_version = '0.12.31'
 $terraform_url = "https://releases.hashicorp.com/terraform/#{$terraform_version}/terraform_#{$terraform_version}_#{os}_amd64.zip"
 $tmp_dir = '.tmp/bin'
-$excluded_dirs = ['conf/', 'modules/']
+$excluded_dirs = ['cli', 'conf/', 'modules/']
 $pwd = Dir.pwd
 
 class Build < Thor
