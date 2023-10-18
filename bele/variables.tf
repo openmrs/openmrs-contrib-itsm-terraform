@@ -40,11 +40,11 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["demo", "mdsbuilder", "o3", "openconceptlab", "cieladmin", "formbuilder.o3"]
+  default = ["demo", "mdsbuilder", "o3", "cieladmin", "formbuilder.o3"]
 }
 
 output "dns_manual_entries" {
-  value = ["openmrs.openconceptlab.org"]
+  value = []
 }
 
 variable "description" {
