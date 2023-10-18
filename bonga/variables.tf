@@ -40,11 +40,11 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["modules-refapp", "uat-refapp", "qa-refapp", "uat-platform", "dev3", "openconceptlab-demo", "openconceptlab-staging", "openconceptlab-qa"]
+  default = ["modules-refapp", "uat-refapp", "qa-refapp", "uat-platform", "dev3"]
 }
 
 output "dns_manual_entries" {
-  value = [ "openmrs.demo.openconceptlab.org", "openmrs.staging.openconceptlab.org", "openmrs.qa.openconceptlab.org"]
+  value = []
 }
 
 variable "description" {
