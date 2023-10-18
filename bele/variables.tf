@@ -30,7 +30,7 @@ variable "has_data_volume" {
 }
 
 variable "data_volume_size" {
-  default = 20
+  default = 60
 }
 
 # If enabling this, make sure to uncomment the two outputs related to backup
