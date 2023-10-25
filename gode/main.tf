@@ -23,6 +23,11 @@ module "single-machine" {
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
 
+  extra_security_groups = [
+    openstack_networking_secgroup_v2.secgroup_ldap_stg.name,
+    openstack_networking_secgroup_v2.secgroup_smtp_stg.name
+  ]
+
 
   # Global variables
   # Don't change values below
