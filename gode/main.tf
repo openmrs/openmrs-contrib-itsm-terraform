@@ -33,3 +33,35 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
+
+resource "openstack_networking_secgroup_v2" "secgroup_ldap_stg" {
+  name        = "${var.project_name}-ldap-stg-clients"
+  description = "Allow ldap-stg clients to connect to server (terraform)"
+}
+
+# gode
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldap_stg_id" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 636
+  port_range_max    = 636
+  remote_ip_prefix  = "${module.single-machine.address}/32"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_ldap_stg.id
+}
+
+resource "openstack_networking_secgroup_v2" "secgroup_smtp_stg" {
+  name        = "${var.project_name}-smtp-stg-clients"
+  description = "Allow smtp-stg clients to connect to server (terraform)"
+}
+
+# allow all smtp access
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtp_stg_id" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 587
+  port_range_max    = 587
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_smtp_stg.id
+}
