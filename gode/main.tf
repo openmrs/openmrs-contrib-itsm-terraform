@@ -39,12 +39,20 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
 }
 
-resource "dme_dns_record" "mx" {
-  domain_id    = var.domain_dns["openmrs.org"]
-  name        = ""
+resource "dme_dns_record" "mx_id_stg" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "id-stg"
   type        = "MX"
   mx_level    = "10"
   value       = "smtp-stg.openmrs.org"
+  ttl         = 300
+}
+
+resource "dme_dns_record" "http_red_id_stg" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "id-stg"
+  type        = "HTTPRED"
+  value       = "https://sso.openmrs.org"
   ttl         = 300
 }
 
