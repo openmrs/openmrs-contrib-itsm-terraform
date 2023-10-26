@@ -39,6 +39,15 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
 }
 
+resource "dme_dns_record" "mx" {
+  domain_id    = var.domain_dns["openmrs.org"]
+  name        = ""
+  type        = "MX"
+  mx_level    = "10"
+  value       = "smtp-stg.openmrs.org"
+  ttl         = 300
+}
+
 resource "openstack_networking_secgroup_v2" "secgroup_ldap_stg" {
   name        = "${var.project_name}-ldap-stg-clients"
   description = "Allow ldap-stg clients to connect to server (terraform)"
