@@ -85,13 +85,22 @@ resource "openstack_networking_secgroup_v2" "secgroup_smtp_stg" {
   description = "Allow smtp-stg clients to connect to server (terraform)"
 }
 
-# allow all smtp access
-resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtp_stg_id" {
+# allow all smtp and smtps access
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtps_stg_id" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
   port_range_min    = 587
   port_range_max    = 587
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_smtp_stg.id
+}
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtp_stg_id" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 25
+  port_range_max    = 25
   remote_ip_prefix  = "0.0.0.0/0"
   security_group_id = openstack_networking_secgroup_v2.secgroup_smtp_stg.id
 }
