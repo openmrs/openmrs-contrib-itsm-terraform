@@ -48,11 +48,19 @@ resource "dme_dns_record" "mx_id_stg" {
   ttl         = 300
 }
 
-resource "dme_dns_record" "http_red_id_stg" {
+resource "dme_dns_record" "a_smtp_stg" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "smtp-stg"
+  type        = "A"
+  value       = module.single-machine.address
+  ttl         = 300
+}
+
+resource "dme_dns_record" "a_id_stg" {
   domain_id   = var.domain_dns["openmrs.org"]
   name        = "id-stg"
-  type        = "HTTPRED"
-  value       = "https://sso.openmrs.org"
+  type        = "A"
+  value       = module.single-machine.address
   ttl         = 300
 }
 
