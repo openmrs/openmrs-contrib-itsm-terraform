@@ -44,7 +44,7 @@ resource "dme_dns_record" "mx_id_stg" {
   name        = "id-stg"
   type        = "MX"
   mx_level    = "10"
-  value       = "smtp-stg.openmrs.org"
+  value       = "smtp-stg"
   ttl         = 300
 }
 
