@@ -24,10 +24,9 @@ module "single-machine" {
   dns_cnames        = "${var.dns_cnames}"
   extra_security_groups = [
     openstack_networking_secgroup_v2.secgroup_ldap.name,
+    openstack_networking_secgroup_v2.secgroup_smtp.name,
     data.terraform_remote_state.base.outputs.secgroup-database-name
   ]
-
-
 
   # Global variables
   # Don't change values below
@@ -39,7 +38,39 @@ module "single-machine" {
   ansible_repo      = "${var.ansible_repo}"
 }
 
+resource "dme_dns_record" "mx_id" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "id"
+  type        = "MX"
+  mx_level    = "10"
+  value       = "smtp"
+  ttl         = 300
+}
 
+resource "dme_dns_record" "a_smtp" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "smtp"
+  type        = "A"
+  value       = module.single-machine.address
+  ttl         = 300
+}
+
+resource "dme_dns_record" "a_id" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "id"
+  type        = "A"
+  value       = module.single-machine.address
+  ttl         = 300
+}
+
+# Temporary subdomain for Keycloak until ID is switched off
+resource "dme_dns_record" "a_id_new" {
+  domain_id   = var.domain_dns["openmrs.org"]
+  name        = "id-new"
+  type        = "A"
+  value       = module.single-machine.address
+  ttl         = 300
+}
 
 data "terraform_remote_state" "base" {
   backend = "s3"
@@ -84,4 +115,29 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_id" {
   port_range_max    = 636
   remote_ip_prefix  = "${module.single-machine.address}/32"
   security_group_id = openstack_networking_secgroup_v2.secgroup_ldap.id
+}
+
+resource "openstack_networking_secgroup_v2" "secgroup_smtp" {
+  name        = "${var.project_name}-smtp-clients"
+  description = "Allow smtp clients to connect to server (terraform)"
+}
+
+# Allow all smtp and smtps access
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtps_id" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 587
+  port_range_max    = 587
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_smtp.id
+}
+resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtp_id" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 25
+  port_range_max    = 25
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.secgroup_smtp.id
 }
