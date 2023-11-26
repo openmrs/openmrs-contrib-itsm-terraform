@@ -75,28 +75,28 @@ resource "dme_dns_record" "a_id_new" {
 # Domain verification for Atlassian outgoing e-mails
 resource "dme_dns_record" "txt_atlassian" {
   domain_id   = var.domain_dns["openmrs.org"]
-  name        = "openmrs.org"
+  name        = ""
   type        = "TXT"
   value       = "atlassian-sending-domain-verification=0fdf1857-bba2-4642-ad65-82e86115de7b"
   ttl         = 300
 }
 resource "dme_dns_record" "cname_active_atlassian" {
   domain_id   = var.domain_dns["openmrs.org"]
-  name        = "atlassian-6d771e._domainkey.openmrs.org"
+  name        = "atlassian-6d771e._domainkey"
   type        = "CNAME"
   value       = "atlassian-6d771e.dkim.atlassian.net."
   ttl         = 300
 }
 resource "dme_dns_record" "cname_fallback_atlassian" {
   domain_id   = var.domain_dns["openmrs.org"]
-  name        = "atlassian-7cbba2._domainkey.openmrs.org"
+  name        = "atlassian-7cbba2._domainkey"
   type        = "CNAME"
   value       = "atlassian-7cbba2.dkim.atlassian.net."
   ttl         = 300
 }
 resource "dme_dns_record" "cname_bounce_atlassian" {
   domain_id   = var.domain_dns["openmrs.org"]
-  name        = "atlassian-bounces.openmrs.org"
+  name        = "atlassian-bounces"
   type        = "CNAME"
   value       = "bounces.mail-us.atlassian.net."
   ttl         = 300
