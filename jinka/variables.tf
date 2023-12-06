@@ -40,7 +40,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["site", "www", "shortener", "mavenrepo", "mavenrepo-redirect"]
+  default = ["site", "www", "shortener", "mavenrepo", "mavenrepo-redirect", "help"]
 }
 
 variable "dns_domain" {
