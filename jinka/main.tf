@@ -63,7 +63,7 @@ resource "dme_dns_record" "servicedesk-cname" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "servicedesk.jira"
   type      = "CNAME"
-  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.saas.atlassian.com"
+  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.saas.atlassian.com."
   ttl       = 300
 }
 
@@ -71,6 +71,22 @@ resource "dme_dns_record" "servicedesk-cname2" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira"
   type      = "CNAME"
-  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.ssl.atlassian.com"
+  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.ssl.atlassian.com."
+  ttl       = 300
+}
+
+resource "dme_dns_record" "help-cname" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "help"
+  type      = "CNAME"
+  value     = "help-openmrs-org-943dd57c-27d5-49ca-8c57-1ac0613e2d17.saas.atlassian.com."
+  ttl       = 300
+}
+
+resource "dme_dns_record" "help-cname2" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "_0a827c3a6c8cea2959a862b03dc7581b.help"
+  type      = "CNAME"
+  value     = "help-openmrs-org-943dd57c-27d5-49ca-8c57-1ac0613e2d17.ssl.atlassian.com."
   ttl       = 300
 }
