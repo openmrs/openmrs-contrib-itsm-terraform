@@ -58,3 +58,19 @@ resource "dme_dns_record" "apex" {
   value       = module.single-machine.address
   ttl         = 300
 }
+
+resource "dme_dns_record" "servicedesk-cname" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "servicedesk.jira"
+  type      = "CNAME"
+  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.saas.atlassian.com"
+  ttl       = 300
+}
+
+resource "dme_dns_record" "servicedesk-cname2" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira"
+  type      = "CNAME"
+  value     = "servicedesk-jira-openmrs--dc3f593a-7888-472d-9b30-df812efdbe0c.ssl.atlassian.com"
+  ttl       = 300
+}
