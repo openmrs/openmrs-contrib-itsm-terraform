@@ -1,4 +1,7 @@
+################################################
 # state file stored in S3
+################################################
+
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
@@ -8,7 +11,6 @@ terraform {
 
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "openmrs-docs-logs"
-  acl    = "log-delivery-write"
   tags = {
     Terraform = "docs"
   }
@@ -16,34 +18,7 @@ resource "aws_s3_bucket" "log_bucket" {
 
 resource "aws_s3_bucket" "docs-s3" {
   bucket = var.bucket_name
-  acl    = "public-read"
-  policy = <<POLICY
-{
-  "Version":"2012-10-17",
-  "Statement":[{
-    "Sid":"PublicReadForGetBucketObjects",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":"s3:GetObject",
-      "Resource":["arn:aws:s3:::${var.bucket_name}/*"
-      ]
-    }
-  ]
-}
-POLICY
 
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
-  }
-  versioning {
-    enabled = true
-  }
   tags = {
     Terraform = "docs"
   }
@@ -154,6 +129,8 @@ EOF
 
 }
 
+# The aws_s3_bucket_object resource is DEPRECATED and will be removed in a future version! Use aws_s3_object instead
+
 resource "aws_s3_bucket_object" "vms-inventory-json" {
   bucket       = var.bucket_name
   key          = "infrastructure/vms.json"
@@ -161,6 +138,8 @@ resource "aws_s3_bucket_object" "vms-inventory-json" {
   etag         = filemd5("vms.json")
   content_type = "application/json"
 }
+
+# The aws_s3_bucket_object resource is DEPRECATED and will be removed in a future version! Use aws_s3_object instead
 
 resource "aws_s3_bucket_object" "vms-inventory" {
   bucket       = var.bucket_name
@@ -170,3 +149,14 @@ resource "aws_s3_bucket_object" "vms-inventory" {
   content_type = "text/html"
 }
 
+# Use aws_s3_object instead, where new features and fixes will be added. When replacing aws_s3_bucket_object with aws_s3_object in your configuration, 
+# on the next apply, Terraform will recreate the object. If you prefer to not have Terraform recreate the object, import the object using aws_s3_object.
+
+# resource "aws_s3_bucket" "example" {
+#   bucket = "var.bucket_name"
+
+#   tags = {
+#     Name        = "My bucket"
+#     Environment = "Dev"
+#   }
+# }

@@ -1,4 +1,7 @@
+################################################
 # state file stored in S3
+################################################
+
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
@@ -6,12 +9,18 @@ terraform {
   }
 }
 
+###########################################################
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
+###########################################################
+
 module "single-machine" {
   source            = "../modules/single-machine"
 
+  ###########################################################
   # Change values in variables.tf file instead
+  ###########################################################
+
   flavor            = "${var.flavor}"
   hostname          = "${var.hostname}"
   region            = "${var.region}"
@@ -23,9 +32,11 @@ module "single-machine" {
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
 
-
+  ###################################
   # Global variables
   # Don't change values below
+  ###################################
+
   image             = "${var.image_ubuntu_22}"
   project_name      = "${var.project_name}"
   ssh_username      = "${var.ssh_username_ubuntu_20}"

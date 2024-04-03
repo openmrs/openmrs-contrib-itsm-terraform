@@ -1,4 +1,7 @@
+################################################
 # state file stored in S3
+################################################
+
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"

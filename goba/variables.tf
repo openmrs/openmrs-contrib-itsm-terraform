@@ -1,5 +1,7 @@
+#################################################################
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
+################################################################
 
 variable "flavor" {
   default = "m3.quad"

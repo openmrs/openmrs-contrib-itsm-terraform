@@ -1,4 +1,7 @@
+################################################################################
 # state file stored in S3
+################################################################################
+
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
@@ -6,8 +9,11 @@ terraform {
   }
 }
 
+################################################################################
 # Description of arguments can be found in
 # ../modules/single-machine/variables.tf in this repository
+################################################################################
+
 module "single-machine" {
   source            = "../modules/single-machine"
 
@@ -28,8 +34,10 @@ module "single-machine" {
     data.terraform_remote_state.base.outputs.secgroup-database-name
   ]
 
+  ################################################################################
   # Global variables
   # Don't change values below
+  ################################################################################
   image             = "${var.image_ubuntu_22}"
   project_name      = "${var.project_name}"
   ssh_username      = "${var.ssh_username_ubuntu_20}"
@@ -37,6 +45,10 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
+
+################################################################################
+# DNS RECORDS
+################################################################################
 
 resource "dme_dns_record" "mx_id" {
   domain_id   = var.domain_dns["openmrs.org"]
@@ -63,7 +75,10 @@ resource "dme_dns_record" "a_id" {
   ttl         = 300
 }
 
+################################################################################
 # Temporary subdomain for Keycloak until ID is switched off
+################################################################################
+
 resource "dme_dns_record" "a_id_new" {
   domain_id   = var.domain_dns["openmrs.org"]
   name        = "id-new"
@@ -72,7 +87,10 @@ resource "dme_dns_record" "a_id_new" {
   ttl         = 300
 }
 
+################################################################################
 # Domain verification for Atlassian outgoing e-mails
+################################################################################
+
 resource "dme_dns_record" "txt_atlassian" {
   domain_id   = var.domain_dns["openmrs.org"]
   name        = ""
@@ -125,7 +143,10 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps" {
   security_group_id = openstack_networking_secgroup_v2.secgroup_ldap.id
 }
 
-# goba (atlas)
+################################################################################
+# goba (atlas) SEC Groups
+################################################################################
+
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_atlas" {
   direction         = "ingress"
   ethertype         = "IPv4"
@@ -136,7 +157,10 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_atlas" {
   security_group_id = openstack_networking_secgroup_v2.secgroup_ldap.id
 }
 
+################################################################################
 # adaba (id and crowd, using public IP)
+################################################################################
+
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_id" {
   direction         = "ingress"
   ethertype         = "IPv4"
@@ -152,7 +176,10 @@ resource "openstack_networking_secgroup_v2" "secgroup_smtp" {
   description = "Allow smtp clients to connect to server (terraform)"
 }
 
+################################################################################
 # Allow all smtp and smtps access
+################################################################################
+
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_smtps_id" {
   direction         = "ingress"
   ethertype         = "IPv4"
