@@ -137,4 +137,3 @@ resource "openstack_networking_secgroup_v2" "database-secgroup" {
     prevent_destroy = true
   }
 }
-

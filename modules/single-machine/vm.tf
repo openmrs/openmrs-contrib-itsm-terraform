@@ -233,8 +233,11 @@ resource "null_resource" "copy_facts_backups" {
   }
 }
 
+# ------------------------------------------------------------------
 # ssh/scp from terraform stops working after this step
 # global-variables need to use personal creds instead
+# ------------------------------------------------------------------
+
 resource "null_resource" "ansible" {
   count      = var.use_ansible? 1 : 0
   depends_on = [null_resource.add_github_key, null_resource.add_gitcrypt_key, null_resource.copy_facts, null_resource.copy_facts_backups]
