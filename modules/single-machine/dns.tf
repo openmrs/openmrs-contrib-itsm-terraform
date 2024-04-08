@@ -15,7 +15,6 @@ resource "dme_dns_record" "private_hostname" {
   ttl         = 300
 }
 
-
 resource "dme_dns_record" "cnames" {
   count       = length(var.dns_cnames)
   domain_id    = var.domain_dns["openmrs.org"]

@@ -37,8 +37,6 @@ module "single-machine" {
     openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.name,
   ]
 
-
-
   # Global variables
   # Don't change values below
   image             = "${var.image_ubuntu_22}"
@@ -48,8 +46,6 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-
 
 resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-ssl" {
   name        = "${var.project_name}-bamboo-server-agents-ssl"

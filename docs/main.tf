@@ -8,7 +8,6 @@ terraform {
 
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "openmrs-docs-logs"
-  acl    = "log-delivery-write"
   tags = {
     Terraform = "docs"
   }
@@ -16,34 +15,7 @@ resource "aws_s3_bucket" "log_bucket" {
 
 resource "aws_s3_bucket" "docs-s3" {
   bucket = var.bucket_name
-  acl    = "public-read"
-  policy = <<POLICY
-{
-  "Version":"2012-10-17",
-  "Statement":[{
-    "Sid":"PublicReadForGetBucketObjects",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":"s3:GetObject",
-      "Resource":["arn:aws:s3:::${var.bucket_name}/*"
-      ]
-    }
-  ]
-}
-POLICY
 
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
-  }
-  versioning {
-    enabled = true
-  }
   tags = {
     Terraform = "docs"
   }
