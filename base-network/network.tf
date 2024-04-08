@@ -1,7 +1,15 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# Manages a V2 keypair resource within OpenStack
+# ----------------------------------------------------------------------------------------------------------------------
+
 resource "openstack_compute_keypair_v2" "default-key" {
   name       = "${var.project_name}-terraform-key"
   public_key = file("${var.ssh_key_file_v2}.pub")
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Manages a V2 Neutron network resource within OpenStack
+# ----------------------------------------------------------------------------------------------------------------------
 
 resource "openstack_networking_network_v2" "private-net" {
   name           = "${var.project_name}-terraform-private"
@@ -10,6 +18,10 @@ resource "openstack_networking_network_v2" "private-net" {
     prevent_destroy = true
   }
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Manages a V2 Neutron subnet resource within OpenStack
+# ----------------------------------------------------------------------------------------------------------------------
 
 resource "openstack_networking_subnet_v2" "default-subnet" {
   name       = "${var.project_name}-terraform-private-subnet"
@@ -20,6 +32,10 @@ resource "openstack_networking_subnet_v2" "default-subnet" {
     prevent_destroy = true
   }
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Manages a V2 router resource within OpenStack
+# ----------------------------------------------------------------------------------------------------------------------
 
 resource "openstack_networking_router_v2" "default-router" {
   name                = "${var.project_name}-terraform-router"
@@ -37,6 +53,10 @@ resource "openstack_networking_router_interface_v2" "subnet-route" {
     prevent_destroy = true
   }
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Create V2 neutron security group rule and manage resource within OpenStack
+# ----------------------------------------------------------------------------------------------------------------------
 
 resource "openstack_compute_secgroup_v2" "ssh-icmp-secgroup" {
   name        = "${var.project_name}-ssh-icmp"

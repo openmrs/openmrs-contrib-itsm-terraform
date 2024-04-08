@@ -1,4 +1,7 @@
+# ---------------------------------------------------------------------
 # discourse uploads its backup straight to S3
+# ---------------------------------------------------------------------
+
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"
   lifecycle_rule {
