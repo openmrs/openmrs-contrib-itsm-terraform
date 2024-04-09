@@ -11,7 +11,10 @@ resource "aws_s3_bucket" "bamboo-artefacts-bucket" {
   }
 }
 
+# ---------------------------------------------------------------------
 # Leaving this user with the old username/machine, for compatibility
+# ---------------------------------------------------------------------
+
 resource "aws_iam_user" "bamboo-artefacts-user" {
   name = "bamboo-artefacts-lobi"
 }
