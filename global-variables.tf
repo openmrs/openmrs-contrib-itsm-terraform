@@ -76,11 +76,34 @@ terraform {
   }
 }
 
-provider "dme" {
-  api_key    = var.dme_apikey
-  secret_key = var.dme_secretkey
-}
+# terraform {
+#   required_version = ">= 1.2"
+# }
 
-provider "aws" {
-  max_retries = 100
-}
+# provider "openstack" {
+#   source = "terraform-provider-openstack/openstack"
+#   version = "~> 1.53.0"
+# }
+
+# provider "null" {
+#   source = "hashicorp/null"
+#   version = "~> 3.2.2"
+# }
+
+# provider "template" {
+#   source = "hashicorp/template"
+#   version = "~> 2.2.0"
+# }
+
+# provider "aws" {
+#   source = "hashicorp/aws"
+#   version = "~> 5.0"
+#   max_retries = 100
+# }
+
+# provider "dme" {
+#   source = "DNSMadeEasy/dme"
+#   version = "~> 1.0.6"
+#   api_key    = var.dme_apikey
+#   secret_key = var.dme_secretkey
+# }
