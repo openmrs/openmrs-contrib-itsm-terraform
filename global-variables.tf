@@ -50,7 +50,7 @@ variable "dme_secretkey" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.2"
 
   required_providers {
     openstack = {
@@ -68,13 +68,19 @@ terraform {
     aws = {
       source = "hashicorp/aws"
       version = "~> 5.0"
-      max_retries = 100
     }
     dme = {
       source = "DNSMadeEasy/dme"
       version = "~> 1.0.6"
-      api_key    = var.dme_apikey
-      secret_key = var.dme_secretkey
     }
   }
+}
+
+provider "dme" {
+  api_key    = var.dme_apikey
+  secret_key = var.dme_secretkey
+}
+
+provider "aws" {
+  max_retries = 100
 }
