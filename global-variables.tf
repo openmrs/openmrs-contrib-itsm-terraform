@@ -1,5 +1,8 @@
+# ----------------------------------------------------------------------------------------------------------------------
 # Very frequently they deprecate older images, and we need to change this
 # terraform is configured to not recreate images if this variable changes
+# ----------------------------------------------------------------------------------------------------------------------
+
 variable "image_ubuntu_22" {
   default = "26459ddd-3ad4-42c0-9255-fc5e682bb037"
 }
