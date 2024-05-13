@@ -4,28 +4,6 @@
 
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"
-  lifecycle_rule {
-    id      = "archive-and-delete"
-    prefix  = ""
-    enabled = true
-    transition {
-      days          = 30
-      storage_class = "GLACIER"
-    }
-    expiration {
-      days = 180
-    }
-  }
-  versioning {
-    enabled = true
-  }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
-      }
-    }
-  }
   tags = {
     Terraform = var.hostname
   }
