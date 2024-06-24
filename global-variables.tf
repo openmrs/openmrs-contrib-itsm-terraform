@@ -4,7 +4,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 variable "image_ubuntu_22" {
-  default = "26459ddd-3ad4-42c0-9255-fc5e682bb037"
+  default = "41020e6b-572c-4c0d-bc67-e9c54277367d"
 }
 
 variable "ssh_key_file_v2" {
@@ -46,30 +46,38 @@ variable "dme_secretkey" {
 }
 
 terraform {
-  required_version = ">= 0.12"
-}
+  required_version = ">= 1.0"
 
-provider "dme" {
-  version = "0.1.3"
-  api_key    = var.dme_apikey
-  secret_key = var.dme_secretkey
-}
+  required_providers {
 
-provider "aws" {
-  version     = "3.57.0"
-  max_retries = 100
-  skip_get_ec2_platforms = true
-}
+    openstack = {
+      source = "terraform-provider-openstack/openstack"
+      version = "~> 1.53.0"
+    }
 
-provider "template" {
-  version = "2.2"
-}
+    null = {
+      source = "hashicorp/null"
+      version = "~> 3.2.2"
+    }
 
-provider "null" {
-  version = "3.0.0"
-}
+    template = {
+      source = "hashicorp/template"
+      version = "~> 2.2.0"
+    }
 
-provider "openstack" {
-  version = "1.43"
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 5.0"
+      max_retries = 100
+    }
+
+    dme = {
+      source = "DNSMadeEasy/dme"
+      version = "~> 1.0.6"
+      api_key    = var.dme_apikey
+      secret_key = var.dme_secretkey
+    }
+    
+  }
 }
 
