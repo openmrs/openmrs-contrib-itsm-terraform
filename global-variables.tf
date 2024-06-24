@@ -46,7 +46,7 @@ variable "dme_secretkey" {
 }
 
 terraform {
-  required_version = ">= 1.0"
+  required_version = "0.13.0"
 
   required_providers {
 
@@ -74,8 +74,8 @@ terraform {
     dme = {
       source = "DNSMadeEasy/dme"
       version = "~> 1.0.6"
-      api_key    = var.dme_apikey
-      secret_key = var.dme_secretkey
+      # api_key    = var.dme_apikey
+      # secret_key = var.dme_secretkey
     }
     
   }
