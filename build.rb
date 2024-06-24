@@ -62,7 +62,7 @@ class Build < Thor
   end
 
   desc 'upgrade', 'Run terraform upgrade on DIR'
-  def init(dir)
+  def upgrade(dir)
     puts "Running terraform upgrade on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade -upgrade=true -force-copy") || abort
   end
