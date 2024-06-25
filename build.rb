@@ -58,31 +58,13 @@ class Build < Thor
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
     puts "Running terraform init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -reconfigure") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
   def validate(dir)
     puts "Running terraform validate on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform validate") || abort
-  end
-
-  desc 'upgrade13', 'Run terraform upgrade on DIR'
-  def upgrade13(dir)
-    puts "Running terraform upgrade13 on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade") || abort
-  end
-
-  desc 'aws', 'Run terraform upgrade on DIR'
-  def aws(dir)
-    puts "Running terraform aws on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform state replace-provider 'registry.terraform.io/-/aws' 'hashicorp/aws'") || abort
-  end
-
-  desc 'upgrade', 'Run terraform upgrade on DIR'
-  def upgrade(dir)
-    puts "Running terraform upgrade on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade ../modules/single-machine") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
