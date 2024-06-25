@@ -67,6 +67,18 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform validate") || abort
   end
 
+  desc 'upgrade13', 'Run terraform upgrade on DIR'
+  def upgrade13(dir)
+    puts "Running terraform upgrade13 on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade") || abort
+  end
+
+  desc 'aws', 'Run terraform upgrade on DIR'
+  def aws(dir)
+    puts "Running terraform aws on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform state replace-provider 'registry.terraform.io/-/aws' 'hashicorp/aws'") || abort
+  end
+
   desc 'upgrade', 'Run terraform upgrade on DIR'
   def upgrade(dir)
     puts "Running terraform upgrade on #{dir}"
