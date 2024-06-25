@@ -58,7 +58,7 @@ class Build < Thor
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
     puts "Running terraform init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -reconfigure") || abort
   end
 
   desc 'upgrade', 'Run terraform upgrade on DIR'
