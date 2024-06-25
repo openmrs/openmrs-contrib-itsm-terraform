@@ -40,7 +40,9 @@ variable "main_domain_dns" {
 }
 
 variable "dme_apikey" {
+  default = ""
 }
 
 variable "dme_secretkey" {
+  default = ""
 }

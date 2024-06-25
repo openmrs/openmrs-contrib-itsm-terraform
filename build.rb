@@ -61,6 +61,12 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -reconfigure") || abort
   end
 
+  desc 'validate DIR', 'Run terraform validate on DIR'
+  def validate(dir)
+    puts "Running terraform validate on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform validate") || abort
+  end
+
   desc 'upgrade', 'Run terraform upgrade on DIR'
   def upgrade(dir)
     puts "Running terraform upgrade on #{dir}"
