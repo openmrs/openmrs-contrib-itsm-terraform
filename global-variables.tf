@@ -51,7 +51,7 @@ terraform {
   required_providers {
 
     openstack = {
-      source = "terraform-provider-openstack/openstack"
+      source = "terraform-providers/openstack"
       version = "~> 1.53.0"
     }
 
@@ -72,7 +72,7 @@ terraform {
     }
 
     dme = {
-      source = "DNSMadeEasy/dme"
+      source = "terraform-providers/dme"
       version = "~> 1.0.6"
       # api_key    = var.dme_apikey
       # secret_key = var.dme_secretkey

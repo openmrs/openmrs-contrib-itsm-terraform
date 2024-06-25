@@ -64,7 +64,7 @@ class Build < Thor
   desc 'upgrade', 'Run terraform upgrade on DIR'
   def upgrade(dir)
     puts "Running terraform upgrade on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade -upgrade=true -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform 0.13upgrade ../modules/single-machine") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
