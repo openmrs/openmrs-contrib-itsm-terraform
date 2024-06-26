@@ -61,6 +61,12 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
   end
 
+  desc 'providers', 'Run terraform providers on DIR'
+  def providers(dir)
+    puts "Running terraform providers on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform providers") || abort
+  end
+
   desc 'validate DIR', 'Run terraform validate on DIR'
   def validate(dir)
     puts "Running terraform validate on #{dir}"
