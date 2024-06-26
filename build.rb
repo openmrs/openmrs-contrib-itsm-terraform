@@ -61,6 +61,12 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
   end
 
+  desc 'config DIR', 'Run terraform init on DIR'
+  def config(dir)
+    puts "Running terraform config on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init --reconfigure") || abort
+  end
+
   desc 'providers', 'Run terraform providers on DIR'
   def providers(dir)
     puts "Running terraform providers on #{dir}"
