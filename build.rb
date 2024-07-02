@@ -58,7 +58,7 @@ class Build < Thor
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
     puts "Running terraform init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=false -force-copy") || abort
   end
 
   desc 'config DIR', 'Run terraform init on DIR'
@@ -71,6 +71,12 @@ class Build < Thor
   def providers(dir)
     puts "Running terraform providers on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform providers") || abort
+  end
+
+  desc 'replace', 'Run terraform replace on DIR'
+  def replace(dir)
+    puts "Running terraform replace-provider on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform state replace-provider -auto-approve terraform.io/builtin/terraform terraform.io/builtin/terraform") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
@@ -207,3 +213,10 @@ class Build < Thor
 end
 
 Build.start
+
+# terraform state replace-provider -auto-approve registry.terraform.io/-/aws registry.terraform.io/hashicorp/aws
+# terraform state replace-provider -auto-approve registry.terraform.io/-/dme registry.terraform.io/terraform-providers/dme
+# terraform state replace-provider -auto-approve registry.terraform.io/-/null registry.terraform.io/hashicorp/null
+# terraform state replace-provider -auto-approve registry.terraform.io/-/openstack registry.terraform.io/terraform-providers/openstack
+# terraform state replace-provider -auto-approve registry.terraform.io/-/template registry.terraform.io/hashicorp/template
+# terraform state replace-provider -auto-approve terraform.io/builtin/terraform terraform.io/builtin/terraform
