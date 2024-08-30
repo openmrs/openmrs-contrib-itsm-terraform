@@ -139,8 +139,8 @@ class Build < Thor
 
   desc 'docs', 'generate docs in .tmp/docs.md'
   def docs
-    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
-
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/', 'dimtu/') #ignoring dimtu as it's new terraform
+ 
     $vms = []
 
     File.open('.tmp/docs.md', 'w') do |_file|
