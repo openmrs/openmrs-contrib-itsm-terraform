@@ -4,7 +4,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 variable "flavor" {
-  default = "m3.small"
+  default = "m3.quad"
 }
 
 variable "region" {
@@ -45,7 +45,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["dev-his.openmrs.org"]
+  default = ["dev-his"]
 }
 
 variable "description" {

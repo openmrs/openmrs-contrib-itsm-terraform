@@ -19,8 +19,17 @@ def os
   end
 end
 
-$terraform_version = '0.13.0'
-$terraform_url = "https://releases.hashicorp.com/terraform/#{$terraform_version}/terraform_#{$terraform_version}_#{os}_amd64.zip"
+
+# While we are upgrading, downloading both versions
+$terraform_current_version='0.12.31'
+$terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
+
+
+$terraform_new_version = '0.13.0'
+$terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
+$terraform_upgraded_machines = ['dimtu']
+
+
 $tmp_dir = '.tmp/bin'
 $excluded_dirs = ['cli/', 'conf/', 'modules/']
 $pwd = Dir.pwd
@@ -41,8 +50,15 @@ class Build < Thor
     puts "\n\n\nAttempting to decrypt secrets using GPG key."
     system('git-crypt unlock') || abort('Error when attempting to decrypt secrets')
     system('chmod 600 conf/provisioning/ssh/terraform-api.key') || abort('Error when setting private key permissions')
-    system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_url}") || abort('Error when downloading terraform')
-    system("cd #{$tmp_dir} && unzip terraform.zip") || abort('Error when unzipping terraform')
+
+    system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort('Error when downloading terraform 13')
+    system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
+    
+
+    system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_current_version_url}") || abort('Error when downloading terraform 12')
+    system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform") || abort('Error when unzipping current terraform')
+
+
     FileUtils.cp('conf/openrc-personal-example', 'conf/openrc-personal') unless File.exist?('conf/openrc-personal')
     puts "\n\n\n*** Please edit conf/openrc-personal with your credentials. ***\n\n"
   end
@@ -57,8 +73,11 @@ class Build < Thor
 
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
-    puts "Running terraform init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=false -force-copy") || abort
+
+    $terraform_upgraded_machines.include?(dir)? suffix="_new" : suffix="" 
+
+    puts "Running terraform#{suffix} init on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=false -force-copy") || abort
   end
 
   desc 'config DIR', 'Run terraform init on DIR'

@@ -90,6 +90,20 @@ $ ./build.rb destroy <stack>
 ```
 - Undo changes to `modules/single-machine/vm.tf`
 
+To manipulate the terraform state file (e.g. maji), run:
+```
+$ MACHINE=jinka
+$ ./build.rb terraform $MACHINE "state pull" > $MACHINE/remote_state.tfstate
+$ cp $MACHINE/remote_state.tfstate $MACHINE/remote_state_backup.tfstate
+
+Edit jinka/remote_state.tfstate:
+  - Remove the first line, as it's not valid json
+  - Increase the serial number
+  - edit the state file as desired
+
+$ ./build.rb terraform $MACHINE "state push remote_state.tfstate" 
+```
+
 
 To generate and update VM documentation:
 ```

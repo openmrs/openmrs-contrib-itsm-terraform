@@ -67,9 +67,19 @@ resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-ssl" {
   description = "Allow bamboo agents to connect to server using SSL (terraform)."
 }
 
-resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule" {
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4" {
   direction         = "ingress"
   ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 54663
+  port_range_max    = 54663
+  remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
+  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
+}
+
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv6" {
+  direction         = "ingress"
+  ethertype         = "IPv6"
   protocol          = "tcp"
   port_range_min    = 54667
   port_range_max    = 54667
