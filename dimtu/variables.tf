@@ -4,7 +4,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 variable "flavor" {
-  default = "m3.quad"
+  default = "m3.small"
 }
 
 variable "region" {
@@ -20,7 +20,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = true
+  default = false
 }
 
 variable "ansible_inventory" {

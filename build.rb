@@ -29,6 +29,10 @@ $terraform_new_version = '0.13.0'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 $terraform_upgraded_machines = ['dimtu']
 
+def terraformVersion(dir)
+  $terraform_upgraded_machines.include?(dir.chomp("/"))? suffix="_new" : suffix="" 
+end 
+
 
 $tmp_dir = '.tmp/bin'
 $excluded_dirs = ['cli/', 'conf/', 'modules/']
@@ -66,52 +70,57 @@ class Build < Thor
   desc 'init_all', 'Run terraform init in all subfolders'
   def init_all
     (Dir['*/'] - $excluded_dirs).sort.each do |d|
+      suffix=terraformVersion(d)
       puts "Running terraform init on #{d}"
-      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform init -upgrade=true -force-copy") || abort
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=true -force-copy") || abort
     end
   end
 
   desc 'init DIR', 'Run terraform init on DIR'
   def init(dir)
-
-    $terraform_upgraded_machines.include?(dir)? suffix="_new" : suffix="" 
-
+    suffix=terraformVersion(dir)
     puts "Running terraform#{suffix} init on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=false -force-copy") || abort
   end
 
   desc 'config DIR', 'Run terraform init on DIR'
   def config(dir)
+    suffix=terraformVersion(dir)
     puts "Running terraform config on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init --reconfigure") || abort
   end
 
   desc 'providers', 'Run terraform providers on DIR'
   def providers(dir)
+    suffix=terraformVersion(dir) 
     puts "Running terraform providers on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform providers") || abort
   end
 
   desc 'replace', 'Run terraform replace on DIR'
   def replace(dir)
+    suffix=terraformVersion(dir)
     puts "Running terraform replace-provider on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform state replace-provider -auto-approve terraform.io/builtin/terraform terraform.io/builtin/terraform") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
   def validate(dir)
+    suffix=terraformVersion(dir) 
     puts "Running terraform validate on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform validate") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
   def plan(dir)
-    puts "Running terraform plan on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform plan -out terraform.plan -refresh=false") || abort
+    suffix=terraformVersion(dir) 
+    puts "Running terraform#{suffix} plan on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -out terraform.plan -refresh=false") || abort
   end
 
   desc 'apply DIR', 'run terraform apply on defined directory'
   def apply(dir)
+    suffix=terraformVersion(dir) 
     puts "Terraform apply is NOT thread-safe, and there's no lock mechanism enabled. Two concurrent calls on the same stack will cause inconsistences."
     printf "Do you really want to modify stack #{dir}? [y/N]:  "
     prompt = STDIN.gets.chomp
@@ -123,6 +132,7 @@ class Build < Thor
 
   desc 'destroy DIR', 'completely deletes VM and data'
   def destroy(dir)
+    suffix=terraformVersion(dir) 
     puts "Make sure to change prevent_destroy to true following README file."
     printf "Do you really want to delete stack #{dir}? [y/N]:  "
     prompt = STDIN.gets.chomp
@@ -134,6 +144,7 @@ class Build < Thor
 
   desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
   def taint_vm(dir)
+    suffix=terraformVersion(dir) 
     puts "Running terraform taint on #{dir} (vm resources)"
     system(''"source conf/openrc && cd #{dir} \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
@@ -151,6 +162,7 @@ class Build < Thor
 
   desc 'taint-data DIR', 'mark data storage for re creation in DIR'
   def taint_data(dir)
+    suffix=terraformVersion(dir) 
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
       && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_blockstorage_volume_v3.data_volume[0] \
@@ -161,12 +173,14 @@ class Build < Thor
 
   desc "terraform DIR 'subcommand --args'", 'run arbitrary terraform subcommands on defined directory'
   def terraform(dir, args)
+    suffix=terraformVersion(dir) 
     puts "Running terraform \'#{args}\' on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform #{args}") || abort
   end
 
   desc 'create DIR', 'creates files for new stack DIR'
   def create(dir)
+    suffix=terraformVersion(dir) 
     puts "Creating stack \'#{dir}\'"
     FileUtils.mkdir_p dir
     FileUtils.cp_r 'conf/template-stack/.', dir
@@ -188,6 +202,7 @@ class Build < Thor
 
     File.open('.tmp/docs.md', 'w') do |_file|
       (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
+        suffix=terraformVersion(dir) 
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
         outputs_parsed = JSON.parse(outputs)
