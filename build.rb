@@ -190,6 +190,8 @@ class Build < Thor
                                       f.read.gsub(/STACK-NAME/, dir.to_s)
                                     end)
     FileUtils.ln_sf '../global-variables.tf', "#{dir}/global-variables.tf"
+    FileUtils.ln_sf '../versions_terraform_12.tf', "#{dir}/versions.tf"
+
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init") || abort
   end
 
