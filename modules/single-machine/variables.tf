@@ -110,3 +110,11 @@ variable "ansible_repo" {  }
 variable "pool" {
   default = "public"
 }
+
+variable "dme_apikey" {
+  default = ""
+}
+
+variable "dme_secretkey" {
+  default = ""
+}

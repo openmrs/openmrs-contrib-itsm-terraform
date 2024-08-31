@@ -1,0 +1,1 @@
+../versions_terraform_12.tf
