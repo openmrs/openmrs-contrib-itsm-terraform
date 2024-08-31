@@ -89,32 +89,25 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=false -force-copy") || abort
   end
 
-  desc 'config DIR', 'Run terraform init on DIR'
-  def config(dir)
-    suffix=terraformVersion(dir)
-    puts "Running terraform config on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init --reconfigure") || abort
-  end
-
   desc 'providers', 'Run terraform providers on DIR'
   def providers(dir)
     suffix=terraformVersion(dir) 
     puts "Running terraform providers on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform providers") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} providers") || abort
   end
 
   desc 'replace', 'Run terraform replace on DIR'
   def replace(dir)
     suffix=terraformVersion(dir)
     puts "Running terraform replace-provider on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform state replace-provider -auto-approve terraform.io/builtin/terraform terraform.io/builtin/terraform") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve terraform.io/builtin/terraform#{suffix} terraform.io/builtin/terraform") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
   def validate(dir)
     suffix=terraformVersion(dir) 
     puts "Running terraform validate on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform validate") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} validate") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
@@ -133,7 +126,7 @@ class Build < Thor
     return unless prompt == 'y'
 
     puts "Running terraform apply on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform apply terraform.plan") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} apply terraform.plan") || abort
   end
 
   desc 'destroy DIR', 'completely deletes VM and data'
@@ -145,7 +138,7 @@ class Build < Thor
     return unless prompt == 'y'
 
     puts "Running terraform destroy on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform destroy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} destroy") || abort
   end
 
   desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
@@ -153,16 +146,16 @@ class Build < Thor
     suffix=terraformVersion(dir) 
     puts "Running terraform taint on #{dir} (vm resources)"
     system(''"source conf/openrc && cd #{dir} \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.upgrade[0] \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.copy_facts[0] \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.ansible[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.copy_facts_backups[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.template_file.provisioning_file_backup[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.add_github_key[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.add_gitcrypt_key[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.upgrade[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.copy_facts[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.ansible[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.copy_facts_backups[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.template_file.provisioning_file_backup[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.add_github_key[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.add_gitcrypt_key[0] || true \
     "'') || abort
   end
 
@@ -171,9 +164,9 @@ class Build < Thor
     suffix=terraformVersion(dir) 
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_blockstorage_volume_v3.data_volume[0] \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
-      && #{$pwd}/#{$tmp_dir}/terraform taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_blockstorage_volume_v3.data_volume[0] \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_compute_volume_attach_v2.attach_data_volume[0] || true \
+      && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.null_resource.mount_data_volume[0] || true
     "'') || abort
   end
 
@@ -181,7 +174,7 @@ class Build < Thor
   def terraform(dir, args)
     suffix=terraformVersion(dir) 
     puts "Running terraform \'#{args}\' on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform #{args}") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} #{args}") || abort
   end
 
   desc 'create DIR', 'creates files for new stack DIR'
@@ -197,7 +190,7 @@ class Build < Thor
                                       f.read.gsub(/STACK-NAME/, dir.to_s)
                                     end)
     FileUtils.ln_sf '../global-variables.tf', "#{dir}/global-variables.tf"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform init") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init") || abort
   end
 
   desc 'docs', 'generate docs in .tmp/docs.md'
@@ -210,7 +203,7 @@ class Build < Thor
       (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
         suffix=terraformVersion(dir) 
         puts "Retrieving outputs for #{d}"
-        outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform output -json`
+        outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} output -json`
         outputs_parsed = JSON.parse(outputs)
         provisioner = outputs_parsed['provisioner']['value']
 
