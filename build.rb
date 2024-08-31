@@ -27,7 +27,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 $terraform_new_version = '0.13.0'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_machines = ['dimtu']
+$terraform_upgraded_machines = ['dimtu', 'cdn-resources']
 
 def terraformVersion(dir)
   $terraform_upgraded_machines.include?(dir.chomp("/"))? suffix="_new" : suffix="" 
@@ -190,7 +190,7 @@ class Build < Thor
 
   desc 'docs', 'generate docs in .tmp/docs.md'
   def docs
-    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/')
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/', 'cdn-resources')
 
     $vms = []
 
