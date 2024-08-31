@@ -11,28 +11,28 @@ terraform {
 
     openstack = {
       source = "terraform-provider-openstack/openstack"
-      version = "2.1.0"
+      version = "1.43"
     }
 
     null = {
       source = "hashicorp/null"
-      version = "3.2.2"
+      version = "3.0.0"
     }
 
     template = {
       source = "hashicorp/template"
-      version = "2.2.0"
+      version = "2.2"
     }
 
     aws = {
       source = "hashicorp/aws"
-      version = "5.65.0"
+      version = "3.57.0"
       max_retries = 100
     }
 
     dme = {
       source = "DNSMadeEasy/dme"
-      version = "1.0.6"
+      version = "0.1.3"
     } 
 
   }

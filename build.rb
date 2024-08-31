@@ -86,7 +86,7 @@ class Build < Thor
   def init(dir)
     suffix=terraformVersion(dir)
     puts "Running terraform#{suffix} init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=false -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=true -force-copy") || abort
   end
 
   desc 'providers', 'Run terraform providers on DIR'
@@ -94,13 +94,6 @@ class Build < Thor
     suffix=terraformVersion(dir) 
     puts "Running terraform providers on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} providers") || abort
-  end
-
-  desc 'replace', 'Run terraform replace on DIR'
-  def replace(dir)
-    suffix=terraformVersion(dir)
-    puts "Running terraform replace-provider on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve terraform.io/builtin/terraform#{suffix} terraform.io/builtin/terraform") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
