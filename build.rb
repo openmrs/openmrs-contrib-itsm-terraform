@@ -172,7 +172,7 @@ class Build < Thor
 
   desc 'create DIR', 'creates files for new stack DIR'
   def create(dir)
-    suffix=terraformVersion(dir) 
+    suffix="_new"
     puts "Creating stack \'#{dir}\'"
     FileUtils.mkdir_p dir
     FileUtils.cp_r 'conf/template-stack/.', dir
@@ -183,7 +183,7 @@ class Build < Thor
                                       f.read.gsub(/STACK-NAME/, dir.to_s)
                                     end)
     FileUtils.ln_sf '../global-variables.tf', "#{dir}/global-variables.tf"
-    FileUtils.ln_sf '../versions_terraform_12.tf', "#{dir}/versions.tf"
+    FileUtils.ln_sf '../versions_terraform_13.tf', "#{dir}/versions.tf"
 
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init") || abort
   end
@@ -196,7 +196,7 @@ class Build < Thor
 
     File.open('.tmp/docs.md', 'w') do |_file|
       (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
-        suffix=terraformVersion(dir) 
+        suffix=terraformVersion(d) 
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} output -json`
         outputs_parsed = JSON.parse(outputs)
@@ -241,10 +241,3 @@ class Build < Thor
 end
 
 Build.start
-
-# terraform state replace-provider -auto-approve registry.terraform.io/-/aws registry.terraform.io/hashicorp/aws
-# terraform state replace-provider -auto-approve registry.terraform.io/-/dme registry.terraform.io/terraform-providers/dme
-# terraform state replace-provider -auto-approve registry.terraform.io/-/null registry.terraform.io/hashicorp/null
-# terraform state replace-provider -auto-approve registry.terraform.io/-/openstack registry.terraform.io/terraform-providers/openstack
-# terraform state replace-provider -auto-approve registry.terraform.io/-/template registry.terraform.io/hashicorp/template
-# terraform state replace-provider -auto-approve terraform.io/builtin/terraform terraform.io/builtin/terraform
