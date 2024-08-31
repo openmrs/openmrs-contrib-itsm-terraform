@@ -24,6 +24,7 @@ You need to have installed:
   - ruby (2.0+)
   - thor (`gem install thor`)
   - `wget`
+  - if you are running on mac M1/M2, ensure rosetta is installed
 
 # Development environment setup
 To install terraform, run git crypto and initial setup (needed only once after cloning repo)
