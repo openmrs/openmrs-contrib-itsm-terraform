@@ -39,12 +39,18 @@ $excluded_dirs = ['cli/', 'conf/', 'modules/']
 $pwd = Dir.pwd
 
 class Build < Thor
-  desc 'clean', 'Clean all folders'
-  def clean
+  desc 'clean_all', 'Clean all folders'
+  def clean_all
     puts 'Cleaning temp folder'
     FileUtils.rm_rf($tmp_dir)
     puts 'Cleaning .terraform folders'
     Dir['**/.terraform/'].each { |x| FileUtils.rm_rf(x) }
+  end
+
+  desc 'clean', 'Clean terraform folder'
+  def clean(dir)
+    puts "Cleaning terraform files on #{dir}"
+    FileUtils.rm_rf("#{dir}/.terraform")
   end
 
   desc 'install', 'Install required dependencies.'
