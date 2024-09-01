@@ -21,13 +21,14 @@ end
 
 
 # While we are upgrading, downloading both versions
-$terraform_current_version='0.12.31'
+$terraform_current_version='0.13.7'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
 
 
-$terraform_new_version = '0.13.0'
+$terraform_new_version = '0.14.11'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_stacks = ['cdn-resources','docs', 'base-network', 'dimtu',  'yu', 'xindi', 'xiao',  'worabe', 'sawla', 'mota', 'mojo']
+$terraform_upgraded_stacks = []
+#$terraform_upgraded_stacks = ["adaba", "base-network", "bele", "bonga", "cdn-resources", "dimtu", "docs", "goba", "gode", "maji", "mojo", "mota", "sawla", "worabe", "xiao", "xindi", "yu"]
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
@@ -258,6 +259,16 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/template registry.terraform.io/hashicorp/template") || abort
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/aws registry.terraform.io/hashicorp/aws") || abort
   end
+
+  desc 'clean_init_plan_all', 'Run terraform clean, init and plan in all subfolders'
+  def clean_init_plan_all
+    (Dir['*/'] - $excluded_dirs).sort.each do |d|
+      clean(d)
+      init(d)
+      plan(d)
+    end
+  end
+
 end
 
 Build.start
