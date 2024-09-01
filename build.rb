@@ -27,16 +27,17 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 $terraform_new_version = '0.13.0'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_machines = ['dimtu', 'cdn-resources']
+$terraform_upgraded_stacks = ['dimtu', 'cdn-resources', 'yu']
 
 def terraformVersion(dir)
-  $terraform_upgraded_machines.include?(dir.chomp("/"))? suffix="_new" : suffix="" 
+  $terraform_upgraded_stacks.include?(dir.chomp("/"))? suffix="_new" : suffix="" 
 end 
 
 
-$tmp_dir = '.tmp/bin'
+# Directories without terraform stacks
 $excluded_dirs = ['cli/', 'conf/', 'modules/']
 $pwd = Dir.pwd
+$tmp_dir = '.tmp/bin'
 
 class Build < Thor
   desc 'clean_all', 'Clean all folders'

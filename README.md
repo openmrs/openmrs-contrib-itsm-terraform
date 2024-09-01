@@ -165,3 +165,9 @@ Some resources are necessary to run terraform, so they were created manually:
   - S3 bucket to keep terraform state (versioned)
   - User to interact with bucket (access via bucket policy)
   - DNS domains (not defined in terraform provider)
+
+## Upgrading stacks to terraform 0.13
+  - change versions.tf symlink from 12 to 13
+  - edit `build.rb` script and register this stack as upgraded
+  - Run a `clean` and `init` for the directory using `build.rd`
+  - Run a `plan` and verify what needs to change. If it's just reading new data sources, it's safe to apply
