@@ -27,7 +27,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 $terraform_new_version = '0.13.0'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_stacks = ['cdn-resources','docs', 'base-network', 'dimtu',  'yu', 'xindi', 'xiao',  'worabe']
+$terraform_upgraded_stacks = ['cdn-resources','docs', 'base-network', 'dimtu',  'yu', 'xindi', 'xiao',  'worabe', 'sawla', 'mota', 'mojo']
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
