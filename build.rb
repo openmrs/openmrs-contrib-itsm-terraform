@@ -27,7 +27,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 $terraform_new_version = '0.13.0'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_stacks = ['dimtu', 'cdn-resources', 'yu', 'xindi', 'xiao']
+$terraform_upgraded_stacks = ['cdn-resources','docs', 'base-network', 'dimtu',  'yu', 'xindi', 'xiao',  'worabe']
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
@@ -92,13 +92,6 @@ class Build < Thor
     suffix=terraformVersion(dir)
     puts "Running terraform#{suffix} init on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=true -force-copy") || abort
-  end
-
-  desc 'providers', 'Run terraform providers on DIR'
-  def providers(dir)
-    suffix=terraformVersion(dir) 
-    puts "Running terraform providers on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} providers") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
@@ -244,6 +237,26 @@ class Build < Thor
 
     puts "\n\n\n\n"
     puts 'Update stack <docs> to upload it to S3. '
+  end
+
+
+  ### ======= >>>>>>  For terraform 13 upgrade
+  desc 'providers', 'Run terraform providers on DIR'
+  def providers(dir)
+    suffix=terraformVersion(dir) 
+    puts "Running terraform providers on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} providers") || abort
+  end
+
+  desc 'changeTerraform13Providers', 'Replace Openstack and DME providers'
+  def changeTerraform13Providers(dir)
+    suffix=terraformVersion(dir) 
+    puts "Changing terraform providers on #{dir}"
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/dme registry.terraform.io/DNSMadeEasy/dme") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/openstack registry.terraform.io/terraform-provider-openstack/openstack") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/null registry.terraform.io/hashicorp/null") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/template registry.terraform.io/hashicorp/template") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/aws registry.terraform.io/hashicorp/aws") || abort
   end
 end
 

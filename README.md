@@ -171,3 +171,5 @@ Some resources are necessary to run terraform, so they were created manually:
   - edit `build.rb` script and register this stack as upgraded
   - Run a `clean` and `init` for the directory using `build.rd`
   - Run a `plan` and verify what needs to change. If it's just reading new data sources, it's safe to apply
+  - Run `providers` to verify if openstack and DME are now own their own providers on the state file. If not, run `changeTerraform13Providers`
+  - Check if there's any pending changes with `clean, init and plan`
