@@ -21,13 +21,13 @@ end
 
 
 # While we are upgrading, downloading both versions
-$terraform_current_version='0.12.31'
+$terraform_current_version='0.13.0'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
 
 
-$terraform_new_version = '0.13.0'
+$terraform_new_version = '0.13.7'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_stacks = ['cdn-resources','docs', 'base-network', 'dimtu',  'yu', 'xindi', 'xiao',  'worabe', 'sawla', 'mota', 'mojo', 'adaba', 'bele', 'bonga', "goba", "gode", "jinka", "maji"]
+$terraform_upgraded_stacks = []
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
