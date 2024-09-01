@@ -21,11 +21,11 @@ end
 
 
 # While we are upgrading, downloading both versions
-$terraform_current_version='0.13.0'
+$terraform_current_version='0.13.7'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
 
 
-$terraform_new_version = '0.13.7'
+$terraform_new_version = '0.14.11'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 $terraform_upgraded_stacks = []
 #$terraform_upgraded_stacks = ["adaba", "base-network", "bele", "bonga", "cdn-resources", "dimtu", "docs", "goba", "gode", "maji", "mojo", "mota", "sawla", "worabe", "xiao", "xindi", "yu"]
