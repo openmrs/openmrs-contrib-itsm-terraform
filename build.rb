@@ -30,8 +30,12 @@ $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraf
 $terraform_upgraded_stacks = ['dimtu', 'cdn-resources', 'yu']
 
 def terraformVersion(dir)
-  $terraform_upgraded_stacks.include?(dir.chomp("/"))? suffix="_new" : suffix="" 
+  $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
 end 
+
+def terraformDocVersion(dir)
+  $terraform_upgraded_stacks.include?(dir.chomp("/"))? $terraform_new_version : $terraform_current_version 
+end
 
 
 # Directories without terraform stacks
@@ -191,13 +195,14 @@ class Build < Thor
 
   desc 'docs', 'generate docs in .tmp/docs.md'
   def docs
-    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/', 'cdn-resources')
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/', 'cdn-resources/')
 
     $vms = []
 
     File.open('.tmp/docs.md', 'w') do |_file|
       (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
         suffix=terraformVersion(d) 
+        version_terraform=terraformDocVersion(d)
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} output -json`
         outputs_parsed = JSON.parse(outputs)
@@ -207,14 +212,15 @@ class Build < Thor
         vm_name = d.chomp('/')
         puts "Found terraformed machine #{vm_name}"
         vm = {
-          'name'        => vm_name,
-          'environment' => outputs_parsed['ansible_inventory']['value'],
-          'size'        => outputs_parsed['flavor']['value'],
-          'backup'      => outputs_parsed['has_backup']['value'] == true ? 'Yes' : 'No',
-          'data_volume' => outputs_parsed['has_data_volume']['value'] == true ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
-          'ip'          => outputs_parsed['ip_address']['value'],
-          'dns'         => outputs_parsed['dns_entries']['value'],
-          'description' => outputs_parsed['description']['value']
+          'name'              => vm_name,
+          'environment'       => outputs_parsed['ansible_inventory']['value'],
+          'size'              => outputs_parsed['flavor']['value'],
+          'backup'            => outputs_parsed['has_backup']['value'] == true ? 'Yes' : 'No',
+          'data_volume'       => outputs_parsed['has_data_volume']['value'] == true ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
+          'ip'                => outputs_parsed['ip_address']['value'],
+          'dns'               => outputs_parsed['dns_entries']['value'],
+          'description'       => outputs_parsed['description']['value'],
+          'terraform_version' => version_terraform
         }
         if outputs_parsed['dns_manual_entries']
           vm['manual_dns'] = outputs_parsed['dns_manual_entries']['value']
