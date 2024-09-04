@@ -87,6 +87,7 @@ resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-i
   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
 }
 
+## TODO this resource can probably be removed altogether
 resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
   name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
