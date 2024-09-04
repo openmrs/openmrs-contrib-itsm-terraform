@@ -18,9 +18,7 @@ resource "aws_s3_bucket" "cdn-resources-s3" {
   "Statement":[{
     "Sid":"AllowCloudFrontServicePrincipalReadOnly",
       "Effect":"Allow",
-      "Principal": {
-            "Service": "cloudfront.amazonaws.com"
-      },
+      "Principal": "*",
       "Action":"s3:GetObject",
       "Resource":["arn:aws:s3:::${var.bucket_name}/*"]
     }
@@ -28,18 +26,6 @@ resource "aws_s3_bucket" "cdn-resources-s3" {
 }
 POLICY
 
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-  # logging {
-  #   target_bucket = aws_s3_bucket.log_bucket.id
-  #   target_prefix = "log/"
-  # }
-  versioning {
-    enabled = true
-  }
   tags = {
     Terraform = "cdn-resources"
   }
@@ -47,6 +33,53 @@ POLICY
     prevent_destroy = false
   }
 }
+
+
+resource "aws_s3_bucket_website_configuration" "cdn-resources-website" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "cdn-resources-controls" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "cdn-resources-block" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.cdn-resources-controls,
+    aws_s3_bucket_public_access_block.cdn-resources-block,
+  ]
+
+  bucket = aws_s3_bucket.cdn-resources-s3.id
+  acl    = "public-read"
+}
+
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
@@ -63,11 +96,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   enabled             = true
   aliases             = ["cdn.openmrs.org", "assets.openmrs.org"]
   default_root_object = "index.html"
-  # logging_config {
-  #   include_cookies = false
-  #   bucket          = aws_s3_bucket.log_bucket.bucket_domain_name
-  #   prefix          = "cloudfront"
-  # }
   tags = {
     Terraform = "cdn-resources"
   }
