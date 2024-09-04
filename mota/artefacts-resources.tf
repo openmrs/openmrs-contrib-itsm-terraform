@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "bamboo-artefacts-bucket" {
   bucket = "openmrs-bamboo-artefacts-staging"
-  versioning {
-    enabled = true
-  }
+  # versioning {
+  #   enabled = true
+  # }
   tags = {
     Terraform = var.hostname
   }

@@ -1,10 +1,10 @@
 # [Required] VM size.
 # Check https://docs.jetstream-cloud.org/general/vmsizes/ for options
-variable "flavor" { }
+variable "flavor" {}
 
 # [Required] VM hostname. Should be unique.
 # Details on the repository README.md file
-variable "hostname" { }
+variable "hostname" {}
 
 # [Optional] Where the VM should be created.
 # Values could be 'v2' only
@@ -53,7 +53,7 @@ variable "has_backup" {
 
 # [Optional] extra CNAMES to create on DNS
 variable "dns_cnames" {
-  type    = list
+  type    = list(any)
   default = []
 }
 
@@ -64,7 +64,7 @@ variable "has_private_dns" {
 
 # [Optional] extra security_groups to apply to VM
 variable "extra_security_groups" {
-  type    = list
+  type    = list(any)
   default = []
 }
 
@@ -89,22 +89,22 @@ variable "power_state" {
 
 # Image for the new VM.
 # Automation is only tested for Ubuntu 22.
-variable "image" { }
+variable "image" {}
 
 # Jetstream project
-variable "project_name" { }
+variable "project_name" {}
 
 # User to SSH into new VM
-variable "ssh_username" { }
+variable "ssh_username" {}
 
 # Key file to SSH into new box
-variable "ssh_key_file" { }
+variable "ssh_key_file" {}
 
 # DNS domains in our DNS provider
-variable "domain_dns" { type = map }
+variable "domain_dns" { type = map(any) }
 
 # repository where to download ansible code
-variable "ansible_repo" {  }
+variable "ansible_repo" {}
 
 # Floating IP Pool
 variable "pool" {
