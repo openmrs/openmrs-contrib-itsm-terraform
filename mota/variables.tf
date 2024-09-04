@@ -25,7 +25,7 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier1"
+  default = "prod-tier4"
 }
 
 variable "has_data_volume" {
@@ -46,9 +46,13 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["wiki", "wiki-old"]
+  default = ["wiki", "wiki-old", "ci-stg"]
+}
+
+variable "bamboo_remote_agent_port" {
+  default = "54663"
 }
 
 variable "description" {
-  default = "Wiki"
+  default = "CI Staging"
 }

@@ -6,3 +6,4 @@ openrc-personal
 terraform.plan
 docs/vms.html
 docs/vms.json
+*/.terraform.lock.hcl

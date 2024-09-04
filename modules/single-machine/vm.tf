@@ -1,23 +1,23 @@
 resource "openstack_compute_floatingip_v2" "ip" {
-  pool       = var.pool
+  pool = var.pool
 }
 
 resource "openstack_compute_instance_v2" "vm" {
-  name            = "${var.project_name}-${var.hostname}"
-  image_id        = var.image
-  flavor_name     = var.flavor
-  power_state     = var.power_state
-  key_pair        = data.terraform_remote_state.base.outputs.key-pair-name
+  name        = "${var.project_name}-${var.hostname}"
+  image_id    = var.image
+  flavor_name = var.flavor
+  power_state = var.power_state
+  key_pair    = data.terraform_remote_state.base.outputs.key-pair-name
   security_groups = compact(
-      concat(
-          list(
-            data.terraform_remote_state.base.outputs.secgroup-ssh-name,
-            var.allow_web? data.terraform_remote_state.base.outputs.secgroup-http-name:""
-          ),
-          var.extra_security_groups
-      )
+    concat(
+      list(
+        data.terraform_remote_state.base.outputs.secgroup-ssh-name,
+        var.allow_web ? data.terraform_remote_state.base.outputs.secgroup-http-name : ""
+      ),
+      var.extra_security_groups
+    )
   )
-  
+
 
   network {
     uuid = data.terraform_remote_state.base.outputs.network-id[var.region]
@@ -38,9 +38,9 @@ resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
 }
 
 resource "openstack_blockstorage_volume_v3" "data_volume" {
-  count  = var.has_data_volume? 1 : 0
-  name   = "${var.project_name}-data_volume"
-  size   = var.data_volume_size
+  count = var.has_data_volume ? 1 : 0
+  name  = "${var.project_name}-data_volume"
+  size  = var.data_volume_size
 
   # this cannot be a variable!!!!!!
   # https://github.com/hashicorp/terraform/issues/3116
@@ -51,15 +51,15 @@ resource "openstack_blockstorage_volume_v3" "data_volume" {
 }
 
 resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
-  count       = var.has_data_volume? 1 : 0
+  count       = var.has_data_volume ? 1 : 0
   depends_on  = [openstack_blockstorage_volume_v3.data_volume, openstack_compute_instance_v2.vm]
   instance_id = openstack_compute_instance_v2.vm.id
   volume_id   = openstack_blockstorage_volume_v3.data_volume[count.index].id
 }
 
 resource "null_resource" "mount_data_volume" {
-  count       = var.has_data_volume? 1 : 0
-  depends_on  = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
+  count      = var.has_data_volume ? 1 : 0
+  depends_on = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
@@ -83,7 +83,7 @@ resource "null_resource" "mount_data_volume" {
 }
 
 resource "null_resource" "upgrade" {
-  count = var.update_os? 1 : 0
+  count      = var.update_os ? 1 : 0
   depends_on = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
@@ -109,7 +109,7 @@ resource "null_resource" "upgrade" {
 }
 
 resource "null_resource" "add_github_key" {
-  count      = var.leave_git_clone_creds? 1 : 0
+  count      = var.leave_git_clone_creds ? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -137,7 +137,7 @@ resource "null_resource" "add_github_key" {
 
 
 resource "null_resource" "add_gitcrypt_key" {
-  count      = var.leave_git_clone_creds? 1 : 0
+  count      = var.leave_git_clone_creds ? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -168,12 +168,12 @@ data "template_file" "provisioning_file" {
       ansible_inventory = var.ansible_inventory
       region            = var.region
       has_backup        = var.has_backup
-    })
+  })
 }
 
 
 resource "null_resource" "copy_facts" {
-  count      = var.copy_ansible_facts? 1 : 0
+  count      = var.copy_ansible_facts ? 1 : 0
   depends_on = [null_resource.upgrade]
 
   connection {
@@ -183,7 +183,7 @@ resource "null_resource" "copy_facts" {
   }
 
   provisioner "file" {
-    content      = data.template_file.provisioning_file.rendered
+    content     = data.template_file.provisioning_file.rendered
     destination = "/tmp/provisioning.fact"
   }
 
@@ -200,15 +200,15 @@ resource "null_resource" "copy_facts" {
 }
 
 data "template_file" "provisioning_file_backup" {
-  count    = var.has_backup? 1 : 0
+  count = var.has_backup ? 1 : 0
   template = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
-    aws_access_key_id     = "${aws_iam_access_key.backup-user-key[count.index].id}"
-    aws_secret_access_key = "${aws_iam_access_key.backup-user-key[count.index].secret}"
+    aws_access_key_id     = aws_iam_access_key.backup-user-key[count.index].id
+    aws_secret_access_key = aws_iam_access_key.backup-user-key[count.index].secret
   })
 }
 
 resource "null_resource" "copy_facts_backups" {
-  count = var.has_backup? 1 : 0
+  count      = var.has_backup ? 1 : 0
   depends_on = [null_resource.copy_facts]
 
   connection {
@@ -218,7 +218,7 @@ resource "null_resource" "copy_facts_backups" {
   }
 
   provisioner "file" {
-    content      = data.template_file.provisioning_file_backup[count.index].rendered
+    content     = data.template_file.provisioning_file_backup[count.index].rendered
     destination = "/tmp/aws.fact"
   }
 
@@ -236,7 +236,7 @@ resource "null_resource" "copy_facts_backups" {
 # ssh/scp from terraform stops working after this step
 # global-variables need to use personal creds instead
 resource "null_resource" "ansible" {
-  count      = var.use_ansible? 1 : 0
+  count      = var.use_ansible ? 1 : 0
   depends_on = [null_resource.add_github_key, null_resource.add_gitcrypt_key, null_resource.copy_facts, null_resource.copy_facts_backups]
   connection {
     user        = var.ssh_username

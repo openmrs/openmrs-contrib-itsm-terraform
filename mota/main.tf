@@ -23,25 +23,27 @@ data "terraform_remote_state" "base" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 module "single-machine" {
-  source            = "../modules/single-machine"
+  source = "../modules/single-machine"
 
   ################################################
   # Change values in variables.tf file instead
   ################################################
-  flavor            = "${var.flavor}"
-  hostname          = "${var.hostname}"
-  region            = "${var.region}"
-  update_os         = "${var.update_os}"
-  use_ansible       = "${var.use_ansible}"
-  ansible_inventory = "${var.ansible_inventory}"
-  has_data_volume   = "${var.has_data_volume}"
-  data_volume_size  = "${var.data_volume_size}"
-  has_backup        = "${var.has_backup}"
-  dns_cnames        = "${var.dns_cnames}"
+  flavor            = var.flavor
+  hostname          = var.hostname
+  region            = var.region
+  update_os         = var.update_os
+  use_ansible       = var.use_ansible
+  ansible_inventory = var.ansible_inventory
+  has_data_volume   = var.has_data_volume
+  data_volume_size  = var.data_volume_size
+  has_backup        = var.has_backup
+  dns_cnames        = var.dns_cnames
 
   extra_security_groups = [
     data.terraform_remote_state.base.outputs.secgroup-database-name,
+    # openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.name,
   ]
+
 
 
   # ----------------------------------------------------------------------------------------------------------------------
@@ -49,10 +51,38 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image             = "${var.image_ubuntu_22}"
-  project_name      = "${var.project_name}"
-  ssh_username      = "${var.ssh_username_ubuntu_20}"
-  ssh_key_file      = "${var.ssh_key_file_v2}"
-  domain_dns        = "${var.domain_dns}"
-  ansible_repo      = "${var.ansible_repo}"
+  image        = var.image_ubuntu_22
+  project_name = var.project_name
+  ssh_username = var.ssh_username_ubuntu_20
+  ssh_key_file = var.ssh_key_file_v2
+  domain_dns   = var.domain_dns
+  ansible_repo = var.ansible_repo
 }
+
+
+
+# resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-ssl" {
+#   name        = "${var.project_name}-bamboo-stg-agents-ssl"
+#   description = "Allow bamboo staging agents to connect to server using SSL (terraform)."
+# }
+
+# resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4" {
+#   direction         = "ingress"
+#   ethertype         = "IPv4"
+#   protocol          = "tcp"
+#   port_range_min    = 54663
+#   port_range_max    = 54663
+#   remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
+#   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
+# }
+
+# resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv6" {
+#   direction         = "ingress"
+#   ethertype         = "IPv6"
+#   protocol          = "tcp"
+#   port_range_min    = 54667
+#   port_range_max    = 54667
+#   remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
+#   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
+# }
+

@@ -1,1 +1,1 @@
-../versions_terraform_12.tf
+../versions_terraform_14.tf

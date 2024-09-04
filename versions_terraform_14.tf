@@ -5,33 +5,33 @@
 
 terraform {
 
-  required_version = ">= 0.13"
+  required_version = ">= 0.14"
 
   required_providers {
 
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = "1.43"
+      version = "2.1.0"
     }
 
     null = {
       source  = "hashicorp/null"
-      version = "3.0.0"
+      version = "3.2.2"
     }
 
     template = {
       source  = "hashicorp/template"
-      version = "2.2"
+      version = "2.2.0"
     }
 
     aws = {
       source  = "hashicorp/aws"
-      version = "3.57.0"
+      version = "5.65.0"
     }
 
     dme = {
       source  = "dnsmadeeasy/dme"
-      version = "0.1.3"
+      version = "1.0.6"
     }
 
   }

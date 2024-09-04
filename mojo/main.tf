@@ -55,11 +55,3 @@ module "single-machine" {
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
 }
-
-resource "dme_dns_record" "a_id_stg" {
-  domain_id   = var.domain_dns["openmrs.org"]
-  name        = "id-stg"
-  type        = "A"
-  value       = module.single-machine.address
-  ttl         = 300
-}
