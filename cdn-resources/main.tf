@@ -12,7 +12,7 @@ terraform {
 
 resource "aws_s3_bucket" "cdn-resources-s3" {
   bucket = var.bucket_name
-  acl = "public-read"
+  # acl = "public-read"
   policy = <<POLICY
 {
   "Version":"2012-10-17",
@@ -28,17 +28,17 @@ resource "aws_s3_bucket" "cdn-resources-s3" {
 POLICY
 
 
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
+  # website {
+  #   index_document = "index.html"
+  #   error_document = "error.html"
+  # }
   # logging {
   #   target_bucket = aws_s3_bucket.log_bucket.id
   #   target_prefix = "log/"
   # }
-  versioning {
-    enabled = true
-  }
+  # versioning {
+  #   enabled = true
+  # }
   tags = {
     Terraform = "cdn-resources"
   }
