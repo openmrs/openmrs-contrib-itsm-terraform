@@ -46,7 +46,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["wiki", "wiki-old", "ci-stg"]
+  default = ["ci-stg"]
 }
 
 variable "bamboo_remote_agent_port" {
