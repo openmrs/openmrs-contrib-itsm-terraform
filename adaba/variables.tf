@@ -45,9 +45,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ldap", "crowd"]
+  default = ["ldap"]
 }
 
 variable "description" {
-  default = "ID servers (ldap, crowd, openmrsid)"
+  default = "ID servers (ldap, keycloak, postfix)"
 }
