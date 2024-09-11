@@ -45,7 +45,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["dev-his"]
+  default = ["dev-his", "emr.dev-his", "erp.dev-his", "lims.dev-his"]
 }
 
 variable "description" {
