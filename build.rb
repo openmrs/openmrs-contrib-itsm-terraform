@@ -27,7 +27,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 $terraform_new_version = '0.14.11'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
-$terraform_upgraded_stacks = ['mota', 'cdn-resources', 'mota']
+$terraform_upgraded_stacks = ['mota', 'cdn-resources', 'adaba']
 #$terraform_upgraded_stacks = ["adaba", "base-network", "bele", "bonga", "cdn-resources", "dimtu", "docs", "goba", "gode", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu"]
 
 def terraformVersion(dir)
@@ -238,35 +238,6 @@ class Build < Thor
 
     puts "\n\n\n\n"
     puts 'Update stack <docs> to upload it to S3. '
-  end
-
-
-  ### ======= >>>>>>  For terraform 13 upgrade
-  desc 'providers', 'Run terraform providers on DIR'
-  def providers(dir)
-    suffix=terraformVersion(dir) 
-    puts "Running terraform providers on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} providers") || abort
-  end
-
-  desc 'changeTerraform13Providers', 'Replace Openstack and DME providers'
-  def changeTerraform13Providers(dir)
-    suffix=terraformVersion(dir) 
-    puts "Changing terraform providers on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/dme registry.terraform.io/DNSMadeEasy/dme") || abort
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/openstack registry.terraform.io/terraform-provider-openstack/openstack") || abort
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/null registry.terraform.io/hashicorp/null") || abort
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/template registry.terraform.io/hashicorp/template") || abort
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} state replace-provider -auto-approve registry.terraform.io/-/aws registry.terraform.io/hashicorp/aws") || abort
-  end
-
-  desc 'clean_init_plan_all', 'Run terraform clean, init and plan in all subfolders'
-  def clean_init_plan_all
-    (Dir['*/'] - $excluded_dirs).sort.each do |d|
-      clean(d)
-      init(d)
-      plan(d)
-    end
   end
 
 end
