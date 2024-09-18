@@ -15,21 +15,21 @@ terraform {
 # ----------------------------------------------------------------------------------------------------------------------
 
 module "single-machine" {
-  source            = "../modules/single-machine"
+  source = "../modules/single-machine"
 
   ################################################
   # Change values in variables.tf file instead
   ################################################
-  flavor            = "${var.flavor}"
-  hostname          = "${var.hostname}"
-  region            = "${var.region}"
-  update_os         = "${var.update_os}"
-  use_ansible       = "${var.use_ansible}"
-  ansible_inventory = "${var.ansible_inventory}"
-  has_data_volume   = "${var.has_data_volume}"
-  data_volume_size  = "${var.data_volume_size}"
-  has_backup        = "${var.has_backup}"
-  dns_cnames        = "${var.dns_cnames}"
+  flavor            = var.flavor
+  hostname          = var.hostname
+  region            = var.region
+  update_os         = var.update_os
+  use_ansible       = var.use_ansible
+  ansible_inventory = var.ansible_inventory
+  has_data_volume   = var.has_data_volume
+  data_volume_size  = var.data_volume_size
+  has_backup        = var.has_backup
+  dns_cnames        = var.dns_cnames
 
   extra_security_groups = [
     openstack_networking_secgroup_v2.secgroup_ldap_stg.name,
@@ -42,37 +42,37 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image             = "${var.image_ubuntu_22}"
-  project_name      = "${var.project_name}"
-  ssh_username      = "${var.ssh_username_ubuntu_20}"
-  ssh_key_file      = "${var.ssh_key_file_v2}"
-  domain_dns        = "${var.domain_dns}"
-  ansible_repo      = "${var.ansible_repo}"
+  image        = var.image_ubuntu_22
+  project_name = var.project_name
+  ssh_username = var.ssh_username_ubuntu_20
+  ssh_key_file = var.ssh_key_file_v2
+  domain_dns   = var.domain_dns
+  ansible_repo = var.ansible_repo
 }
 
 resource "dme_dns_record" "mx_id_stg" {
-  domain_id   = var.domain_dns["openmrs.org"]
-  name        = "id-stg"
-  type        = "MX"
-  mx_level    = "10"
-  value       = "smtp-stg"
-  ttl         = 300
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "id-stg"
+  type      = "MX"
+  mx_level  = "10"
+  value     = "smtp-stg"
+  ttl       = 300
 }
 
 resource "dme_dns_record" "a_smtp_stg" {
-  domain_id   = var.domain_dns["openmrs.org"]
-  name        = "smtp-stg"
-  type        = "A"
-  value       = module.single-machine.address
-  ttl         = 300
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "smtp-stg"
+  type      = "A"
+  value     = module.single-machine.address
+  ttl       = 300
 }
 
 resource "dme_dns_record" "a_id_stg" {
-  domain_id   = var.domain_dns["openmrs.org"]
-  name        = "id-stg"
-  type        = "A"
-  value       = module.single-machine.address
-  ttl         = 300
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "id-stg"
+  type      = "A"
+  value     = module.single-machine.address
+  ttl       = 300
 }
 
 resource "openstack_networking_secgroup_v2" "secgroup_ldap_stg" {

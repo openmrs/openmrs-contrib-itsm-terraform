@@ -36,7 +36,7 @@ output "secgroup-database-id" {
 
 output "network-id" {
   value = {
-    v2   = openstack_networking_network_v2.private-net.id
+    v2 = openstack_networking_network_v2.private-net.id
   }
 }
 
