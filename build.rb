@@ -21,15 +21,15 @@ end
 
 
 # While we are upgrading, downloading both versions
-$terraform_current_version = '0.14.11'
+$terraform_current_version = '0.15.5'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
 
 
 # When changing versions, reinstall terraform
-$terraform_new_version = '0.15.5'
+$terraform_new_version = '1.0.11'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 #$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu" ]
-$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu"]
+$terraform_upgraded_stacks = []
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
@@ -63,11 +63,16 @@ class Build < Thor
   desc 'install', 'Install required dependencies.'
   def install
     puts "Running on: #{os}"
+
+    puts 'Cleaning temp folder'
+    FileUtils.rm_rf($tmp_dir)
+
     FileUtils.mkdir_p '.tmp/bin'
     puts "\n\n\nAttempting to decrypt secrets using GPG key."
     system('git-crypt unlock') || abort('Error when attempting to decrypt secrets')
     system('chmod 600 conf/provisioning/ssh/terraform-api.key') || abort('Error when setting private key permissions')
 
+    
     system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort('Error when downloading terraform 13')
     system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
     
