@@ -20,6 +20,19 @@ def os
 end
 
 
+def arch
+  case RbConfig::CONFIG['host_cpu']
+  when "x86_64"
+    "amd64"
+  when 'arm64'
+    "arm64"
+  when 'amd64'
+    "amd64"
+  else
+    abort("Unsupported CPU arch #{RbConfig::CONFIG['host_cpu']}")
+  end
+end
+
 # While we are upgrading, downloading both versions
 $terraform_current_version = '0.15.5'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
@@ -27,9 +40,9 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 # When changing versions, reinstall terraform
 $terraform_new_version = '1.0.11'
-$terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
+$terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_#{arch}.zip"
 #$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu" ]
-$terraform_upgraded_stacks = []
+$terraform_upgraded_stacks = ["yu"]
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
