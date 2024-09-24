@@ -11,11 +11,11 @@ output "vm_name" {
 }
 
 output "backup_access_key_id" {
-  value = element(concat(aws_iam_access_key.backup-user-key.*.id, list("")), 0)
+  value = element(concat(aws_iam_access_key.backup-user-key.*.id, tolist([""])), 0)
 }
 
 output "backup_access_key_secret" {
-  value = element(concat(aws_iam_access_key.backup-user-key.*.secret, list("")), 0)
+  value = element(concat(aws_iam_access_key.backup-user-key.*.secret, tolist([""])), 0)
 }
 
 output "dns_entries" {
@@ -23,7 +23,7 @@ output "dns_entries" {
 }
 
 output "private-dns" {
-  value = element(concat(dme_dns_record.private_hostname.*.name, list("")), 0)
+  value = element(concat(dme_dns_record.private_hostname.*.name, tolist([""])), 0)
 }
 
 output "power_state" {
