@@ -157,19 +157,19 @@ EOF
 
 }
 
-resource "aws_s3_bucket_object" "vms-inventory-json" {
-  bucket       = var.bucket_name
-  key          = "infrastructure/vms.json"
-  source       = "vms.json" # use './build docs' to generate it
-  etag         = filemd5("vms.json")
+resource "aws_s3_object" "vms-list-json" {
+  bucket = var.bucket_name
+  key    = "infrastructure/vms.json"
+  source = "vms.json" # use './build docs' to generate it
+  etag = filemd5("vms.json")
   content_type = "application/json"
 }
 
-resource "aws_s3_bucket_object" "vms-inventory" {
-  bucket       = var.bucket_name
-  key          = "infrastructure/vms.html"
-  source       = "vms.html" # use './build docs' to generate it
-  etag         = filemd5("vms.html")
+resource "aws_s3_object" "vms-list-html" {
+  bucket = var.bucket_name
+  key    = "infrastructure/vms.html"
+  source = "vms.html" # use './build docs' to generate it
+  etag = filemd5("vms.html")
   content_type = "text/html"
 }
 
