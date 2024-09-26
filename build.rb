@@ -20,6 +20,7 @@ def os
 end
 
 
+# using arch to download terraform requires us to get rid of template provider
 def arch
   case RbConfig::CONFIG['host_cpu']
   when "x86_64"
@@ -40,7 +41,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 # When changing versions, reinstall terraform
 $terraform_new_version = '1.0.11'
-$terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_#{arch}.zip"
+$terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 #$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu" ]
 $terraform_upgraded_stacks = ["yu"]
 
