@@ -35,15 +35,15 @@ def arch
 end
 
 # While we are upgrading, downloading both versions
-$terraform_current_version = '0.15.5'
+$terraform_current_version = '1.0.11'
 $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_current_version}/terraform_#{$terraform_current_version}_#{os}_amd64.zip"
 
 
 # When changing versions, reinstall terraform
-$terraform_new_version = '1.0.11'
+$terraform_new_version = '1.1.9'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 #$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu" ]
-$terraform_upgraded_stacks = ["yu"]
+$terraform_upgraded_stacks = []
 
 def terraformVersion(dir)
   $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
