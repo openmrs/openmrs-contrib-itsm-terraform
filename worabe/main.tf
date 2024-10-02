@@ -87,7 +87,7 @@ resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-i
   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
 }
 
-## TODO this resource can probably be removed altogether
+## Not sure if this one is being used or the previous one
 resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
   name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
@@ -100,13 +100,13 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.154.41/32"
   }
 
-  # xindi jetstream
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.152.20/32"
-  }
+  # # xindi jetstream - doesn't seem to be deployed in Jetstream??
+  # rule {
+  #   from_port   = var.bamboo_remote_agent_port
+  #   to_port     = var.bamboo_remote_agent_port
+  #   ip_protocol = "tcp"
+  #   cidr        = "149.165.152.20/32"
+  # }
 
   # yu jetstream
   rule {
@@ -115,4 +115,13 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     ip_protocol = "tcp"
     cidr        = "149.165.152.37/32"
   }
+
+  # old machine I guess - seems to be deployed in Jetstream
+  rule {
+    from_port   = var.bamboo_remote_agent_port
+    to_port     = var.bamboo_remote_agent_port
+    ip_protocol = "tcp"
+    cidr        = "149.165.169.95/32"
+  }
+  
 }
