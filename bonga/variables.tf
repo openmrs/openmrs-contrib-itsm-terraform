@@ -49,10 +49,6 @@ variable "dns_cnames" {
   default = ["modules-refapp", "uat-refapp", "qa-refapp", "uat-platform", "dev3"]
 }
 
-output "dns_manual_entries" {
-  value = []
-}
-
 variable "description" {
   default = "Ephemeral (development and CI) OpenMRS environments"
 }

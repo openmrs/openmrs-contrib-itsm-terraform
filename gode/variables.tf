@@ -52,3 +52,7 @@ variable "dns_cnames" {
 variable "description" {
   default = "Internal community tools (staging & QA)"
 }
+
+output "dns_manual_entries" {
+  value = ["id-stg.openmrs.org"]
+}

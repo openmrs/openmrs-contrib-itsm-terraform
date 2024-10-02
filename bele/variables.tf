@@ -49,10 +49,6 @@ variable "dns_cnames" {
   default = ["demo", "mdsbuilder", "o3", "cieladmin", "formbuilder.o3"]
 }
 
-output "dns_manual_entries" {
-  value = []
-}
-
 variable "description" {
   default = "Stable OpenMRS environments"
 }

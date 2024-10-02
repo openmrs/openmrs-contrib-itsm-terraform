@@ -51,3 +51,7 @@ variable "dns_cnames" {
 variable "description" {
   default = "ID servers (ldap, keycloak, postfix)"
 }
+
+output "dns_manual_entries" {
+  value = ["id.openmrs.org", "id-new.openmrs.org"]
+}
