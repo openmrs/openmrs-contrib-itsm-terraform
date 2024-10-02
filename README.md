@@ -16,7 +16,7 @@ Check [Provision new machine](https://github.com/openmrs/openmrs-contrib-itsmres
 Before you can use this repository, you need:
   - Jetstream credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
-  - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/auth/) to obtain your personal `openrc.sh` file.
+  - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/auth/) to obtain your personal `openrc.sh` file. Don't use any specific role. 
 
 ## Software
 You need to have installed:

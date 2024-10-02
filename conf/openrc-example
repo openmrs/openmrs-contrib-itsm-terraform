@@ -4,6 +4,9 @@
 # export OS_PROJECT_NAME=<> -- omit for Jetstream2 (Burke, April 2023)
 export OS_IDENTITY_API_VERSION=3
 export OS_AUTH_URL=<>
+export OS_AUTH_TYPE=<>
+export OS_REGION_NAME=<>
+export OS_INTERFACE=<>
 
 export AWS_DEFAULT_REGION="<>"
 export AWS_ACCESS_KEY_ID="<>"
