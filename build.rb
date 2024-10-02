@@ -126,7 +126,7 @@ class Build < Thor
   def plan(dir)
     suffix=terraformVersion(dir) 
     puts "Running terraform#{suffix} plan on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -out terraform.plan -refresh=false") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -out terraform.plan") || abort
   end
 
   desc 'plan_all', 'Run terraform plan in all subfolders'
@@ -134,7 +134,7 @@ class Build < Thor
     (Dir['*/'] - $excluded_dirs).sort.each do |d|
       suffix=terraformVersion(d)
       puts "Running terraform plan on #{d}"
-      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -compact-warnings -refresh=false ") || abort
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -compact-warnings") || abort
     end
   end
 
