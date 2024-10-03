@@ -41,7 +41,7 @@ module "single-machine" {
 
   extra_security_groups = [
     data.terraform_remote_state.base.outputs.secgroup-database-name,
-    openstack_networking_secgroup_v2.bamboo-remote-stg-agent-ssl.name,
+    openstack_compute_secgroup_v2.bamboo-remote-stg-agent.name,
   ]
 
 
@@ -58,27 +58,16 @@ module "single-machine" {
   ansible_repo = var.ansible_repo
 }
 
-resource "openstack_networking_secgroup_v2" "bamboo-remote-stg-agent-ssl" {
-  name        = "${var.project_name}-bamboo-server-stg-agents-ssl"
-  description = "Allow bamboo agents to connect to server using SSL (terraform)."
-}
+# Using the agents security group didn't seem to do the trick. Using hardcoded values
+resource "openstack_compute_secgroup_v2" "bamboo-remote-stg-agent" {
+  name        = "${var.project_name}-bamboo-server-stg-agents"
+  description = "Allow bamboo agents to connect to server (terraform)."
 
-resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4" {
-  direction         = "ingress"
-  ethertype         = "IPv4"
-  protocol          = "tcp"
-  port_range_min    = 54663
-  port_range_max    = 54663
-  remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
-  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-stg-agent-ssl.id
-}
-
-resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv6" {
-  direction         = "ingress"
-  ethertype         = "IPv6"
-  protocol          = "tcp"
-  port_range_min    = 54667
-  port_range_max    = 54667
-  remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
-  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-stg-agent-ssl.id
+  # yu jetstream
+  rule {
+    from_port   = var.bamboo_remote_agent_port
+    to_port     = var.bamboo_remote_agent_port
+    ip_protocol = "tcp"
+    cidr        = "149.165.152.37/32"
+  }
 }
