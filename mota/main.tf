@@ -41,7 +41,7 @@ module "single-machine" {
 
   extra_security_groups = [
     data.terraform_remote_state.base.outputs.secgroup-database-name,
-    openstack_compute_secgroup_v2.bamboo-remote-stg-agent.name,
+    openstack_networking_secgroup_v2.bamboo-remote-stg-agent.name,
   ]
 
 
@@ -58,16 +58,19 @@ module "single-machine" {
   ansible_repo = var.ansible_repo
 }
 
-# Using the agents security group didn't seem to do the trick. Using hardcoded values
-resource "openstack_compute_secgroup_v2" "bamboo-remote-stg-agent" {
-  name        = "${var.project_name}-bamboo-server-stg-agents"
+# Using the agents security group didn't seem to do the trick. Using public IPs instead
+resource "openstack_networking_secgroup_v2" "bamboo-remote-stg-agent" {
+  name        = "${var.project_name}-stg-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
+}
 
-  # yu jetstream
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.152.37/32"
-  }
+# yu jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.152.37/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-stg-agent.id
 }
