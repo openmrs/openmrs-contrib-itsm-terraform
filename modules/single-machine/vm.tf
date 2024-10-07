@@ -1,4 +1,4 @@
-resource "openstack_compute_floatingip_v2" "ip" {
+resource "openstack_networking_floatingip_v2" "ip" {
   pool = var.pool
 }
 
@@ -32,14 +32,19 @@ resource "openstack_compute_instance_v2" "vm" {
   }
 }
 
-resource "openstack_compute_floatingip_associate_v2" "fip_vm" {
-  floating_ip = openstack_compute_floatingip_v2.ip.address
-  instance_id = openstack_compute_instance_v2.vm.id
+data "openstack_networking_port_v2" "vm_port" {
+  device_id  = openstack_compute_instance_v2.vm.id
+  network_id = data.terraform_remote_state.base.outputs.network-id[var.region]
+}
+
+resource "openstack_networking_floatingip_associate_v2" "fip_vm" {
+  floating_ip = openstack_networking_floatingip_v2.ip.address
+  port_id     = data.openstack_networking_port_v2.vm_port.id
 }
 
 resource "openstack_blockstorage_volume_v3" "data_volume" {
   count = var.has_data_volume ? 1 : 0
-  name  = "${var.project_name}-data_volume"
+  name  = "${var.project_name}-${var.hostname}-data_volume"
   size  = var.data_volume_size
 
   # this cannot be a variable!!!!!!
@@ -59,11 +64,11 @@ resource "openstack_compute_volume_attach_v2" "attach_data_volume" {
 
 resource "null_resource" "mount_data_volume" {
   count      = var.has_data_volume ? 1 : 0
-  depends_on = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
+  depends_on = [openstack_networking_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -84,11 +89,11 @@ resource "null_resource" "mount_data_volume" {
 
 resource "null_resource" "upgrade" {
   count      = var.update_os ? 1 : 0
-  depends_on = [openstack_compute_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
+  depends_on = [openstack_networking_floatingip_associate_v2.fip_vm, openstack_compute_volume_attach_v2.attach_data_volume]
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
 
@@ -115,7 +120,7 @@ resource "null_resource" "add_github_key" {
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -143,7 +148,7 @@ resource "null_resource" "add_gitcrypt_key" {
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -179,7 +184,7 @@ resource "null_resource" "copy_facts" {
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -214,7 +219,7 @@ resource "null_resource" "copy_facts_backups" {
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {
@@ -241,7 +246,7 @@ resource "null_resource" "ansible" {
   connection {
     user        = var.ssh_username
     private_key = file(var.ssh_key_file)
-    host        = openstack_compute_floatingip_v2.ip.address
+    host        = openstack_networking_floatingip_v2.ip.address
   }
 
   provisioner "file" {

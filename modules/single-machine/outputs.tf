@@ -1,5 +1,5 @@
 output "address" {
-  value = openstack_compute_floatingip_v2.ip.address
+  value = openstack_networking_floatingip_v2.ip.address
 }
 
 output "private_address" {

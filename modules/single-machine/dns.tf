@@ -2,7 +2,7 @@ resource "dme_dns_record" "hostname" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = var.hostname
   type      = "A"
-  value     = openstack_compute_floatingip_v2.ip.address
+  value     = openstack_networking_floatingip_v2.ip.address
   ttl       = 300
 }
 
