@@ -9,44 +9,11 @@ terraform {
   }
 }
 
-resource "aws_s3_bucket" "log_bucket" {
-  bucket = "openmrs-docs-logs"
-  acl    = "log-delivery-write"
-  tags = {
-    Terraform = "docs"
-  }
-}
+
 
 resource "aws_s3_bucket" "docs-s3" {
   bucket = var.bucket_name
-  acl    = "public-read"
-  policy = <<POLICY
-{
-  "Version":"2012-10-17",
-  "Statement":[{
-    "Sid":"PublicReadForGetBucketObjects",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":"s3:GetObject",
-      "Resource":["arn:aws:s3:::${var.bucket_name}/*"
-      ]
-    }
-  ]
-}
-POLICY
 
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
-  }
-  versioning {
-    enabled = true
-  }
   tags = {
     Terraform = "docs"
   }
@@ -54,6 +21,70 @@ POLICY
     prevent_destroy = false
   }
 }
+
+resource "aws_s3_bucket_acl" "docs-acl" {
+  bucket = aws_s3_bucket.docs-s3.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "docs-versioning" {
+  bucket = aws_s3_bucket.docs-s3.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "docs-website" {
+  bucket = aws_s3_bucket.docs-s3.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_policy" "docs-policy" {
+  bucket = aws_s3_bucket.docs-s3.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "AllowGetObjects"
+    Statement = [
+      {
+        Sid       = "AllowPublic"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.docs-s3.arn}/**"
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = "openmrs-docs-logs"
+  tags = {
+    Terraform = "docs"
+  }
+}
+
+resource "aws_s3_bucket_acl" "acl_log_bucket" {
+  bucket = aws_s3_bucket.log_bucket.id
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket_logging" "docs-logging" {
+  bucket = aws_s3_bucket.docs-s3.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "log/"
+}
+
+
+
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
