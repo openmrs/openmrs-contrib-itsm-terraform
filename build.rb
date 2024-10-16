@@ -40,7 +40,7 @@ $terraform_current_version_url = "https://releases.hashicorp.com/terraform/#{$te
 
 
 # When changing versions, reinstall terraform
-$terraform_new_version = '1.1.9'
+$terraform_new_version = '1.5.7'
 $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraform_new_version}/terraform_#{$terraform_new_version}_#{os}_amd64.zip"
 #$terraform_upgraded_stacks = ['cdn-resources', "base-network", "docs", 'adaba', 'bele', 'bonga', "dimtu", "goba", "gode", "jinka", "maji", "mota", "sawla", "worabe", "xiao", "xindi", "yu" ]
 $terraform_upgraded_stacks = []
