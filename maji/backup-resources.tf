@@ -4,10 +4,21 @@
 
 resource "aws_s3_bucket" "talk-backups" {
   bucket = "openmrs-talk-backup"
-  lifecycle_rule {
+
+  tags = {
+    Terraform = var.hostname
+  }
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+
+resource "aws_s3_bucket_lifecycle_configuration" "lifecycle_bucket" {
+  bucket = aws_s3_bucket.talk-backups.id
+
+  rule {
     id      = "archive-and-delete"
-    prefix  = ""
-    enabled = true
     transition {
       days          = 30
       storage_class = "GLACIER"
@@ -15,22 +26,25 @@ resource "aws_s3_bucket" "talk-backups" {
     expiration {
       days = 180
     }
+
+    status = "Enabled"
   }
-  versioning {
-    enabled = true
-  }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "encryption_bucket" {
+  bucket = aws_s3_bucket.talk-backups.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
     }
   }
-  tags = {
-    Terraform = var.hostname
-  }
-  lifecycle {
-    prevent_destroy = true
+}
+
+resource "aws_s3_bucket_versioning" "versioning_bucket" {
+  bucket = aws_s3_bucket.talk-backups.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
