@@ -62,8 +62,6 @@ $tmp_dir = '.tmp/bin'
 class Build < Thor
   desc 'clean_all', 'Clean all folders'
   def clean_all
-    puts 'Cleaning temp folder'
-    FileUtils.rm_rf($tmp_dir)
     puts 'Cleaning .terraform folders'
     Dir['**/.terraform/'].each { |x| FileUtils.rm_rf(x) }
   end

@@ -5,7 +5,7 @@
 
 terraform {
 
-  required_version = ">= 0.14"
+  required_version = ">= 1.0"
 
   required_providers {
 
@@ -17,11 +17,6 @@ terraform {
     null = {
       source  = "hashicorp/null"
       version = "3.2.2"
-    }
-
-    template = {
-      source  = "hashicorp/template"
-      version = "2.2.0"
     }
 
     aws = {
@@ -44,9 +39,6 @@ provider "dme" {
 
 provider "aws" {
   max_retries = 100
-}
-
-provider "template" {
 }
 
 provider "null" {
