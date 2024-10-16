@@ -1,13 +1,18 @@
 resource "aws_s3_bucket" "bamboo-artefacts-bucket" {
   bucket = "openmrs-bamboo-artefacts"
-  versioning {
-    enabled = true
-  }
+
   tags = {
     Terraform = var.hostname
   }
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_versioning" "versioning_bucket" {
+  bucket = aws_s3_bucket.bamboo-artefacts-bucket.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
