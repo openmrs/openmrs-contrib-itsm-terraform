@@ -46,7 +46,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["demo", "mdsbuilder", "o3", "cieladmin", "formbuilder.o3"]
+  default = ["demo", "mdsbuilder", "o2", "o3", "cieladmin", "formbuilder.o3"]
 }
 
 variable "description" {
