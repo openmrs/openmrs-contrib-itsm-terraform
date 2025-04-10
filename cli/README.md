@@ -13,10 +13,7 @@ Get started quickly with IU Jetstream2's API using Docker. Assuming you have [Do
 $ ./cli.sh
 ```
 
-This should build the jetstream2 docker image (the first time you run it) and then 
-place you at a command prompt at which you can begin using the OpenStack tools. You 
-can validate it's working by testing the `os flavor list` command to list out 
-available flavors of server instances:
+This should build the jetstream2 docker image (the first time you run it) and then place you at a command prompt at which you can begin using the OpenStack tools. You can validate it's working by testing the `os flavor list` command to list out available flavors of server instances:
 
 ```bash
 # os flavor list
@@ -32,3 +29,19 @@ available flavors of server instances:
 | 8  | m3.2xl    | 256000 |   60 |         0 |    64 | True      |
 +----+-----------+--------+------+-----------+-------+-----------+
 ```
+
+## Rebuilding the image
+
+If you've run the cli tool in the past and want to upgrade your image, you need to delete the old image. You can find the old image using this command:
+
+```bash
+$ docker images | grep cli
+```
+
+Then delete any existing old images with the command (tip: when you get to the name of the image, try using the tab key for autocomplete):
+
+```bash
+$ docker image rm cli-cli:latest
+```
+
+Once the old image is deleted, simply run the `./cli.sh` command again and it will re-build the image.
