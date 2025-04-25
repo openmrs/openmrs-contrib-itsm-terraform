@@ -47,7 +47,7 @@ variable "has_backup" {
 
 variable "dns_cnames" {
   # subdomains pointing to dimtu added to try to deal with issues with Certbot and named subdomains
-  default = ["dev-his", "emr.dev-his", "erp.dev-his", "lims.dev-his", "emr.dimtu", "erp.dimtu", "lims.dimtu", "dev3"]
+  default = ["dev-his", "emr.dev-his", "erp.dev-his", "lims.dev-his", "emr.dimtu", "erp.dimtu", "lims.dimtu", "dev3", "emr.dev3", "erp.dev3", "lims.dev3",]
 }
 
 variable "description" {
