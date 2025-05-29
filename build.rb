@@ -88,12 +88,12 @@ class Build < Thor
     system('chmod 600 conf/provisioning/ssh/terraform-api.key') || abort('Error when setting private key permissions')
 
     
-    # system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort('Error when downloading terraform 13')
-    # system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
+    system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort('Error when downloading terraform 13')
+    system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
     
 
-    # system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_current_version_url}") || abort('Error when downloading terraform 12')
-    # system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform") || abort('Error when unzipping current terraform')
+    system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_current_version_url}") || abort('Error when downloading terraform 12')
+    system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform") || abort('Error when unzipping current terraform')
 
 
     FileUtils.cp('conf/openrc-personal-example', 'conf/openrc-personal') unless File.exist?('conf/openrc-personal')
