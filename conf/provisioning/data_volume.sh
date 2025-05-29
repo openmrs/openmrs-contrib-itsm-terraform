@@ -19,5 +19,6 @@ fi
 
 
 echo "/dev/sdb1    /data     ext4    defaults    0    0" >> /etc/fstab
+systemctl daemon-reload
 
 mount /data
