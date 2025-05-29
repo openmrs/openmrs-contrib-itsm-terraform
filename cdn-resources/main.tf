@@ -177,3 +177,92 @@ resource "aws_iam_user_policy" "bamboo-user-policy" {
 EOF
 
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# CloudFront for developer demo environment (dev3.openmrs.org)
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ACM certificate for TLS on CloudFront
+resource "aws_acm_certificate" "dev-cert" {
+  domain_name       = "dev3.openmrs.org"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# CloudFront Distribution
+resource "aws_cloudfront_distribution" "dev-cdn" {
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "CloudFront CDN for dev3.openmrs.org"
+  default_root_object = "index.html"
+
+  aliases = ["dev3.openmrs.org"]
+
+  origin {
+    domain_name = "dev3.openmrs.org" # Jetstream server domain (or IP + port if behind a reverse proxy)
+    origin_id   = "openmrs-dev3-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only" # or "https-only" if supported
+      origin_ssl_protocols   = ["TLSv1.3", "TLSv1.2"]
+      origin_read_timeout    = 60
+    }
+  }
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "openmrs-dev3-origin"
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 300
+    max_ttl                = 3600
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn = aws_acm_certificate.dev-cert.arn
+    ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
+}
+
+resource "dme_dns_record" "dev-dns" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "dev3"
+  type      = "CNAME"
+  value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
+  ttl       = 300
+}
+
+resource "dme_dns_record" "dev-cert-validation" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_name
+  type      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_type
+  value     = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_value
+  ttl       = 300
+}
+
+resource "aws_acm_certificate_validation" "dev-cert-validation" {
+  certificate_arn         = aws_acm_certificate.dev-cert.arn
+  validation_record_fqdns = [dme_dns_record.dev-cert-validation.fqdn]
+}
