@@ -6,12 +6,25 @@ terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
     key    = "cdn-resources.tfstate"
+    region = "us-west-2"
   }
 }
 
 
 resource "aws_s3_bucket" "cdn-resources-s3" {
   bucket = var.bucket_name
+
+  tags = {
+    Terraform = "cdn-resources"
+  }
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+
+resource "aws_s3_bucket_policy" "cdn-resources-policy" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
   policy = <<POLICY
 {
   "Version":"2012-10-17",
@@ -25,15 +38,7 @@ resource "aws_s3_bucket" "cdn-resources-s3" {
   ]
 }
 POLICY
-
-  tags = {
-    Terraform = "cdn-resources"
-  }
-  lifecycle {
-    prevent_destroy = false
-  }
 }
-
 
 resource "aws_s3_bucket_website_configuration" "cdn-resources-website" {
   bucket = aws_s3_bucket.cdn-resources-s3.id
@@ -83,7 +88,7 @@ resource "aws_s3_bucket_acl" "example" {
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
-    domain_name = aws_s3_bucket.cdn-resources-s3.website_endpoint
+    domain_name = aws_s3_bucket.cdn-resources-s3.bucket_regional_domain_name
     origin_id   = "S3-${var.bucket_name}"
     custom_origin_config {
       origin_read_timeout    = 60
@@ -209,7 +214,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only" # or "https-only" if supported
-      origin_ssl_protocols   = ["TLSv1.3", "TLSv1.2"]
+      origin_ssl_protocols   = ["SSLv3", "TLSv1.2"]
       origin_read_timeout    = 60
     }
   }
@@ -244,25 +249,4 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
-}
-
-resource "dme_dns_record" "dev-dns" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "dev3"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
-  ttl       = 300
-}
-
-resource "dme_dns_record" "dev-cert-validation" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_name
-  type      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_type
-  value     = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_value
-  ttl       = 300
-}
-
-resource "aws_acm_certificate_validation" "dev-cert-validation" {
-  certificate_arn         = aws_acm_certificate.dev-cert.arn
-  validation_record_fqdns = [dme_dns_record.dev-cert-validation.fqdn]
 }
