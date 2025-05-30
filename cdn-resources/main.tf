@@ -6,12 +6,25 @@ terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
     key    = "cdn-resources.tfstate"
+    region = "us-west-2"
   }
 }
 
 
 resource "aws_s3_bucket" "cdn-resources-s3" {
   bucket = var.bucket_name
+
+  tags = {
+    Terraform = "cdn-resources"
+  }
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+
+resource "aws_s3_bucket_policy" "cdn-resources-policy" {
+  bucket = aws_s3_bucket.cdn-resources-s3.id
   policy = <<POLICY
 {
   "Version":"2012-10-17",
@@ -25,15 +38,7 @@ resource "aws_s3_bucket" "cdn-resources-s3" {
   ]
 }
 POLICY
-
-  tags = {
-    Terraform = "cdn-resources"
-  }
-  lifecycle {
-    prevent_destroy = false
-  }
 }
-
 
 resource "aws_s3_bucket_website_configuration" "cdn-resources-website" {
   bucket = aws_s3_bucket.cdn-resources-s3.id
@@ -83,7 +88,7 @@ resource "aws_s3_bucket_acl" "example" {
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
-    domain_name = aws_s3_bucket.cdn-resources-s3.website_endpoint
+    domain_name = aws_s3_bucket.cdn-resources-s3.bucket_regional_domain_name
     origin_id   = "S3-${var.bucket_name}"
     custom_origin_config {
       origin_read_timeout    = 60
@@ -176,4 +181,72 @@ resource "aws_iam_user_policy" "bamboo-user-policy" {
 }
 EOF
 
+}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# CloudFront for developer demo environment (dev3.openmrs.org)
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ACM certificate for TLS on CloudFront
+resource "aws_acm_certificate" "dev-cert" {
+  domain_name       = "dev3.openmrs.org"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# CloudFront Distribution
+resource "aws_cloudfront_distribution" "dev-cdn" {
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "CloudFront CDN for dev3.openmrs.org"
+  default_root_object = "index.html"
+
+  aliases = ["dev3.openmrs.org"]
+
+  origin {
+    domain_name = "dev3.openmrs.org" # Jetstream server domain (or IP + port if behind a reverse proxy)
+    origin_id   = "openmrs-dev3-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only" # or "https-only" if supported
+      origin_ssl_protocols   = ["TLSv1.2"]
+      origin_read_timeout    = 60
+    }
+  }
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "openmrs-dev3-origin"
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 300
+    max_ttl                = 3600
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn = aws_acm_certificate.dev-cert.arn
+    ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
 }
