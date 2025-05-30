@@ -7,7 +7,7 @@ output "secgroup-ssh-name" {
 }
 
 output "secgroup-http-name" {
-  value = openstack_compute_secgroup_v2.https-secgroup.name
+  value = openstack_networking_secgroup_v2.https-secgroup.name
 }
 
 output "secgroup-bamboo-remote-agent-name" {
