@@ -6,6 +6,7 @@ terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
     key    = "cdn-resources.tfstate"
+    region = "us-west-2"
   }
 }
 

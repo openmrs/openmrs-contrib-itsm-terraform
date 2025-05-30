@@ -105,7 +105,7 @@ class Build < Thor
     (Dir['*/'] - $excluded_dirs).sort.each do |d|
       suffix=terraformVersion(d)
       puts "Running terraform init on #{d}"
-      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=true -force-copy") || abort
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -reconfigure") || abort
     end
   end
 
@@ -113,7 +113,7 @@ class Build < Thor
   def init(dir)
     suffix=terraformVersion(dir)
     puts "Running terraform#{suffix} init on #{dir}"
-    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -upgrade=true -force-copy") || abort
+    system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init -reconfigure") || abort
   end
 
   desc 'validate DIR', 'Run terraform validate on DIR'
