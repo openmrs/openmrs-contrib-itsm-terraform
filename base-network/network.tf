@@ -58,26 +58,51 @@ resource "openstack_networking_router_interface_v2" "subnet-route" {
 # Create V2 neutron security group rule and manage resource within OpenStack
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "openstack_compute_secgroup_v2" "ssh-icmp-secgroup" {
+# resource "openstack_compute_secgroup_v2" "ssh-icmp-secgroup" {
+#   name        = "${var.project_name}-ssh-icmp"
+#   description = "Allow SSH and icmp from anywhere (terraform)."
+#   rule {
+#     from_port   = 22
+#     to_port     = 22
+#     ip_protocol = "tcp"
+#     cidr        = "0.0.0.0/0"
+#   }
+
+#   rule {
+#     from_port   = -1
+#     to_port     = -1
+#     ip_protocol = "icmp"
+#     cidr        = "0.0.0.0/0"
+#   }
+#   lifecycle {
+#     prevent_destroy = true
+#   }
+# }
+
+resource "openstack_networking_secgroup_v2" "ssh-icmp-secgroup" {
   name        = "${var.project_name}-ssh-icmp"
   description = "Allow SSH and icmp from anywhere (terraform)."
-  rule {
-    from_port   = 22
-    to_port     = 22
-    ip_protocol = "tcp"
-    cidr        = "0.0.0.0/0"
-  }
-
-  rule {
-    from_port   = -1
-    to_port     = -1
-    ip_protocol = "icmp"
-    cidr        = "0.0.0.0/0"
-  }
   lifecycle {
     prevent_destroy = true
   }
 }
+resource "openstack_networking_secgroup_rule_v2" "ssh-secgroup-rule" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.ssh-icmp-secgroup.id
+}
+resource "openstack_networking_secgroup_rule_v2" "icmp-secgroup-rule" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "icmp"
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.ssh-icmp-secgroup.id
+}
+
 
 resource "openstack_compute_secgroup_v2" "https-secgroup" {
   name        = "${var.project_name}-https"
@@ -100,7 +125,17 @@ resource "openstack_compute_secgroup_v2" "https-secgroup" {
   }
 }
 
-resource "openstack_compute_secgroup_v2" "bamboo-remote-agent-secgroup" {
+# resource "openstack_networking_secgroup_v2" "https-secgroup" {
+#   name        = "${var.project_name}-https"
+#   description = "Allow http/s from anywhere (terraform)."
+#   lifecycle {
+#     prevent_destroy = true
+#   }
+# }
+
+
+
+resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-secgroup" {
   name        = "${var.project_name}-bamboo-remote-agent"
   description = "Default bamboo-remote-agent group (terraform)."
   lifecycle {

@@ -3,7 +3,7 @@ output "key-pair-name" {
 }
 
 output "secgroup-ssh-name" {
-  value = openstack_compute_secgroup_v2.ssh-icmp-secgroup.name
+  value = openstack_networking_secgroup_v2.ssh-icmp-secgroup.name
 }
 
 output "secgroup-http-name" {
@@ -11,11 +11,11 @@ output "secgroup-http-name" {
 }
 
 output "secgroup-bamboo-remote-agent-name" {
-  value = openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup.name
+  value = openstack_networking_secgroup_v2.bamboo-remote-agent-secgroup.name
 }
 
 output "secgroup-bamboo-remote-agent-id" {
-  value = openstack_compute_secgroup_v2.bamboo-remote-agent-secgroup.id
+  value = openstack_networking_secgroup_v2.bamboo-remote-agent-secgroup.id
 }
 
 output "secgroup-ldap-name" {
