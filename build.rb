@@ -83,10 +83,12 @@ class Build < Thor
     FileUtils.rm_rf($tmp_dir)
 
     FileUtils.mkdir_p '.tmp/bin'
+
+    system("which wget") || abort("Make sure to install command wget")
+
     puts "\n\n\nAttempting to decrypt secrets using GPG key."
     system('git-crypt unlock') || abort('Error when attempting to decrypt secrets')
     system('chmod 600 conf/provisioning/ssh/terraform-api.key') || abort('Error when setting private key permissions')
-
     
     system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort("Error when downloading terraform #{$terraform_new_version_url}")
     system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
