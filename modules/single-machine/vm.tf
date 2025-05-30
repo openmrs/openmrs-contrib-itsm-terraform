@@ -167,15 +167,6 @@ resource "null_resource" "add_gitcrypt_key" {
   }
 }
 
-data "template_file" "provisioning_file" {
-  template = templatefile("${path.module}/templates/provisioning_facts.tpl",
-    {
-      ansible_inventory = var.ansible_inventory
-      region            = var.region
-      has_backup        = var.has_backup
-  })
-}
-
 
 resource "null_resource" "copy_facts" {
   count      = var.copy_ansible_facts ? 1 : 0
@@ -188,7 +179,12 @@ resource "null_resource" "copy_facts" {
   }
 
   provisioner "file" {
-    content     = data.template_file.provisioning_file.rendered
+    content     = templatefile("${path.module}/templates/provisioning_facts.tpl",
+                  {
+                    ansible_inventory = var.ansible_inventory
+                    region            = var.region
+                    has_backup        = var.has_backup
+                  })
     destination = "/tmp/provisioning.fact"
   }
 
@@ -204,14 +200,6 @@ resource "null_resource" "copy_facts" {
   }
 }
 
-data "template_file" "provisioning_file_backup" {
-  count = var.has_backup ? 1 : 0
-  template = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
-    aws_access_key_id     = aws_iam_access_key.backup-user-key[count.index].id
-    aws_secret_access_key = aws_iam_access_key.backup-user-key[count.index].secret
-  })
-}
-
 resource "null_resource" "copy_facts_backups" {
   count      = var.has_backup ? 1 : 0
   depends_on = [null_resource.copy_facts]
@@ -223,7 +211,10 @@ resource "null_resource" "copy_facts_backups" {
   }
 
   provisioner "file" {
-    content     = data.template_file.provisioning_file_backup[count.index].rendered
+    content     = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
+                    aws_access_key_id     = aws_iam_access_key.backup-user-key[var.has_backup ? 1 : 0].id
+                    aws_secret_access_key = aws_iam_access_key.backup-user-key[var.has_backup ? 1 : 0].secret
+                  })
     destination = "/tmp/aws.fact"
   }
 
