@@ -67,27 +67,41 @@ resource "openstack_networking_secgroup_v2" "bamboo-remote-agent-ssl" {
   description = "Allow bamboo agents to connect to server using SSL (terraform)."
 }
 
-resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4" {
+
+# Using the agents security group didn't seem to do the trick. Using public IPs instead
+## yu
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4-yu" {
   direction         = "ingress"
   ethertype         = "IPv4"
   protocol          = "tcp"
-  port_range_min    = 54663
-  port_range_max    = 54663
-  remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.152.37/32"
   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
 }
-
-resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv6" {
+## xiao
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4-xiao" {
   direction         = "ingress"
-  ethertype         = "IPv6"
+  ethertype         = "IPv4"
   protocol          = "tcp"
-  port_range_min    = 54667
-  port_range_max    = 54667
-  remote_group_id   = data.terraform_remote_state.base.outputs.secgroup-bamboo-remote-agent-id
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.154.41/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
+}
+## xindi
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-ipv4-xindi" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.169.95/32"
   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.id
 }
 
-## Not sure if this one is being used or the previous one
+
+## Legacy
 resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
   name        = "${var.project_name}-bamboo-server-agents"
   description = "Allow bamboo agents to connect to server (terraform)."
@@ -100,14 +114,6 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.154.41/32"
   }
 
-  # # xindi jetstream - doesn't seem to be deployed in Jetstream??
-  # rule {
-  #   from_port   = var.bamboo_remote_agent_port
-  #   to_port     = var.bamboo_remote_agent_port
-  #   ip_protocol = "tcp"
-  #   cidr        = "149.165.152.20/32"
-  # }
-
   # yu jetstream
   rule {
     from_port   = var.bamboo_remote_agent_port
@@ -116,7 +122,7 @@ resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
     cidr        = "149.165.152.37/32"
   }
 
-  # old machine I guess - seems to be deployed in Jetstream
+  # xindi
   rule {
     from_port   = var.bamboo_remote_agent_port
     to_port     = var.bamboo_remote_agent_port
