@@ -40,7 +40,7 @@ module "single-machine" {
   dns_cnames        = var.dns_cnames
 
   extra_security_groups = [
-    openstack_compute_secgroup_v2.bamboo-remote-agent.name,
+    # openstack_compute_secgroup_v2.bamboo-remote-agent.name,
     data.terraform_remote_state.base.outputs.secgroup-database-name,
     openstack_networking_secgroup_v2.bamboo-remote-agent-ssl.name,
   ]
@@ -102,32 +102,32 @@ resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-i
 
 
 ## Legacy
-resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
-  name        = "${var.project_name}-bamboo-server-agents"
-  description = "Allow bamboo agents to connect to server (terraform)."
+# resource "openstack_compute_secgroup_v2" "bamboo-remote-agent" {
+#   name        = "${var.project_name}-bamboo-server-agents"
+#   description = "Allow bamboo agents to connect to server (terraform)."
 
-  # xiao jetstream
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.154.41/32"
-  }
+#   # xiao jetstream
+#   rule {
+#     from_port   = var.bamboo_remote_agent_port
+#     to_port     = var.bamboo_remote_agent_port
+#     ip_protocol = "tcp"
+#     cidr        = "149.165.154.41/32"
+#   }
 
-  # yu jetstream
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.152.37/32"
-  }
+#   # yu jetstream
+#   rule {
+#     from_port   = var.bamboo_remote_agent_port
+#     to_port     = var.bamboo_remote_agent_port
+#     ip_protocol = "tcp"
+#     cidr        = "149.165.152.37/32"
+#   }
 
-  # xindi
-  rule {
-    from_port   = var.bamboo_remote_agent_port
-    to_port     = var.bamboo_remote_agent_port
-    ip_protocol = "tcp"
-    cidr        = "149.165.169.95/32"
-  }
+#   # xindi
+#   rule {
+#     from_port   = var.bamboo_remote_agent_port
+#     to_port     = var.bamboo_remote_agent_port
+#     ip_protocol = "tcp"
+#     cidr        = "149.165.169.95/32"
+#   }
   
-}
+# }
