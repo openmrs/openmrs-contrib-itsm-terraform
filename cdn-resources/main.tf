@@ -214,7 +214,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only" # or "https-only" if supported
-      origin_ssl_protocols   = ["SSLv3", "TLSv1.2"]
+      origin_ssl_protocols   = ["TLSv1.2"]
       origin_read_timeout    = 60
     }
   }
