@@ -3,8 +3,8 @@
 # terraform is configured to not recreate images if this variable changes
 # ----------------------------------------------------------------------------------------------------------------------
 
-variable "image_ubuntu_24" {
-  default = "e6fe2847-4bf5-41e8-9aab-bd715e96c296"
+variable "image_ubuntu_22" {
+  default = "26e80a26-2b42-4eac-b21d-cc4a1ab08504"
 }
 
 variable "ssh_key_file_v2" {

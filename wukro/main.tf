@@ -37,7 +37,7 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image        = var.image_ubuntu_24
+  image        = var.image_ubuntu_22
   project_name = var.project_name
   ssh_username = var.ssh_username_ubuntu_20
   ssh_key_file = var.ssh_key_file_v2
