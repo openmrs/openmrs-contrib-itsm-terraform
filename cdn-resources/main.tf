@@ -197,6 +197,14 @@ resource "aws_acm_certificate" "dev-cert" {
   }
 }
 
+resource "dme_dns_record" "dev3-openmrs-org-cert-validation" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_name
+  type      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_type
+  value     = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_value
+  ttl       = 300
+}
+
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "dev-cdn" {
   enabled             = true
