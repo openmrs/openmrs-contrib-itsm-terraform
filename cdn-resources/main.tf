@@ -199,9 +199,9 @@ resource "aws_acm_certificate" "dev-cert" {
 
 resource "dme_dns_record" "dev3-openmrs-org-cert-validation" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_name
-  type      = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_type
-  value     = aws_acm_certificate.dev-cert.domain_validation_options[0].resource_record_value
+  name      = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_name
+  type      = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_type
+  value     = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_value
   ttl       = 300
 }
 
@@ -215,7 +215,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   aliases = ["dev3.openmrs.org"]
 
   origin {
-    domain_name = "dev3.openmrs.org" # Jetstream server domain (or IP + port if behind a reverse proxy)
+    domain_name = "dimtu.openmrs.org" # Jetstream server domain (or IP + port if behind a reverse proxy)
     origin_id   = "openmrs-dev3-origin"
 
     custom_origin_config {
@@ -257,4 +257,12 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+}
+
+resource "dme_dns_record" "dev3-openmrs-org-cdn" {
+  domain_id = var.domain_dns["openmrs.org"]
+  name      = "dev3"
+  type      = "CNAME"
+  value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
+  ttl       = 300
 }
