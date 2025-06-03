@@ -187,23 +187,6 @@ EOF
 # CloudFront for developer demo environment (dev3.openmrs.org)
 # ----------------------------------------------------------------------------------------------------------------------
 
-# ACM certificate for TLS on CloudFront
-resource "aws_acm_certificate" "dev-cert" {
-  domain_name       = "dev3.openmrs.org"
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "dme_dns_record" "dev3-openmrs-org-cert-validation" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_name
-  type      = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_type
-  value     = tolist(aws_acm_certificate.dev-cert.domain_validation_options)[0].resource_record_value
-  ttl       = 300
-}
 
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "dev-cdn" {
@@ -215,7 +198,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   aliases = ["dev3.openmrs.org"]
 
   origin {
-    domain_name = "dimtu.openmrs.org" # Jetstream server domain (or IP + port if behind a reverse proxy)
+    domain_name = var.dev3_machine
     origin_id   = "openmrs-dev3-origin"
 
     custom_origin_config {
@@ -253,7 +236,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate.dev-cert.arn
+    acm_certificate_arn = var.dev3_certificate_arn
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -261,7 +244,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
 
 resource "dme_dns_record" "dev3-openmrs-org-cdn" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = "dev3"
+  name      = "dev3-cdn"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
   ttl       = 300
