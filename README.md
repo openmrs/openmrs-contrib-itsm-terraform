@@ -81,6 +81,8 @@ To SSH a machine before running ansible:
 $ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
 ```
 After ansible, you should use your regular user.
+Terraform will create files in `/etc/ansible/facts.d/` , so these variables can be picked by ansible. This file may not be always updated. 
+
 
 To completely destroy a VM (and its data volume):
 
