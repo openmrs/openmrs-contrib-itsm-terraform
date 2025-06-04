@@ -16,9 +16,3 @@ variable "certificate_arn" {
 variable "dev3_certificate_arn" {
   default = "arn:aws:acm:us-east-1:525453398140:certificate/bcf94186-3377-4c8f-aae8-8676f7411f68"
 }
-
-
-variable "dev3_machine" {
-  #  Jetstream server domain (or IP + port if behind a reverse proxy)
-  default = "dimtu.openmrs.org"
-}

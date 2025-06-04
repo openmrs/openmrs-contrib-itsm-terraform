@@ -198,13 +198,13 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   aliases = ["dev3-cdn.openmrs.org"]
 
   origin {
-    domain_name = var.dev3_machine
+    domain_name = "dev3.openmrs.org"
     origin_id   = "openmrs-dev3-origin"
 
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "http-only" # or "https-only" if supported
+      origin_protocol_policy = "match-viewer" # or "https-only" if supported
       origin_ssl_protocols   = ["TLSv1.2"]
       origin_read_timeout    = 60
     }
