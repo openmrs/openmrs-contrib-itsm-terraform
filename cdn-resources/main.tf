@@ -193,9 +193,15 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "CloudFront CDN for dev3.openmrs.org"
-  default_root_object = "index.html"
 
   aliases = ["dev3-cdn.openmrs.org"]
+
+  # Add logging configuration
+  # logging_config {
+  #   include_cookies = false
+  #   bucket          = aws_s3_bucket.dev-cdn-logs.bucket_domain_name
+  #   prefix          = "cloudfront-logs/"
+  # }
 
   origin {
     domain_name = "dev3.openmrs.org"
@@ -204,7 +210,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "match-viewer" # or "https-only" if supported
+      origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
       origin_read_timeout    = 60
     }
@@ -215,17 +221,12 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "openmrs-dev3-origin"
 
-    forwarded_values {
-      query_string = true
+    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6" # Managed Cache Policy for Managed-CachingOptimized
+    origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac" # Managed Origin Request Policy for Managed-AllViewerExceptHostHeader
 
-      cookies {
-        forward = "none"
-      }
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = "allow-all"
     min_ttl                = 0
-    default_ttl            = 300
+    default_ttl            = 0
     max_ttl                = 3600
   }
 
@@ -240,6 +241,11 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     ssl_support_method  = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  tags = {
+    Terraform = "cdn-resources"
+    Environment = "dev3"
+  }
 }
 
 resource "dme_dns_record" "dev3-openmrs-org-cdn" {
@@ -249,3 +255,88 @@ resource "dme_dns_record" "dev3-openmrs-org-cdn" {
   value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
   ttl       = 300
 }
+
+# S3 bucket for CloudFront access logs
+resource "aws_s3_bucket" "dev-cdn-logs" {
+  bucket = "openmrs-dev3-cdn-logs"
+
+  tags = {
+    Terraform = "cdn-resources"
+    Purpose   = "CloudFront Access Logs"
+  }
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "dev-cdn-logs-encryption" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "dev-cdn-logs-controls" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "dev-cdn-logs-block" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_acl" "dev-cdn-logs-acl" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.dev-cdn-logs-controls,
+    aws_s3_bucket_public_access_block.dev-cdn-logs-block,
+  ]
+
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "dev-cdn-logs-versioning" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "dev-cdn-logs-lifecycle" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
+
+  rule {
+    id     = "delete-old-logs"
+    status = "Enabled"
+
+    expiration {
+      days = 90
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 7
+    }
+  }
+}
+
+# # CloudWatch Log Group for additional monitoring
+# resource "aws_cloudwatch_log_group" "dev-cdn-logs" {
+#   name              = "/aws/cloudfront/dev-cdn"
+#   retention_in_days = 30
+
+#   tags = {
+#     Terraform = "cdn-resources"
+#     Environment = "dev3"
+#   }
+# }
