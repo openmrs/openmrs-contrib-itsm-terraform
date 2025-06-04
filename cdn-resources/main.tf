@@ -195,7 +195,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   comment             = "CloudFront CDN for dev3.openmrs.org"
   default_root_object = "index.html"
 
-  aliases = ["dev3.openmrs.org"]
+  aliases = ["dev3-cdn.openmrs.org"]
 
   origin {
     domain_name = var.dev3_machine

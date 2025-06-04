@@ -14,7 +14,7 @@ variable "certificate_arn" {
 
 
 variable "dev3_certificate_arn" {
-  default = "arn:aws:acm:us-east-1:525453398140:certificate/683f9cab-cb4e-4524-b46e-5f9463cc2a03"
+  default = "arn:aws:acm:us-east-1:525453398140:certificate/bcf94186-3377-4c8f-aae8-8676f7411f68"
 }
 
 
