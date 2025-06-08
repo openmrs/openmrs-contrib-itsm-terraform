@@ -212,8 +212,8 @@ resource "null_resource" "copy_facts_backups" {
 
   provisioner "file" {
     content     = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
-                    aws_access_key_id     = aws_iam_access_key.backup-user-key[var.has_backup ? 1 : 0].id
-                    aws_secret_access_key = aws_iam_access_key.backup-user-key[var.has_backup ? 1 : 0].secret
+                    aws_access_key_id     = aws_iam_access_key.backup-user-key[0].id
+                    aws_secret_access_key = aws_iam_access_key.backup-user-key[0].secret
                   })
     destination = "/tmp/aws.fact"
   }

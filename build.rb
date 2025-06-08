@@ -152,7 +152,7 @@ class Build < Thor
     puts "Running terraform apply on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} apply terraform.plan") || abort
 
-    puts "\n\nIf this change require documentation to be updated [https://docs.openmrs.org/infrastructure/vms.html], please run './build.rb docs && ./build.rb plan docs && ./build.rb apply docs'\n\n"
+    puts "\n\nIf this change require documentation to be updated [https://docs.openmrs.org/infrastructure/vms.html], please run './build.rb docs && ./build.rb plan docs && yes | ./build.rb apply docs'\n\n"
   end
 
   desc 'destroy DIR', 'completely deletes VM and data'
