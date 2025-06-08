@@ -5,7 +5,7 @@
 
 
 variable "flavor" {
-  default = "m3.small"
+  default = "m3.quad"
 }
 
 variable "region" {
