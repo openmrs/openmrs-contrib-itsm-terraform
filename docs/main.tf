@@ -88,7 +88,7 @@ resource "aws_s3_bucket_logging" "docs-logging" {
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
-    domain_name = aws_s3_bucket.docs-s3.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.docs-website.website_endpoint
     origin_id   = "S3-${var.bucket_name}"
     custom_origin_config {
       origin_read_timeout    = 60
