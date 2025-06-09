@@ -3,10 +3,16 @@ variable "bucket_name" {
 }
 
 # ----------------------------------------------------------------
-# created manually on AWS console in us-east-1
+# created manually on AWS console in us-east-1 
+# to avoid the whole chickens and eggs of certificates and terraform
+# Ensure the manually created certs are checked via DNS
 # ----------------------------------------------------------------
 
 variable "certificate_arn" {
   default = "arn:aws:acm:us-east-1:525453398140:certificate/252df87b-b832-46e1-98df-fed5266c9a8b"
 }
 
+
+variable "dev3_certificate_arn" {
+  default = "arn:aws:acm:us-east-1:525453398140:certificate/bcf94186-3377-4c8f-aae8-8676f7411f68"
+}
