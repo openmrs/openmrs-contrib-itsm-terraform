@@ -207,7 +207,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     custom_origin_config {
       http_port              = 80
       https_port             = 443
-      origin_protocol_policy = "http-only"
+      origin_protocol_policy = "https-only"
       origin_ssl_protocols   = ["TLSv1.2"]
       origin_read_timeout    = 60
     }
@@ -218,13 +218,10 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "openmrs-dev3-origin"
 
-    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6" # Managed Cache Policy for Managed-CachingOptimized
-    origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac" # Managed Origin Request Policy for Managed-AllViewerExceptHostHeader
+    cache_policy_id = "4cc15a8a-d715-48a4-82b8-cc0b614638fe" # Managed Cache Policy for UseOriginCacheControlHeaders-QueryStrings
+    origin_request_policy_id = "216adef6-5c7f-47e4-b989-5492eafa07d3" # Managed Origin Request Policy for Managed-AllViewer
 
     viewer_protocol_policy = "allow-all"
-    min_ttl                = 0
-    default_ttl            = 300
-    max_ttl                = 3600
   }
 
   restrictions {
