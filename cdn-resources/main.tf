@@ -1,6 +1,10 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # state file stored in S3
 # ----------------------------------------------------------------------------------------------------------------------
+provider "aws" {
+  region = "us-east-1"
+  alias = "virginia"
+}
 
 terraform {
   backend "s3" {
@@ -196,13 +200,6 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
 
   aliases = ["dev3-cdn.openmrs.org"]
 
-  # Add logging configuration
-  # logging_config {
-  #   include_cookies = false
-  #   bucket          = aws_s3_bucket.dev-cdn-logs.bucket_domain_name
-  #   prefix          = "cloudfront-logs/"
-  # }
-
   origin {
     domain_name = "dev3.openmrs.org"
     origin_id   = "openmrs-dev3-origin"
@@ -330,13 +327,46 @@ resource "aws_s3_bucket_lifecycle_configuration" "dev-cdn-logs-lifecycle" {
   }
 }
 
-# # CloudWatch Log Group for additional monitoring
-# resource "aws_cloudwatch_log_group" "dev-cdn-logs" {
-#   name              = "/aws/cloudfront/dev-cdn"
-#   retention_in_days = 30
+# Bucket policy for CloudFront log delivery
+resource "aws_s3_bucket_policy" "dev-cdn-logs-policy" {
+  bucket = aws_s3_bucket.dev-cdn-logs.id
 
-#   tags = {
-#     Terraform = "cdn-resources"
-#     Environment = "dev3"
-#   }
-# }
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "AWSLogDeliveryWrite20150319"
+    Statement = [
+      {
+        Sid    = "AWSLogDeliveryWrite1"
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Action   = "s3:PutObject"
+        Resource = "arn:aws:s3:::${aws_s3_bucket.dev-cdn-logs.id}/AWSLogs/525453398140/CloudFront/*"
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = "525453398140"
+            "s3:x-amz-acl"     = "bucket-owner-full-control"
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:logs:us-east-1:525453398140:delivery-source:CreatedByCloudFront-E1DV2MB3VLGT7R"
+          }
+        }
+      }
+    ]
+  })
+
+  depends_on = [aws_s3_bucket_public_access_block.dev-cdn-logs-block]
+}
+
+# CloudWatch Log Group for additional monitoring
+resource "aws_cloudwatch_log_group" "dev-cdn-logs" {
+  provider = aws.virginia
+  name              = "/aws/cloudfront/dev-cdn"
+  retention_in_days = 30
+
+  tags = {
+    Terraform = "cdn-resources"
+    Environment = "dev3"
+  }
+}
