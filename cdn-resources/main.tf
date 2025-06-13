@@ -198,10 +198,10 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   is_ipv6_enabled     = true
   comment             = "CloudFront CDN for dev3.openmrs.org"
 
-  aliases = ["dev3-cdn.openmrs.org"]
+  aliases = ["dev3.openmrs.org"]
 
   origin {
-    domain_name = "dev3.openmrs.org"
+    domain_name = "dev3-orig.openmrs.org"
     origin_id   = "openmrs-dev3-origin"
 
     custom_origin_config {
@@ -244,7 +244,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
 
 resource "dme_dns_record" "dev3-openmrs-org-cdn" {
   domain_id = var.domain_dns["openmrs.org"]
-  name      = "dev3-cdn"
+  name      = "dev3"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
   ttl       = 300
