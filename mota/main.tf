@@ -74,3 +74,15 @@ resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-agent-ssl-rule-i
   remote_ip_prefix  = "149.165.152.37/32"
   security_group_id = openstack_networking_secgroup_v2.bamboo-remote-stg-agent.id
 }
+
+
+# ploong jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-ploong-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.155.237/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-remote-stg-agent.id
+}
