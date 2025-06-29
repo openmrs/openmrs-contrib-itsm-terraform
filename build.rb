@@ -205,7 +205,8 @@ class Build < Thor
 
   desc 'create DIR', 'creates files for new stack DIR'
   def create(dir)
-    suffix="_new"
+    suffix=terraformVersion(dir)
+    puts "Check https://github.com/openmrs/openmrs-contrib-itsm-terraform/blob/master/creating-new-vm.md for guidelines"
     puts "Creating stack \'#{dir}\'"
     FileUtils.mkdir_p dir
     FileUtils.cp_r 'conf/template-stack/.', dir
@@ -216,7 +217,7 @@ class Build < Thor
                                       f.read.gsub(/STACK-NAME/, dir.to_s)
                                     end)
     FileUtils.ln_sf '../global-variables.tf', "#{dir}/global-variables.tf"
-    FileUtils.ln_sf '../versions_terraform_13.tf', "#{dir}/versions.tf"
+    FileUtils.ln_sf '../versions_terraform_14.tf', "#{dir}/versions.tf"
 
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} init") || abort
   end

@@ -49,11 +49,6 @@ To undo the changes from the previous commands:
 $ ./build.rb clean
 ```
 
-To create a new stack _test_:
-```
-$ ./build.rb create test
-```
-
 To run terraform plan (and see what changed on your stack) on a _base-network_ stack:
 ```
 $ ./build.rb plan base-network/
@@ -76,12 +71,12 @@ $ ./build.rb plan <stack>
 $ ./build.rb apply <stack>
 ```
 
-To SSH a machine before running ansible:
+To create a new stack _test_:
 ```
-$ ssh -i conf/provisioning/ssh/terraform-api.key root@<machine>
+$ ./build.rb create test
 ```
-After ansible, you should use your regular user.
-Terraform will create files in `/etc/ansible/facts.d/` , so these variables can be picked by ansible. This file may not be always updated. 
+
+To create a new machine, check [Create new VM](./creating-new-vm.md) docs. 
 
 
 To completely destroy a VM (and its data volume):
