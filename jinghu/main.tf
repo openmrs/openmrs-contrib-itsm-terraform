@@ -31,6 +31,10 @@ module "single-machine" {
   has_backup        = "${var.has_backup}"
   dns_cnames        = "${var.dns_cnames}"
 
+  extra_security_groups = [
+    openstack_networking_secgroup_v2.bamboo-agents.name,
+  ]
+
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Global variables
@@ -43,4 +47,34 @@ module "single-machine" {
   ssh_key_file      = "${var.ssh_key_file_v2}"
   domain_dns        = "${var.domain_dns}"
   ansible_repo      = "${var.ansible_repo}"
+}
+
+
+# Using the agents security group didn't seem to do the trick. Using public IPs instead
+resource "openstack_networking_secgroup_v2" "bamboo-agents" {
+  name        = "${var.project_name}-bamboo-remote-agents"
+  description = "Allow bamboo agents to connect to server (terraform | new)."
+}
+
+# yu jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-yu-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.152.37/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-agents.id
+}
+
+
+# ploong jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-ploong-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.155.237/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-agents.id
 }
