@@ -76,7 +76,7 @@ To create a new stack _test_:
 $ ./build.rb create test
 ```
 
-To create a new machine, check [Create new VM](./creating-new-vm.md) docs. 
+To create a new machine, check [Create new VM](https://github.com/openmrs/openmrs-contrib-itsmresources/wiki/Provision-new-machine) docs. 
 
 
 To completely destroy a VM (and its data volume):
