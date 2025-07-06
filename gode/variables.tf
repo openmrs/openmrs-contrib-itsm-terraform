@@ -53,6 +53,6 @@ variable "description" {
   default = "Internal community tools (staging & QA)"
 }
 
-output "dns_manual_entries" {
-  value = ["id-stg.openmrs.org"]
+output "dns_other_entries" {
+  value = ["id-stg.openmrs.org", "smtp-stg.openmrs.org"]
 }

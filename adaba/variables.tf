@@ -52,6 +52,6 @@ variable "description" {
   default = "ID servers (ldap, keycloak, postfix)"
 }
 
-output "dns_manual_entries" {
-  value = ["id.openmrs.org", "id-new.openmrs.org"]
+output "dns_other_entries" {
+  value = ["id.openmrs.org", "id-new.openmrs.org", "smtp.openmrs.org"]
 }

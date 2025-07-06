@@ -251,8 +251,8 @@ class Build < Thor
           'description'       => outputs_parsed['description']['value'],
           'terraform_version' => version_terraform
         }
-        if outputs_parsed['dns_manual_entries']
-          vm['manual_dns'] = outputs_parsed['dns_manual_entries']['value']
+        if outputs_parsed['dns_other_entries']
+          vm['other_dns'] = outputs_parsed['dns_other_entries']['value']
         end
         $vms.push(vm)
       end
