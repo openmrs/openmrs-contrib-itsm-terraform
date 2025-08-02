@@ -78,3 +78,25 @@ resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-ploong-ipv4" {
   remote_ip_prefix  = "149.165.155.237/32"
   security_group_id = openstack_networking_secgroup_v2.bamboo-agents.id
 }
+
+# xiao jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-xiao-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.154.41/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-agents.id
+}
+
+# xindi jetstream
+resource "openstack_networking_secgroup_rule_v2" "bamboo-remote-xindi-ipv4" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = var.bamboo_remote_agent_port
+  port_range_max    = var.bamboo_remote_agent_port
+  remote_ip_prefix  = "149.165.169.95/32"
+  security_group_id = openstack_networking_secgroup_v2.bamboo-agents.id
+}
