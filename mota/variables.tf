@@ -21,7 +21,7 @@ variable "update_os" {
 }
 
 variable "use_ansible" {
-  default = false
+  default = true
 }
 
 variable "ansible_inventory" {
