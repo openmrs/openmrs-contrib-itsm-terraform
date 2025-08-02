@@ -31,9 +31,12 @@ source myenv/bin/activate
 
 pip3 install -q "ansible-core==2.18.6"
 pip3 install --upgrade cryptography
+
+ansible-config --version
+
 ansible-galaxy collection download -r requirements.yml
 ansible-galaxy install -r requirements.yml --force
-ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org -c local site.yml || true
+ansible-playbook -i inventories/${ansible_inventory} --limit ${hostname}.openmrs.org --tags basic-os,soe,monitoring -c local site.yml || true
 
 deactivate
 

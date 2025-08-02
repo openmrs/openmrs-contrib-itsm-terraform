@@ -5,7 +5,7 @@ set -e
 set -v
 
 
-mkdir /data
+mkdir -p /data
 
 if lsblk | fgrep sdb1; then
  echo "sdb1 already exists, skipping partitioning"
