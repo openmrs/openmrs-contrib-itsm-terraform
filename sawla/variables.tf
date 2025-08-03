@@ -50,5 +50,5 @@ variable "dns_cnames" {
 }
 
 variable "description" {
-  default = "Database"
+  default = "Database (legacy)"
 }
