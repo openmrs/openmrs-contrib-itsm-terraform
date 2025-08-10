@@ -40,6 +40,7 @@ module "single-machine" {
   dns_cnames        = var.dns_cnames
   allow_web         = false
   has_private_dns   = true
+  power_state       = "shutoff"
 
   extra_security_groups = [openstack_networking_secgroup_v2.secgroup_database.name]
 

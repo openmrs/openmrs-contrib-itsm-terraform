@@ -249,6 +249,7 @@ class Build < Thor
           'ip'                => outputs_parsed['ip_address']['value'],
           'dns'               => outputs_parsed['dns_entries']['value'],
           'description'       => outputs_parsed['description']['value'],
+          'vm_status'         => outputs_parsed['power_state']['value'],
           'terraform_version' => version_terraform
         }
         if outputs_parsed['dns_other_entries']
