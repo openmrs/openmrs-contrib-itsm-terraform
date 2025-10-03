@@ -12,7 +12,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "fisa"
+  default = "zegye"
 }
 
 variable "update_os" {

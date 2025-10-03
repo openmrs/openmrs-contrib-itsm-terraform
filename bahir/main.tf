@@ -5,7 +5,7 @@
 terraform {
   backend "s3" {
     bucket = "openmrs-terraform-state-files"
-    key    = "zege.tfstate"
+    key    = "bahir.tfstate"
   }
 }
 
