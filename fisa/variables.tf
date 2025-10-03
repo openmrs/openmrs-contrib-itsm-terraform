@@ -49,5 +49,5 @@ variable "dns_cnames" {
 }
 
 variable "description" {
-  default = "Kubernetes control pane node"
+  default = "Kubernetes control plane node"
 }
