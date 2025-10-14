@@ -11,7 +11,7 @@ terraform {
 
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = "2.1.0"
+      version = "3.3.2"
     }
 
     null = {
@@ -29,6 +29,25 @@ terraform {
       version = "1.0.6"
     }
 
+    helm = {
+      source  = "hashicorp/helm"
+      version = "3.0.2"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.38"
+    }
+
+    local = {
+      source  = "hashicorp/local"
+      version = "2.5.3"
+    }
+
+    external = {
+      source  = "hashicorp/external"
+      version = "2.3.5"
+    }
   }
 }
 

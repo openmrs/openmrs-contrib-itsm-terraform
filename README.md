@@ -17,6 +17,8 @@ Before you can use this repository, you need:
   - Jetstream credentials - check internal wiki for Jetstream access details
   - Be included in git crypt in this repository (to access secrets)
   - Follow [docs](https://docs.jetstream-cloud.org/ui/cli/auth/) to obtain your personal `openrc.sh` file. Don't use any specific role. 
+### Kubernetes
+If you intend to deploy Kubernetes you need to create an app credential with ‘Unrestricted (dangerous)’ application credential with all permissions, including the “loadbalancer” permission.
 
 ## Software
 You need to have installed:
@@ -122,6 +124,32 @@ $ ./cli.sh
 
 This will invoke a docker container with the necessary settings to interact directy with Jetsteam's
 OpenStack environment via the command line.
+
+# Kubernetes
+Kubernetes is deployed with OpenStack Magnum.
+The cluster can be set up / updated with:
+```
+$ ./build.rb plan kubernetes
+$ ./build.rb apply kubernetes
+```
+OpenStack Magnum will automatically provision Kubernetes control plane and worker nodes.
+
+The Kubernetes dashboard is configured to be accessible at https://k8s.openmrs.org.
+You can get token credentials by running:
+```
+./build.rb terraform kubernetes 'output --raw kubernetes_dashboard_token'
+```
+The terraform outputs kubernetes/kubeconfig as well, if you want to use kubectl.
+
+The cluster is configured with the nginx ingress controller behind an OpenStack Load Balancer. Use `nginx` as ingress class name.
+
+It also has the following storage classes:
+- `default` for Cinder  attached volumes
+- `local-path` for local storage
+
+Please note that local storage is limited to worker node disk size (60GB for m3.medium), but it has the best performance.
+
+The O3 k8s deployment is at https://o3-k8s.openmrs.org. It is the most robust deployment with MariaDB Galera, ElasticSearch, Minio and fully replicated OpenMRS backend and frontend services.
 
 # Repository organisation
   - _build.rb_: build helper (thor) file
