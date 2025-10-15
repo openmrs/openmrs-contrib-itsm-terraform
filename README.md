@@ -141,11 +141,13 @@ You can get token credentials by running:
 ```
 The terraform outputs kubernetes/kubeconfig as well, if you want to use kubectl.
 
-The cluster is configured with the nginx ingress controller behind an OpenStack Load Balancer. Use `nginx` as ingress class name.
+The cluster is configured with the nginx ingress controller behind an OpenStack Load Balancer. Use the `nginx` ingress class name.
 
-It also has the following storage classes:
-- `default` for Cinder  attached volumes
-- `local-path` for local storage
+There is also cert-manager deployed to create and renew SSL certificates for nginx ingress via letsencrypt. Add the `cert-manager.io/cluster-issuer: letsencrypt` annotation on your ingress to have SSL certificate.
+
+The cluster has the following storage classes:
+- `default` for Cinder attached volumes
+- `local-path` for local storage volumes
 
 Please note that local storage is limited to worker node disk size (60GB for m3.medium), but it has the best performance.
 
