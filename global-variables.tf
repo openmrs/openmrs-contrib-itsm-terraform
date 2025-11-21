@@ -3,6 +3,23 @@
 # terraform is configured to not recreate images if this variable changes
 # ----------------------------------------------------------------------------------------------------------------------
 
+variable "image_ubuntu_22" {
+  default = "26e80a26-2b42-4eac-b21d-cc4a1ab08504"
+}
+
+variable "ssh_key_file_v2" {
+  description = "SSH key used to provision VMs"
+  default     = "../conf/provisioning/ssh/terraform-api.key"
+}
+
+variable "ansible_repo" {
+  default = "git@github.com:openmrs/openmrs-contrib-itsmresources.git"
+}
+
+variable "ssh_username_ubuntu_20" {
+  default = "ubuntu"
+}
+
 variable "project_name" {
   description = "Project name in Jetstream"
   default     = "TG-ASC170002"

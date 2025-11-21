@@ -65,14 +65,6 @@ resource "dme_dns_record" "short-dns-wildcard" {
 # Terraform provider bug doesn't allow to update APEX
 # ----------------------------------------------------
 
-resource "dme_dns_record" "apex" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = ""
-  type      = "A"
-  value     = module.single-machine.address
-  ttl       = 300
-}
-
 resource "dme_dns_record" "servicedesk-cname" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "servicedesk.jira"
