@@ -31,7 +31,7 @@ resource "openstack_containerinfra_cluster_v1" "kubernetes" {
     "min_node_count": var.node_count
     "max_node_count": var.max_node_count
     "master_lb_floating_ip_enabled": "false" # Do not expose control plane nodes publicly
-    "kube_dashboard_enabled": "false" # We will deploy the latest version with helm
+    #"kube_dashboard_enabled": "false" # We will deploy the latest version with helm
   }
 }
 
@@ -197,11 +197,12 @@ resource "helm_release" "o3" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
   name = "o3"
-  repository = "oci://ghcr.io/openmrs"
+  repository = "https://openmrs.github.io/openmrs-contrib-cluster/"
   chart = "openmrs"
-  version = "1.1.0"
+  version = "1.2.2"
   namespace = "o3"
   create_namespace = true
+  upgrade_install = true
 
   values = [file("${path.module}/o3-values.key")]
 }
