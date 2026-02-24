@@ -136,10 +136,14 @@ OpenStack Magnum will automatically provision Kubernetes control plane and worke
 
 The Kubernetes dashboard is configured to be accessible at https://k8s.openmrs.org.
 You can get token credentials by running:
-```
+```bash
 ./build.rb terraform kubernetes 'output --raw kubernetes_dashboard_token'
 ```
-The terraform outputs kubernetes/kubeconfig as well, if you want to use kubectl.
+The terraform outputs kubeconfig at `kubernetes/kubeconfig`. You can use it with:
+```bash
+export KUBECONFIG=$(pwd)/kubernetes/kubeconfig
+kubectl get nodes
+```
 
 The cluster is configured with the nginx ingress controller behind an OpenStack Load Balancer. Use the `nginx` ingress class name.
 
