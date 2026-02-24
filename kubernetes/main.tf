@@ -126,9 +126,9 @@ resource "helm_release" "kubernetes-dashboard" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
   name       = "kubernetes-dashboard"
-  repository = "https://kubernetes.github.io/dashboard"
+  repository = "https://kubernetes-retired.github.io/dashboard/"
   chart      = "kubernetes-dashboard"
-  version    = "7.13.0"
+  version    = "7.14.0"
   namespace  = "kubernetes-dashboard-new"
   create_namespace = true
 
