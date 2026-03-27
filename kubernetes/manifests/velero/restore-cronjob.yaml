@@ -1,0 +1,68 @@
+# Health-check CronJob — auto-restore when o3 is broken (TRUNK-6485)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: o3-restore-check
+  namespace: velero
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: velero
+          restartPolicy: OnFailure
+          containers:
+            - name: restore-check
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "=== O3 Health Check $(date) ==="
+
+                  RUNNING=$(kubectl get pods -n o3 \
+                    --field-selector=status.phase=Running \
+                    --no-headers 2>/dev/null | wc -l)
+
+                  BROKEN=$(kubectl get pods -n o3 --no-headers 2>/dev/null | \
+                    grep -cE 'CrashLoopBackOff|Error|OOMKilled|ImagePullBackOff' || true)
+
+                  echo "Running pods : $RUNNING"
+                  echo "Broken pods  : $BROKEN"
+
+                  if [ "$RUNNING" -lt 3 ] || [ "$BROKEN" -ge 2 ]; then
+                    echo "Cluster appears broken. Checking for active restore..."
+
+                    ACTIVE_RESTORE=$(kubectl get restore -n velero \
+                      --no-headers 2>/dev/null | grep -cE 'InProgress' || true)
+
+                    if [ "$ACTIVE_RESTORE" -gt 0 ]; then
+                      echo "Restore already in progress. Skipping."
+                      exit 0
+                    fi
+
+                    LATEST_BACKUP=$(kubectl get backup -n velero \
+                      --sort-by=.metadata.creationTimestamp \
+                      --no-headers 2>/dev/null | \
+                      grep 'Completed' | tail -1 | awk '{print $1}')
+
+                    if [ -z "$LATEST_BACKUP" ]; then
+                      echo "No completed backups found. Cannot restore."
+                      exit 1
+                    fi
+
+                    echo "Triggering restore from backup: $LATEST_BACKUP"
+
+                    kubectl create restore \
+                      -n velero \
+                      --from-backup="$LATEST_BACKUP" \
+                      "auto-restore-$(date +%Y%m%d%H%M)" \
+                      --include-namespaces o3 \
+                      --existing-resource-policy replace
+
+                    echo "Restore job submitted."
+                  else
+                    echo "Cluster is healthy. No restore needed."
+                  fi

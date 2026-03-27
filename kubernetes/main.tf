@@ -206,3 +206,47 @@ resource "helm_release" "o3" {
 
   values = [file("${path.module}/o3-values.key")]
 }
+
+# Velero — automated backup & restore of DB, ES and volumes 
+resource "kubernetes_namespace" "velero" {
+  depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
+
+  metadata {
+    name = "velero"
+  }
+}
+
+resource "helm_release" "velero" {
+  depends_on = [
+    openstack_containerinfra_cluster_v1.kubernetes,
+    kubernetes_namespace.velero,
+    helm_release.o3,
+  ]
+
+  name       = "velero"
+  repository = "https://vmware-tanzu.github.io/helm-charts"
+  chart      = "velero"
+  version    = "8.1.0"
+  namespace  = "velero"
+
+  values = [
+    templatefile("${path.module}/manifests/velero/velero-values.yaml", {
+      backup_bucket  = var.velero_backup_bucket
+      aws_region     = var.velero_aws_region
+      backup_schedule = var.velero_backup_schedule
+      backup_ttl     = var.velero_backup_ttl
+    })
+  ]
+}
+
+resource "kubernetes_manifest" "velero_backup_schedule" {
+  depends_on = [helm_release.velero]
+
+  manifest = yamldecode(file("${path.module}/manifests/velero/backup-schedule.yaml"))
+}
+
+resource "kubernetes_manifest" "velero_restore_cronjob" {
+  depends_on = [helm_release.velero]
+
+  manifest = yamldecode(file("${path.module}/manifests/velero/restore-cronjob.yaml"))
+}

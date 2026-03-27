@@ -38,3 +38,24 @@ variable "dns_cnames" {
   type    = list(any)
   default = ["o3-k8s"]
 }
+
+# Backup / Restore
+variable "velero_backup_bucket" {
+  description = "S3 bucket name for Velero backups (DB, ES, volumes)"
+  default     = "openmrs-k8s-velero-backups"
+}
+
+variable "velero_backup_schedule" {
+  description = "Cron schedule for automated backups"
+  default     = "0 2 * * *"   # every day at 02:00 UTC
+}
+
+variable "velero_backup_ttl" {
+  description = "How long to keep backups before expiry"
+  default     = "720h"   # 30 days
+}
+
+variable "velero_aws_region" {
+  description = "AWS region of the S3 backup bucket"
+  default     = "us-east-1"
+}

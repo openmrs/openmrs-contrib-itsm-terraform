@@ -1,0 +1,82 @@
+# Velero Helm values (TRUNK-6485)
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.10.0
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+configuration:
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: ${backup_bucket}
+      config:
+        region: ${aws_region}
+        s3ForcePathStyle: "true"
+
+  volumeSnapshotLocation:
+    - name: default
+      provider: aws
+      config:
+        region: ${aws_region}
+
+credentials:
+  useSecret: true
+  secretContents:
+    cloud: |
+      [default]
+      aws_access_key_id=REPLACE_WITH_SECRET
+      aws_secret_access_key=REPLACE_WITH_SECRET
+
+schedules:
+  o3-daily-backup:
+    disabled: false
+    schedule: "${backup_schedule}"
+    useOwnerReferencesInBackup: false
+    template:
+      ttl: "${backup_ttl}"
+      includedNamespaces:
+        - o3
+      storageLocation: default
+      volumeSnapshotLocations:
+        - default
+      hooks:
+        resources:
+          - name: mysql-backup-hook
+            includedNamespaces:
+              - o3
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: mysql
+            pre:
+              - exec:
+                  container: mysql
+                  command:
+                    - /bin/sh
+                    - -c
+                    - >
+                      mysqldump -u root -p$MYSQL_ROOT_PASSWORD
+                      --all-databases
+                      --single-transaction
+                      > /var/lib/mysql/full-backup.sql
+                  onError: Fail
+                  timeout: 5m
+          - name: elasticsearch-backup-hook
+            includedNamespaces:
+              - o3
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: elasticsearch
+            pre:
+              - exec:
+                  container: elasticsearch
+                  command:
+                    - /bin/sh
+                    - -c
+                    - >
+                      curl -s -X PUT
+                      "localhost:9200/_snapshot/velero_backup/snapshot_$(date +%Y%m%d%H%M)?wait_for_completion=true"
+                  onError: Fail
+                  timeout: 10m
