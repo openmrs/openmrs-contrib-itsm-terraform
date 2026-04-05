@@ -231,18 +231,14 @@ resource "helm_release" "velero" {
 
   values = [
     templatefile("${path.module}/manifests/velero/velero-values.yaml", {
-      backup_bucket  = var.velero_backup_bucket
-      aws_region     = var.velero_aws_region
+      backup_bucket   = var.velero_backup_bucket
+      aws_region      = var.velero_aws_region
       backup_schedule = var.velero_backup_schedule
-      backup_ttl     = var.velero_backup_ttl
+      backup_ttl      = var.velero_backup_ttl
+      aws_access_key  = var.velero_aws_access_key
+      aws_secret_key  = var.velero_aws_secret_key
     })
   ]
-}
-
-resource "kubernetes_manifest" "velero_backup_schedule" {
-  depends_on = [helm_release.velero]
-
-  manifest = yamldecode(file("${path.module}/manifests/velero/backup-schedule.yaml"))
 }
 
 resource "kubernetes_manifest" "velero_restore_cronjob" {

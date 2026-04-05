@@ -59,3 +59,15 @@ variable "velero_aws_region" {
   description = "AWS region of the S3 backup bucket"
   default     = "us-east-1"
 }
+
+variable "velero_aws_access_key" {
+  description = "AWS access key ID for Velero backup S3 bucket"
+  default     = ""
+  sensitive   = true
+}
+
+variable "velero_aws_secret_key" {
+  description = "AWS secret access key for Velero backup S3 bucket"
+  default     = ""
+  sensitive   = true
+}

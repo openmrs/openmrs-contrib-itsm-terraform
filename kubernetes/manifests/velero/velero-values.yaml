@@ -27,8 +27,8 @@ credentials:
   secretContents:
     cloud: |
       [default]
-      aws_access_key_id=REPLACE_WITH_SECRET
-      aws_secret_access_key=REPLACE_WITH_SECRET
+      aws_access_key_id=${aws_access_key}
+      aws_secret_access_key=${aws_secret_key}
 
 schedules:
   o3-daily-backup:
