@@ -17,9 +17,9 @@ resource "dme_dns_record" "private_hostname" {
 
 
 resource "dme_dns_record" "cnames" {
-  count     = length(var.dns_cnames)
+  for_each  = toset(var.dns_cnames)
   domain_id = var.domain_dns["openmrs.org"]
-  name      = element(var.dns_cnames, count.index)
+  name      = each.value
   type      = "CNAME"
   value     = var.hostname
   ttl       = var.default_dns_ttl

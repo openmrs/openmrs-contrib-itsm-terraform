@@ -19,7 +19,7 @@ output "backup_access_key_secret" {
 }
 
 output "dns_entries" {
-  value = [dme_dns_record.hostname.name, dme_dns_record.cnames.*.name]
+  value = [dme_dns_record.hostname.name, values(dme_dns_record.cnames).*.name]
 }
 
 output "private-dns" {
