@@ -3,7 +3,7 @@ resource "dme_dns_record" "hostname" {
   name      = var.hostname
   type      = "A"
   value     = openstack_networking_floatingip_v2.ip.address
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "private_hostname" {
@@ -12,7 +12,7 @@ resource "dme_dns_record" "private_hostname" {
   name      = "${var.hostname}-internal"
   type      = "A"
   value     = openstack_compute_instance_v2.vm.network.0.fixed_ip_v4
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 
@@ -22,5 +22,5 @@ resource "dme_dns_record" "cnames" {
   name      = element(var.dns_cnames, count.index)
   type      = "CNAME"
   value     = var.hostname
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }

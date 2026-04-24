@@ -48,6 +48,8 @@ module "single-machine" {
   ssh_key_file = var.ssh_key_file_v2
   domain_dns   = var.domain_dns
   ansible_repo = var.ansible_repo
+
+  default_dns_ttl = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "mx_id_stg" {
@@ -56,7 +58,7 @@ resource "dme_dns_record" "mx_id_stg" {
   type      = "MX"
   mx_level  = "10"
   value     = "smtp-stg"
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "a_smtp_stg" {
@@ -64,7 +66,7 @@ resource "dme_dns_record" "a_smtp_stg" {
   name      = "smtp-stg"
   type      = "A"
   value     = module.single-machine.address
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "a_id_stg" {
@@ -72,7 +74,7 @@ resource "dme_dns_record" "a_id_stg" {
   name      = "id-stg"
   type      = "A"
   value     = module.single-machine.address
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "openstack_networking_secgroup_v2" "secgroup_ldap_stg" {

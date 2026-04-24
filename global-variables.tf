@@ -39,6 +39,11 @@ variable "main_domain_dns" {
   default = "openmrs.org"
 }
 
+variable "default_dns_ttl" {
+  description = "Default TTL (seconds) for DNS records managed by this repo"
+  default     = 43200
+}
+
 variable "dme_apikey" {
   default = ""
 }

@@ -43,6 +43,8 @@ module "single-machine" {
   ssh_key_file = var.ssh_key_file_v2
   domain_dns   = var.domain_dns
   ansible_repo = var.ansible_repo
+
+  default_dns_ttl = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "short-dns" {
@@ -50,7 +52,7 @@ resource "dme_dns_record" "short-dns" {
   name      = ""
   type      = "ANAME"
   value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "short-dns-wildcard" {
@@ -58,7 +60,7 @@ resource "dme_dns_record" "short-dns-wildcard" {
   name      = "*"
   type      = "ANAME"
   value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 # ----------------------------------------------------
@@ -70,7 +72,7 @@ resource "dme_dns_record" "servicedesk-cname" {
   name      = "servicedesk.jira"
   type      = "CNAME"
   value     = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.saas.atlassian.com."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "servicedesk-cname2" {
@@ -78,5 +80,5 @@ resource "dme_dns_record" "servicedesk-cname2" {
   name      = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira"
   type      = "CNAME"
   value     = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.ssl.atlassian.com."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }

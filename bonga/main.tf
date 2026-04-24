@@ -43,4 +43,6 @@ module "single-machine" {
   ssh_key_file = var.ssh_key_file_v2
   domain_dns   = var.domain_dns
   ansible_repo = var.ansible_repo
+
+  default_dns_ttl = var.default_dns_ttl
 }

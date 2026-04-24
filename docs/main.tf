@@ -142,7 +142,7 @@ resource "dme_dns_record" "docs" {
   name      = "docs"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "resources" {
@@ -150,7 +150,7 @@ resource "dme_dns_record" "resources" {
   name      = "resources"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "aws_iam_user" "bamboo-user" {

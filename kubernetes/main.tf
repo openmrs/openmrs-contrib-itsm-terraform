@@ -77,7 +77,7 @@ resource "dme_dns_record" "hostname" {
   name      = var.hostname
   type      = "A"
   value     = data.openstack_networking_floatingip_v2.fip_lb.address
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "cnames" {
@@ -86,7 +86,7 @@ resource "dme_dns_record" "cnames" {
   name      = element(var.dns_cnames, count.index)
   type      = "CNAME"
   value     = var.hostname
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "helm_release" "cert-manager" {

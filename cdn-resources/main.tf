@@ -141,7 +141,7 @@ resource "dme_dns_record" "cdn-dns" {
   name      = "cdn"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "dme_dns_record" "assets-dns" {
@@ -149,7 +149,7 @@ resource "dme_dns_record" "assets-dns" {
   name      = "assets"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 resource "aws_iam_user" "bamboo-user" {
@@ -247,7 +247,7 @@ resource "dme_dns_record" "dev3-openmrs-org-cdn" {
   name      = "dev3"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
-  ttl       = 300
+  ttl       = var.default_dns_ttl
 }
 
 # S3 bucket for CloudFront access logs
