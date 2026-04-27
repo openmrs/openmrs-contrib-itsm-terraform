@@ -46,9 +46,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["dev-ssl"]
+  default = ["sec3"]
 }
 
 variable "description" {
-  default = "Ephemeral development server without nginx proxy"
+  default = "Server setup with O3 for Qualys scan"
 }
