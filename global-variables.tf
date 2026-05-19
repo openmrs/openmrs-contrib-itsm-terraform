@@ -9,6 +9,7 @@ variable "image_ubuntu_22" {
 
 variable "ssh_key_file_v2" {
   description = "SSH key used to provision VMs"
+  sensitive   = true
   default     = "../conf/provisioning/ssh/terraform-api.key"
 }
 
@@ -35,6 +36,16 @@ variable "domain_dns" {
   }
 }
 
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone IDs per domain"
+  default = {
+    "openmrs.org" = "b4971e2d7be2ee072cab9e438f687838"
+    "openmrs.net" = "0f28c530f91a49051b191fb4c395c710"
+    "openmrs.com" = "9a92b877cadbfe3b5e4608121faa8a39"
+    "om.rs"       = "e998bf6d653ca86601bb161c6c65cc38"
+  }
+}
+
 variable "main_domain_dns" {
   default = "openmrs.org"
 }
@@ -45,9 +56,21 @@ variable "default_dns_ttl" {
 }
 
 variable "dme_apikey" {
-  default = ""
+  sensitive = true
+  default   = ""
 }
 
 variable "dme_secretkey" {
-  default = ""
+  sensitive = true
+  default   = ""
+}
+
+variable "cf_api_token" {
+  description = "Cloudflare API token"
+  sensitive   = true
+  default     = ""
+}
+
+variable "cf_account_id" {
+  default = "8b602baa4865372bf49619922b9913d6"
 }

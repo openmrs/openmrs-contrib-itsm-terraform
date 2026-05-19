@@ -16,6 +16,10 @@ terraform {
       source = "dnsmadeeasy/dme"
     }
 
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+    }
+
     aws = {
       source = "hashicorp/aws"
     }

@@ -29,6 +29,11 @@ terraform {
       version = "1.0.6"
     }
 
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.19.1"
+    }
+
     helm = {
       source  = "hashicorp/helm"
       version = "3.1.1"
@@ -54,6 +59,10 @@ terraform {
 provider "dme" {
   api_key    = var.dme_apikey
   secret_key = var.dme_secretkey
+}
+
+provider "cloudflare" {
+  api_token = var.cf_api_token
 }
 
 provider "aws" {
