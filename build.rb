@@ -224,7 +224,7 @@ class Build < Thor
 
   desc 'docs', 'generate docs in .tmp/docs.md'
   def docs
-    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'cloudflare-zones/', 'docs/', 'cdn-resources/', 'kubernetes/')
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'cloudflare-zones/', 'cdn-resources/', 'docs/', 'kubernetes/', 'manual-dns/')
 
     $vms = []
 
