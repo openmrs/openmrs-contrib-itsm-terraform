@@ -49,11 +49,11 @@ $terraform_new_version_url = "https://releases.hashicorp.com/terraform/#{$terraf
 $terraform_upgraded_stacks = []
 
 def terraformVersion(dir)
-  $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : "" 
-end 
+  $terraform_upgraded_stacks.include?(dir.chomp("/"))? "_new" : ""
+end
 
 def terraformDocVersion(dir)
-  $terraform_upgraded_stacks.include?(dir.chomp("/"))? $terraform_new_version : $terraform_current_version 
+  $terraform_upgraded_stacks.include?(dir.chomp("/"))? $terraform_new_version : $terraform_current_version
 end
 
 
@@ -89,10 +89,10 @@ class Build < Thor
     puts "\n\n\nAttempting to decrypt secrets using GPG key."
     system('git-crypt unlock') || abort('Error when attempting to decrypt secrets')
     system('chmod 600 conf/provisioning/ssh/terraform-api.key') || abort('Error when setting private key permissions')
-    
+
     system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_new_version_url}") || abort("Error when downloading terraform #{$terraform_new_version_url}")
     system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform_new && rm terraform.zip") || abort('Error when unzipping upgrade terraform')
-    
+
 
     system("wget -vvvv -O #{$tmp_dir}/terraform.zip #{$terraform_current_version_url}") || abort("Error when downloading terraform #{$terraform_current_version_url}")
     system("cd #{$tmp_dir} && unzip terraform.zip && mv terraform terraform") || abort('Error when unzipping current terraform')
@@ -120,14 +120,14 @@ class Build < Thor
 
   desc 'validate DIR', 'Run terraform validate on DIR'
   def validate(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Running terraform validate on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} validate") || abort
   end
 
   desc 'plan DIR', 'run terraform plan on defined directory'
   def plan(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Running terraform#{suffix} plan on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} plan -out terraform.plan") || abort
   end
@@ -143,7 +143,7 @@ class Build < Thor
 
   desc 'apply DIR', 'run terraform apply on defined directory'
   def apply(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Terraform apply is NOT thread-safe, and there's no lock mechanism enabled. Two concurrent calls on the same stack will cause inconsistences."
     printf "Do you really want to modify stack #{dir}? [y/N]:  "
     prompt = STDIN.gets.chomp
@@ -157,7 +157,7 @@ class Build < Thor
 
   desc 'destroy DIR', 'completely deletes VM and data'
   def destroy(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Make sure to change prevent_destroy to true following README file."
     printf "Do you really want to delete stack #{dir}? [y/N]:  "
     prompt = STDIN.gets.chomp
@@ -169,7 +169,7 @@ class Build < Thor
 
   desc 'taint-vm DIR', 'mark virtual machine for re creation in DIR'
   def taint_vm(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Running terraform taint on #{dir} (vm resources)"
     system(''"source conf/openrc && cd #{dir} \
       && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_compute_instance_v2.vm \
@@ -187,7 +187,7 @@ class Build < Thor
 
   desc 'taint-data DIR', 'mark data storage for re creation in DIR'
   def taint_data(dir)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Running terraform taint on #{dir} (data resources)"
     system(''"source conf/openrc && cd #{dir} \
       && #{$pwd}/#{$tmp_dir}/terraform#{suffix} taint -allow-missing module.single-machine.openstack_blockstorage_volume_v3.data_volume[0] \
@@ -198,7 +198,7 @@ class Build < Thor
 
   desc "terraform DIR 'subcommand --args'", 'run arbitrary terraform subcommands on defined directory'
   def terraform(dir, args)
-    suffix=terraformVersion(dir) 
+    suffix=terraformVersion(dir)
     puts "Running terraform \'#{args}\' on #{dir}"
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} #{args}") || abort
   end
@@ -224,13 +224,13 @@ class Build < Thor
 
   desc 'docs', 'generate docs in .tmp/docs.md'
   def docs
-    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'docs/', 'cdn-resources/', 'kubernetes/')
+    $extra_excluded_dirs = $excluded_dirs.push('base-network/', 'cloudflare-zones/', 'docs/', 'cdn-resources/', 'kubernetes/')
 
     $vms = []
 
     File.open('.tmp/docs.md', 'w') do |_file|
       (Dir['*/'] - $extra_excluded_dirs).sort.each do |d|
-        suffix=terraformVersion(d) 
+        suffix=terraformVersion(d)
         version_terraform=terraformDocVersion(d)
         puts "Retrieving outputs for #{d}"
         outputs = `source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} output -json`
