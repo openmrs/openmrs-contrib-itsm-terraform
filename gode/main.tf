@@ -42,12 +42,13 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image        = var.image_ubuntu_22
-  project_name = var.project_name
-  ssh_username = var.ssh_username_ubuntu_20
-  ssh_key_file = var.ssh_key_file_v2
-  domain_dns   = var.domain_dns
-  ansible_repo = var.ansible_repo
+  image              = var.image_ubuntu_22
+  project_name       = var.project_name
+  ssh_username       = var.ssh_username_ubuntu_20
+  ssh_key_file       = var.ssh_key_file_v2
+  domain_dns         = var.domain_dns
+  cloudflare_zone_id = var.cloudflare_zone_id
+  ansible_repo       = var.ansible_repo
 
   default_dns_ttl = var.default_dns_ttl
 }
@@ -61,6 +62,15 @@ resource "dme_dns_record" "mx_id_stg" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "mx_id_stg" {
+  zone_id  = var.cloudflare_zone_id["openmrs.org"]
+  name     = "id-stg.openmrs.org"
+  type     = "MX"
+  priority = 10
+  content  = "smtp-stg.openmrs.org"
+  ttl      = var.mail_dns_ttl
+}
+
 resource "dme_dns_record" "a_smtp_stg" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "smtp-stg"
@@ -69,12 +79,30 @@ resource "dme_dns_record" "a_smtp_stg" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "a_smtp_stg" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "smtp-stg.openmrs.org"
+  type    = "A"
+  content = module.single-machine.address
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "a_id_stg" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "id-stg"
   type      = "A"
   value     = module.single-machine.address
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "a_id_stg" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "id-stg.openmrs.org"
+  type    = "A"
+  content = module.single-machine.address
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 resource "openstack_networking_secgroup_v2" "secgroup_ldap_stg" {

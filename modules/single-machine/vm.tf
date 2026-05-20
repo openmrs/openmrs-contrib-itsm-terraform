@@ -179,12 +179,12 @@ resource "null_resource" "copy_facts" {
   }
 
   provisioner "file" {
-    content     = templatefile("${path.module}/templates/provisioning_facts.tpl",
-                  {
-                    ansible_inventory = var.ansible_inventory
-                    region            = var.region
-                    has_backup        = var.has_backup
-                  })
+    content = templatefile("${path.module}/templates/provisioning_facts.tpl",
+      {
+        ansible_inventory = var.ansible_inventory
+        region            = var.region
+        has_backup        = var.has_backup
+    })
     destination = "/tmp/provisioning.fact"
   }
 
@@ -211,10 +211,10 @@ resource "null_resource" "copy_facts_backups" {
   }
 
   provisioner "file" {
-    content     = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
-                    aws_access_key_id     = aws_iam_access_key.backup-user-key[0].id
-                    aws_secret_access_key = aws_iam_access_key.backup-user-key[0].secret
-                  })
+    content = templatefile("${path.module}/templates/provisioning_aws_facts.tpl", {
+      aws_access_key_id     = aws_iam_access_key.backup-user-key[0].id
+      aws_secret_access_key = aws_iam_access_key.backup-user-key[0].secret
+    })
     destination = "/tmp/aws.fact"
   }
 

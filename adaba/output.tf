@@ -3,7 +3,7 @@ output "backup_access_key_id" {
 }
 
 output "backup_access_key_secret" {
-  value = module.single-machine.backup_access_key_secret
+  value     = module.single-machine.backup_access_key_secret
   sensitive = true
 }
 

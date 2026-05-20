@@ -103,6 +103,9 @@ variable "ssh_key_file" {}
 # DNS domains in our DNS provider
 variable "domain_dns" { type = map(any) }
 
+# Cloudflare zone IDs per domain
+variable "cloudflare_zone_id" { type = map(any) }
+
 # Default TTL (seconds) for DNS records created by this module
 variable "default_dns_ttl" {}
 

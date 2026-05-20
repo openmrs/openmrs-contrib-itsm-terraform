@@ -37,12 +37,13 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image        = var.image_ubuntu_22
-  project_name = var.project_name
-  ssh_username = var.ssh_username_ubuntu_20
-  ssh_key_file = var.ssh_key_file_v2
-  domain_dns   = var.domain_dns
-  ansible_repo = var.ansible_repo
+  image              = var.image_ubuntu_22
+  project_name       = var.project_name
+  ssh_username       = var.ssh_username_ubuntu_20
+  ssh_key_file       = var.ssh_key_file_v2
+  domain_dns         = var.domain_dns
+  cloudflare_zone_id = var.cloudflare_zone_id
+  ansible_repo       = var.ansible_repo
 
   default_dns_ttl = var.default_dns_ttl
 }

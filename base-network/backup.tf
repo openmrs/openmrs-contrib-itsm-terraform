@@ -14,7 +14,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle_bucket" {
   bucket = aws_s3_bucket.automatic-backups.id
 
   rule {
-    id      = "archive-and-delete"
+    id = "archive-and-delete"
     transition {
       days          = 30
       storage_class = "GLACIER"
@@ -39,7 +39,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption_bucket
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "aws:kms"
     }
   }
 }
@@ -86,7 +86,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption_manual
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "aws:kms"
     }
   }
 }

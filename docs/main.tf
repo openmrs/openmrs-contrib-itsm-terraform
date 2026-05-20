@@ -145,12 +145,30 @@ resource "dme_dns_record" "docs" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "docs" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "docs.openmrs.org"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "resources" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "resources"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "resources" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "resources.openmrs.org"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 resource "aws_iam_user" "bamboo-user" {
@@ -189,18 +207,18 @@ EOF
 }
 
 resource "aws_s3_object" "vms-list-json" {
-  bucket = var.bucket_name
-  key    = "infrastructure/vms.json"
-  source = "vms.json" # use './build docs' to generate it
-  etag = filemd5("vms.json")
+  bucket       = var.bucket_name
+  key          = "infrastructure/vms.json"
+  source       = "vms.json" # use './build docs' to generate it
+  etag         = filemd5("vms.json")
   content_type = "application/json"
 }
 
 resource "aws_s3_object" "vms-list-html" {
-  bucket = var.bucket_name
-  key    = "infrastructure/vms.html"
-  source = "vms.html" # use './build docs' to generate it
-  etag = filemd5("vms.html")
+  bucket       = var.bucket_name
+  key          = "infrastructure/vms.html"
+  source       = "vms.html" # use './build docs' to generate it
+  etag         = filemd5("vms.html")
   content_type = "text/html"
 }
 

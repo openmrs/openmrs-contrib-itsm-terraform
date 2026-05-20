@@ -26,11 +26,11 @@ resource "openstack_containerinfra_cluster_v1" "kubernetes" {
   master_lb_enabled   = true
   floating_ip_enabled = false # Do not expose nodes publicly
   labels = {
-    "auto_healing_enabled": "true"
-    "auto_scaling_enabled": "true"
-    "min_node_count": var.node_count
-    "max_node_count": var.max_node_count
-    "master_lb_floating_ip_enabled": "false" # Do not expose control plane nodes publicly
+    "auto_healing_enabled" : "true"
+    "auto_scaling_enabled" : "true"
+    "min_node_count" : var.node_count
+    "max_node_count" : var.max_node_count
+    "master_lb_floating_ip_enabled" : "false" # Do not expose control plane nodes publicly
     #"kube_dashboard_enabled": "false" # We will deploy the latest version with helm
   }
 }
@@ -52,18 +52,18 @@ provider "helm" {
 }
 
 resource "local_sensitive_file" "kubeconfig_file" {
-  content = openstack_containerinfra_cluster_v1.kubernetes.kubeconfig.raw_config
+  content  = openstack_containerinfra_cluster_v1.kubernetes.kubeconfig.raw_config
   filename = "${path.module}/kubeconfig"
 }
 
 resource "helm_release" "ingress-nginx" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
-  name       = "ingress-nginx"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  version    = "4.13.3"
-  namespace  = "ingress-nginx"
+  name             = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  version          = "4.13.3"
+  namespace        = "ingress-nginx"
   create_namespace = true
 }
 
@@ -80,6 +80,15 @@ resource "dme_dns_record" "hostname" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "hostname" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "${var.hostname}.openmrs.org"
+  type    = "A"
+  content = data.openstack_networking_floatingip_v2.fip_lb.address
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "cnames" {
   count     = length(var.dns_cnames)
   domain_id = var.domain_dns["openmrs.org"]
@@ -89,18 +98,28 @@ resource "dme_dns_record" "cnames" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "cnames" {
+  count   = length(var.dns_cnames)
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "${element(var.dns_cnames, count.index)}.openmrs.org"
+  type    = "CNAME"
+  content = "${var.hostname}.openmrs.org"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "helm_release" "cert-manager" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
-  name = "cert-manager"
-  repository = "oci://quay.io/jetstack/charts/"
-  chart = "cert-manager"
-  version = "1.19.0"
-  namespace = "cert-manager"
+  name             = "cert-manager"
+  repository       = "oci://quay.io/jetstack/charts/"
+  chart            = "cert-manager"
+  version          = "1.19.0"
+  namespace        = "cert-manager"
   create_namespace = true
 
   set = [{
-    name = "crds.enabled"
+    name  = "crds.enabled"
     value = "true"
   }]
 }
@@ -125,11 +144,11 @@ resource "kubernetes_manifest" "local_path_storage" {
 resource "helm_release" "kubernetes-dashboard" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
-  name       = "kubernetes-dashboard"
-  repository = "https://kubernetes-retired.github.io/dashboard/"
-  chart      = "kubernetes-dashboard"
-  version    = "7.14.0"
-  namespace  = "kubernetes-dashboard-new"
+  name             = "kubernetes-dashboard"
+  repository       = "https://kubernetes-retired.github.io/dashboard/"
+  chart            = "kubernetes-dashboard"
+  version          = "7.14.0"
+  namespace        = "kubernetes-dashboard-new"
   create_namespace = true
 
   set = [
@@ -164,9 +183,9 @@ resource "kubernetes_service_account" "kubernetes-dashboard" {
 }
 
 resource "kubernetes_cluster_role_binding" "kubernetes-dashboard" {
-  depends_on  = [kubernetes_service_account.kubernetes-dashboard]
+  depends_on = [kubernetes_service_account.kubernetes-dashboard]
   metadata {
-    name      = "admin-user"
+    name = "admin-user"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -184,7 +203,7 @@ resource "kubernetes_cluster_role_binding" "kubernetes-dashboard" {
 resource "kubernetes_secret" "kubernetes-dashboard" {
   depends_on = [kubernetes_service_account.kubernetes-dashboard]
   metadata {
-    name = "admin-user"
+    name      = "admin-user"
     namespace = helm_release.kubernetes-dashboard.namespace
     annotations = {
       "kubernetes.io/service-account.name" = "admin-user"
@@ -196,13 +215,13 @@ resource "kubernetes_secret" "kubernetes-dashboard" {
 resource "helm_release" "o3" {
   depends_on = [openstack_containerinfra_cluster_v1.kubernetes]
 
-  name = "o3"
-  repository = "https://openmrs.github.io/openmrs-contrib-cluster/"
-  chart = "openmrs"
-  version = "1.2.2"
-  namespace = "o3"
+  name             = "o3"
+  repository       = "https://openmrs.github.io/openmrs-contrib-cluster/"
+  chart            = "openmrs"
+  version          = "1.2.2"
+  namespace        = "o3"
   create_namespace = true
-  upgrade_install = true
+  upgrade_install  = true
 
   values = [file("${path.module}/o3-values.key")]
 }

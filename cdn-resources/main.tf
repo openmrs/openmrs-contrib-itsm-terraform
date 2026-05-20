@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 provider "aws" {
   region = "us-east-1"
-  alias = "virginia"
+  alias  = "virginia"
 }
 
 terraform {
@@ -144,12 +144,30 @@ resource "dme_dns_record" "cdn-dns" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "cdn-dns" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "cdn.openmrs.org"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "assets-dns" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "assets"
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "assets-dns" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "assets.openmrs.org"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 resource "aws_iam_user" "bamboo-user" {
@@ -194,9 +212,9 @@ EOF
 
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "dev-cdn" {
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "CloudFront CDN for dev3.openmrs.org"
+  enabled         = true
+  is_ipv6_enabled = true
+  comment         = "CloudFront CDN for dev3.openmrs.org"
 
   aliases = ["dev3.openmrs.org"]
 
@@ -218,7 +236,7 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "openmrs-dev3-origin"
 
-    cache_policy_id = "4cc15a8a-d715-48a4-82b8-cc0b614638fe" # Managed Cache Policy for UseOriginCacheControlHeaders-QueryStrings
+    cache_policy_id          = "4cc15a8a-d715-48a4-82b8-cc0b614638fe" # Managed Cache Policy for UseOriginCacheControlHeaders-QueryStrings
     origin_request_policy_id = "216adef6-5c7f-47e4-b989-5492eafa07d3" # Managed Origin Request Policy for Managed-AllViewer
 
     viewer_protocol_policy = "allow-all"
@@ -231,13 +249,13 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = var.dev3_certificate_arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = var.dev3_certificate_arn
+    ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {
-    Terraform = "cdn-resources"
+    Terraform   = "cdn-resources"
     Environment = "dev3"
   }
 }
@@ -248,6 +266,15 @@ resource "dme_dns_record" "dev3-openmrs-org-cdn" {
   type      = "CNAME"
   value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "dev3-openmrs-org-cdn" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "dev3.openmrs.org"
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.dev-cdn.domain_name
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 # S3 bucket for CloudFront access logs
@@ -343,7 +370,7 @@ resource "aws_s3_bucket_policy" "dev-cdn-logs-policy" {
         Condition = {
           StringEquals = {
             "aws:SourceAccount" = "525453398140"
-            "s3:x-amz-acl"     = "bucket-owner-full-control"
+            "s3:x-amz-acl"      = "bucket-owner-full-control"
           }
           ArnLike = {
             "aws:SourceArn" = "arn:aws:logs:us-east-1:525453398140:delivery-source:CreatedByCloudFront-E1DV2MB3VLGT7R"
@@ -358,12 +385,12 @@ resource "aws_s3_bucket_policy" "dev-cdn-logs-policy" {
 
 # CloudWatch Log Group for additional monitoring
 resource "aws_cloudwatch_log_group" "dev-cdn-logs" {
-  provider = aws.virginia
+  provider          = aws.virginia
   name              = "/aws/cloudfront/dev-cdn"
   retention_in_days = 30
 
   tags = {
-    Terraform = "cdn-resources"
+    Terraform   = "cdn-resources"
     Environment = "dev3"
   }
 }

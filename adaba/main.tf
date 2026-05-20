@@ -41,12 +41,13 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image        = var.image_ubuntu_22
-  project_name = var.project_name
-  ssh_username = var.ssh_username_ubuntu_20
-  ssh_key_file = var.ssh_key_file_v2
-  domain_dns   = var.domain_dns
-  ansible_repo = var.ansible_repo
+  image              = var.image_ubuntu_22
+  project_name       = var.project_name
+  ssh_username       = var.ssh_username_ubuntu_20
+  ssh_key_file       = var.ssh_key_file_v2
+  domain_dns         = var.domain_dns
+  cloudflare_zone_id = var.cloudflare_zone_id
+  ansible_repo       = var.ansible_repo
 
   default_dns_ttl = var.default_dns_ttl
 }
@@ -64,6 +65,15 @@ resource "dme_dns_record" "mx_id" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "mx_id" {
+  zone_id  = var.cloudflare_zone_id["openmrs.org"]
+  name     = "id.openmrs.org"
+  type     = "MX"
+  priority = 10
+  content  = "smtp.openmrs.org"
+  ttl      = var.mail_dns_ttl
+}
+
 resource "dme_dns_record" "a_smtp" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "smtp"
@@ -72,12 +82,30 @@ resource "dme_dns_record" "a_smtp" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "a_smtp" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "smtp.openmrs.org"
+  type    = "A"
+  content = module.single-machine.address
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "a_id" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "id"
   type      = "A"
   value     = module.single-machine.address
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "a_id" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "id.openmrs.org"
+  type    = "A"
+  content = module.single-machine.address
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -92,6 +120,15 @@ resource "dme_dns_record" "a_id_new" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "a_id_new" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "id-new.openmrs.org"
+  type    = "A"
+  content = module.single-machine.address
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Domain verification for Atlassian outgoing e-mails
 # ----------------------------------------------------------------------------------------------------------------------
@@ -103,6 +140,15 @@ resource "dme_dns_record" "txt_atlassian" {
   value     = "atlassian-sending-domain-verification=0fdf1857-bba2-4642-ad65-82e86115de7b"
   ttl       = var.default_dns_ttl
 }
+
+resource "cloudflare_dns_record" "txt_atlassian" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "openmrs.org"
+  type    = "TXT"
+  content = "\"atlassian-sending-domain-verification=0fdf1857-bba2-4642-ad65-82e86115de7b\""
+  ttl     = var.mail_dns_ttl
+}
+
 resource "dme_dns_record" "cname_active_atlassian" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "atlassian-6d771e._domainkey"
@@ -110,6 +156,16 @@ resource "dme_dns_record" "cname_active_atlassian" {
   value     = "atlassian-6d771e.dkim.atlassian.net."
   ttl       = var.default_dns_ttl
 }
+
+resource "cloudflare_dns_record" "cname_active_atlassian" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "atlassian-6d771e._domainkey.openmrs.org"
+  type    = "CNAME"
+  content = "atlassian-6d771e.dkim.atlassian.net"
+  ttl     = var.mail_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "cname_fallback_atlassian" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "atlassian-7cbba2._domainkey"
@@ -117,12 +173,31 @@ resource "dme_dns_record" "cname_fallback_atlassian" {
   value     = "atlassian-7cbba2.dkim.atlassian.net."
   ttl       = var.default_dns_ttl
 }
+
+resource "cloudflare_dns_record" "cname_fallback_atlassian" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "atlassian-7cbba2._domainkey.openmrs.org"
+  type    = "CNAME"
+  content = "atlassian-7cbba2.dkim.atlassian.net"
+  ttl     = var.mail_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "cname_bounce_atlassian" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "atlassian-bounces"
   type      = "CNAME"
   value     = "bounces.mail-us.atlassian.net."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "cname_bounce_atlassian" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "atlassian-bounces.openmrs.org"
+  type    = "CNAME"
+  content = "bounces.mail-us.atlassian.net"
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 data "terraform_remote_state" "base" {

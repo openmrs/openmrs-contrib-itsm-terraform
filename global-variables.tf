@@ -52,7 +52,12 @@ variable "main_domain_dns" {
 
 variable "default_dns_ttl" {
   description = "Default TTL (seconds) for DNS records managed by this repo"
-  default     = 43200
+  default     = 3600
+}
+
+variable "mail_dns_ttl" {
+  description = "TTL (seconds) for mail-config records (MX, DKIM, sender verification)"
+  default     = 86400
 }
 
 variable "dme_apikey" {

@@ -37,12 +37,13 @@ module "single-machine" {
   # Don't change values below
   # ----------------------------------------------------------------------------------------------------------------------
 
-  image        = var.image_ubuntu_22
-  project_name = var.project_name
-  ssh_username = var.ssh_username_ubuntu_20
-  ssh_key_file = var.ssh_key_file_v2
-  domain_dns   = var.domain_dns
-  ansible_repo = var.ansible_repo
+  image              = var.image_ubuntu_22
+  project_name       = var.project_name
+  ssh_username       = var.ssh_username_ubuntu_20
+  ssh_key_file       = var.ssh_key_file_v2
+  domain_dns         = var.domain_dns
+  cloudflare_zone_id = var.cloudflare_zone_id
+  ansible_repo       = var.ansible_repo
 
   default_dns_ttl = var.default_dns_ttl
 }
@@ -55,12 +56,31 @@ resource "dme_dns_record" "short-dns" {
   ttl       = var.default_dns_ttl
 }
 
+# Cloudflare flattens CNAME at the apex, so DME ANAME → CF CNAME with name = <zone>.
+resource "cloudflare_dns_record" "short-dns" {
+  zone_id = var.cloudflare_zone_id[var.dns_domain]
+  name    = var.dns_domain
+  type    = "CNAME"
+  content = "${var.hostname}.${var.main_domain_dns}"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "short-dns-wildcard" {
   domain_id = var.domain_dns[var.dns_domain]
   name      = "*"
   type      = "ANAME"
   value     = "${var.hostname}.${var.main_domain_dns}."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "short-dns-wildcard" {
+  zone_id = var.cloudflare_zone_id[var.dns_domain]
+  name    = "*.${var.dns_domain}"
+  type    = "CNAME"
+  content = "${var.hostname}.${var.main_domain_dns}"
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
 
 resource "dme_dns_record" "servicedesk-cname" {
@@ -71,10 +91,28 @@ resource "dme_dns_record" "servicedesk-cname" {
   ttl       = var.default_dns_ttl
 }
 
+resource "cloudflare_dns_record" "servicedesk-cname" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "servicedesk.jira.openmrs.org"
+  type    = "CNAME"
+  content = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.saas.atlassian.com"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "dme_dns_record" "servicedesk-cname2" {
   domain_id = var.domain_dns["openmrs.org"]
   name      = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira"
   type      = "CNAME"
   value     = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.ssl.atlassian.com."
   ttl       = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "servicedesk-cname2" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira.openmrs.org"
+  type    = "CNAME"
+  content = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.ssl.atlassian.com"
+  ttl     = var.default_dns_ttl
+  proxied = false
 }
