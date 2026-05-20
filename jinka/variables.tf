@@ -49,6 +49,43 @@ variable "dns_cnames" {
   default = ["shortener", "mavenrepo", "mavenrepo-redirect", "oldwordpress", "help", "issues", "tickets", "wiki"]
 }
 
+variable "cf_only_dns_cnames" {
+  default = [
+    "api",
+    "ask",
+    "blog",
+    "chat",
+    "connect",
+    "contribute",
+    "dev",
+    "doc",
+    "donate",
+    "download",
+    "downloads",
+    "ebola",
+    "go",
+    "implementers",
+    "inc",
+    "irc",
+    "javadoc",
+    "jobs",
+    "kenya",
+    "license",
+    "lists",
+    "map",
+    "mozambique",
+    "newdev",
+    "occ",
+    "projects",
+    "roadmap",
+    "search",
+    "site",
+    "source",
+    "trac",
+    "uptime",
+  ]
+}
+
 variable "dns_domain" {
   default = "om.rs"
 }

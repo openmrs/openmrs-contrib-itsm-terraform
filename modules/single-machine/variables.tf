@@ -57,6 +57,12 @@ variable "dns_cnames" {
   default = []
 }
 
+# [Optional] extra CNAMES to create only in Cloudflare
+variable "cf_only_dns_cnames" {
+  type    = list(any)
+  default = []
+}
+
 # [Optional] create DNS entry for private IP
 variable "has_private_dns" {
   default = false

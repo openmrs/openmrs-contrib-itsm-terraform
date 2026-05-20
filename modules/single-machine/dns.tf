@@ -45,7 +45,7 @@ resource "dme_dns_record" "cnames" {
 }
 
 resource "cloudflare_dns_record" "cnames" {
-  for_each = toset(var.dns_cnames)
+  for_each = toset(concat(var.dns_cnames, var.cf_only_dns_cnames))
   zone_id  = var.cloudflare_zone_id["openmrs.org"]
   name     = "${each.value}.openmrs.org"
   type     = "CNAME"
