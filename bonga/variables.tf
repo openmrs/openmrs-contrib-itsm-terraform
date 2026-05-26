@@ -46,7 +46,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["modules-refapp", "uat-refapp", "uat-refapp2", "qa-refapp", "qa-refapp2", "uat-platform"]
+  default = ["modules-refapp", "uat-refapp", "uat-refapp2", "qa-refapp", "qa-refapp2", "uat-platform", "test3"]
 }
 
 variable "description" {

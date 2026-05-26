@@ -592,15 +592,6 @@ resource "cloudflare_dns_record" "svn" {
   proxied = false
 }
 
-resource "cloudflare_dns_record" "test3" {
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "test3.openmrs.org"
-  type    = "CNAME"
-  content = "bonga.openmrs.org"
-  ttl     = var.default_dns_ttl
-  proxied = false
-}
-
 # ----------------------------------------------------------------------------------------------------------------------
 # A records — non-VM hosts that aren't managed by a per-VM stack
 # ----------------------------------------------------------------------------------------------------------------------
