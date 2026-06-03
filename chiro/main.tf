@@ -1,0 +1,57 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# state file stored in S3
+# ----------------------------------------------------------------------------------------------------------------------
+
+terraform {
+  backend "s3" {
+    bucket = "openmrs-terraform-state-files"
+    key    = "chiro.tfstate"
+  }
+}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Description of arguments can be found in
+# ../modules/single-machine/variables.tf in this repository
+# ----------------------------------------------------------------------------------------------------------------------
+
+module "single-machine" {
+  source = "../modules/single-machine"
+
+  ################################################
+  # Change values in variables.tf file instead
+  ################################################
+  flavor            = var.flavor
+  hostname          = var.hostname
+  region            = var.region
+  update_os         = var.update_os
+  use_ansible       = var.use_ansible
+  ansible_inventory = var.ansible_inventory
+  has_data_volume   = var.has_data_volume
+  data_volume_size  = var.data_volume_size
+  has_backup        = var.has_backup
+  dns_cnames        = var.dns_cnames
+  has_private_dns   = var.has_private_dns
+
+  # acme-dns exposes public DNS (53/udp+tcp) and a private-only HTTP API rather than the
+  # public web ports, so skip the default http/https security group and attach our own.
+  allow_web = false
+  extra_security_groups = [
+    openstack_networking_secgroup_v2.acme_dns_public.name,
+    openstack_networking_secgroup_v2.acme_dns_api.name,
+  ]
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Global variables
+  # Don't change values below
+  # ----------------------------------------------------------------------------------------------------------------------
+
+  image              = var.image_ubuntu_24
+  project_name       = var.project_name
+  ssh_username       = var.ssh_username_ubuntu_20
+  ssh_key_file       = var.ssh_key_file_v2
+  domain_dns         = var.domain_dns
+  cloudflare_zone_id = var.cloudflare_zone_id
+  ansible_repo       = var.ansible_repo
+
+  default_dns_ttl = var.default_dns_ttl
+}

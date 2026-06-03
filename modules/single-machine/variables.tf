@@ -63,6 +63,22 @@ variable "cf_only_dns_cnames" {
   default = []
 }
 
+# [Optional] subset of dns_cnames to put behind the Cloudflare proxy (orange-cloud).
+# Cloudflare requires TTL "auto" (1) on proxied records; the module sets that automatically
+# for these and leaves the rest DNS-only at the default TTL.
+variable "cf_proxied_cnames" {
+  type    = list(any)
+  default = []
+}
+
+# [Optional] _acme-challenge CNAMEs for DNS-01 via acme-dns. Map of label (relative to
+# openmrs.org) -> acme-dns account fulldomain (<uuid>.acme.openmrs.org), emitted by
+# registration on the host. openmrs.org zone only; cross-zone names are handled in manual-dns.
+variable "acme_challenge_cnames" {
+  type    = map(string)
+  default = {}
+}
+
 # [Optional] create DNS entry for private IP
 variable "has_private_dns" {
   default = false

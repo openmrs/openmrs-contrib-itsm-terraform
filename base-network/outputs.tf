@@ -40,6 +40,10 @@ output "network-id" {
   }
 }
 
+output "private-subnet-cidr" {
+  value = openstack_networking_subnet_v2.default-subnet.cidr
+}
+
 output "backup-bucket-name" {
   value = aws_s3_bucket.automatic-backups.bucket
 }

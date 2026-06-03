@@ -4,7 +4,11 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 variable "image_ubuntu_22" {
-  default = "26e80a26-2b42-4eac-b21d-cc4a1ab08504"
+  default = "657aed7d-e862-46da-b3d5-d9a0e301dcf4"
+}
+
+variable "image_ubuntu_24" {
+  default = "9fd63017-112e-4b6c-8b9e-238892895199"
 }
 
 variable "ssh_key_file_v2" {
