@@ -326,10 +326,11 @@ resource "cloudflare_dns_record" "github_pages_challenge" {
 resource "cloudflare_dns_record" "google_xmpp_srv" {
   for_each = local.google_xmpp_srv
 
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "${each.value.name}.openmrs.org"
-  type    = "SRV"
-  ttl     = var.default_dns_ttl
+  zone_id  = var.cloudflare_zone_id["openmrs.org"]
+  name     = "${each.value.name}.openmrs.org"
+  type     = "SRV"
+  priority = each.value.priority
+  ttl      = var.default_dns_ttl
   data = {
     priority = each.value.priority
     weight   = 0
@@ -340,10 +341,11 @@ resource "cloudflare_dns_record" "google_xmpp_srv" {
 
 # Legacy SMTP service-discovery announcement; targets the apex on port 1 (no-op port).
 resource "cloudflare_dns_record" "client_smtp_srv" {
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "_client._smtp.openmrs.org"
-  type    = "SRV"
-  ttl     = var.mail_dns_ttl
+  zone_id  = var.cloudflare_zone_id["openmrs.org"]
+  name     = "_client._smtp.openmrs.org"
+  type     = "SRV"
+  priority = 1
+  ttl      = var.mail_dns_ttl
   data = {
     priority = 1
     weight   = 1
