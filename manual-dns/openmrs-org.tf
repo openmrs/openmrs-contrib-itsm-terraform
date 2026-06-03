@@ -618,3 +618,49 @@ resource "cloudflare_dns_record" "sawla_internal_a" {
   ttl     = var.default_dns_ttl
   proxied = false
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# acme-dns (chiro) — DNS-01 challenge server owning the acme.openmrs.org subdomain, which
+# we use for DNS-01 ACME challenges
+#
+#   auth.acme.openmrs.org  A     -> chiro's public IP (the delegated zone's nameserver glue)
+#   acme.openmrs.org       NS    -> auth.acme.openmrs.org (delegates the challenge subzone)
+#   acme-internal          CNAME -> chiro-internal.openmrs.org (stable private API endpoint;
+#                                   mirrors db-internal -> sawla-internal, so the acme-dns
+#                                   host can be moved with a one-line repoint)
+# ----------------------------------------------------------------------------------------------------------------------
+
+data "terraform_remote_state" "chiro" {
+  backend = "s3"
+  config = {
+    bucket = "openmrs-terraform-state-files"
+    key    = "chiro.tfstate"
+    region = "us-west-2"
+  }
+}
+
+resource "cloudflare_dns_record" "acme_dns_auth_a" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "auth.acme.openmrs.org"
+  type    = "A"
+  content = data.terraform_remote_state.chiro.outputs.ip_address
+  ttl     = var.default_dns_ttl
+  proxied = false # a nameserver, never proxied
+}
+
+resource "cloudflare_dns_record" "acme_dns_delegation_ns" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "acme.openmrs.org"
+  type    = "NS"
+  content = "auth.acme.openmrs.org"
+  ttl     = var.default_dns_ttl
+}
+
+resource "cloudflare_dns_record" "acme_internal" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "acme-internal.openmrs.org"
+  type    = "CNAME"
+  content = "chiro-internal.openmrs.org"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
