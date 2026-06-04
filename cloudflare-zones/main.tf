@@ -23,3 +23,9 @@ resource "cloudflare_zone" "openmrs" {
     prevent_destroy = true
   }
 }
+
+resource "cloudflare_zone_setting" "openmrs_org_ssl" {
+  zone_id    = cloudflare_zone.openmrs["openmrs.org"].id
+  setting_id = "ssl"
+  value      = "strict"
+}

@@ -62,6 +62,10 @@ variable "acme_challenge_cnames" {
   }
 }
 
+variable "cf_proxied_cnames" {
+  default = ["test3"]
+}
+
 variable "description" {
   default = "Ephemeral (development and CI) OpenMRS environments"
 }

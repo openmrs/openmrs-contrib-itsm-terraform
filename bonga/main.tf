@@ -34,6 +34,9 @@ module "single-machine" {
   # _acme-challenge CNAMEs for DNS-01 (acme-dns); populated post-registration, empty until then.
   acme_challenge_cnames = var.acme_challenge_cnames
 
+  # CNAMEs to proxy through Cloudflare (test3 demo). See variables.tf for the apply ordering.
+  cf_proxied_cnames = var.cf_proxied_cnames
+
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Global variables
