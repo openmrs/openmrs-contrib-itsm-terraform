@@ -31,6 +31,9 @@ module "single-machine" {
   has_backup        = var.has_backup
   dns_cnames        = var.dns_cnames
 
+  # _acme-challenge CNAMEs for DNS-01 (acme-dns); populated post-registration, empty until then.
+  acme_challenge_cnames = var.acme_challenge_cnames
+
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Global variables
