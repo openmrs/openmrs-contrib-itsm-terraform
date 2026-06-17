@@ -36,6 +36,7 @@ locals {
     "fhir",
     "guide",
     "json",
+    "o3-docs",
     "o3-performance",
     "radar",
     "rest",
@@ -536,15 +537,6 @@ resource "cloudflare_dns_record" "notes" {
   name    = "notes.openmrs.org"
   type    = "CNAME"
   content = "etherpad.osuosl.org"
-  ttl     = var.default_dns_ttl
-  proxied = false
-}
-
-resource "cloudflare_dns_record" "o3_docs_vercel" {
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "o3-docs.openmrs.org"
-  type    = "CNAME"
-  content = "cname.vercel-dns.com"
   ttl     = var.default_dns_ttl
   proxied = false
 }
