@@ -63,7 +63,7 @@ variable "acme_challenge_cnames" {
 }
 
 variable "cf_proxied_cnames" {
-  default = ["test3"]
+  default = ["test3", "uat-refapp", "uat-refapp2", "qa-refapp", "qa-refapp2", "uat-platform"]
 }
 
 variable "description" {
