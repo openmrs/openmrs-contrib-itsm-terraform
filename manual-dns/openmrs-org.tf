@@ -29,6 +29,7 @@ locals {
     "globalsign-domain-verification=MT3LmRzGYPgORWLlSBkPpAUpBDH9kl8xxYmB6FjtjY",
     "atlassian-domain-verification=VuGBujoVFWafPPRX7IedCYNeI6gUiJhWLsa2N29Ra7itcHm5JyiTfezcvpfbglPH",
     "atlassian-domain-verification=prCuZpfajIHzMgahOfwlE8Ge9z8vdnpDnR4i4UeBE4tcjXOEixaxiAilfM8SZb2v",
+    "anthropic-domain-verification-htz3cp=w5QAiVRuSvokURCpiqOT0Oyxb",
   ]
 
   github_pages_subdomains = [
