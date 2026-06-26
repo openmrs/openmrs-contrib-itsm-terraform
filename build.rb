@@ -245,6 +245,7 @@ class Build < Thor
           'environment'       => outputs_parsed['ansible_inventory']['value'],
           'size'              => outputs_parsed['flavor']['value'],
           'backup'            => outputs_parsed['has_backup']['value'] == true ? 'Yes' : 'No',
+          'boot_volume'       => (outputs_parsed['has_boot_volume'] || {'value': false}) ['value'] == true ? "Yes (#{outputs_parsed['boot_volume_size']['value']}GB)" : 'No',
           'data_volume'       => outputs_parsed['has_data_volume']['value'] == true ? "Yes (#{outputs_parsed['data_volume_size']['value']}GB)" : 'No',
           'ip'                => outputs_parsed['ip_address']['value'],
           'dns'               => outputs_parsed['dns_entries']['value'],

@@ -12,7 +12,7 @@ variable "region" {
 }
 
 variable "hostname" {
-  default = "STACK-NAME"
+  default = "aksum"
 }
 
 variable "update_os" {
@@ -24,15 +24,15 @@ variable "use_ansible" {
 }
 
 variable "ansible_inventory" {
-  default = "prod-tier4"
+  default = "prod-tier3"
 }
 
 variable "boot_from_volume" {
-  default = false
+  default = true
 }
 
 variable "boot_volume_size" {
-  default = 60
+  default = 120
 }
 
 variable "has_data_volume" {
@@ -53,9 +53,9 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = []
+  default = ["hermes"]
 }
 
 variable "description" {
-  default = ""
+  default = "Hermes Agent host for OpenMRS"
 }

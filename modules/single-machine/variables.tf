@@ -33,6 +33,24 @@ variable "ansible_inventory" {
 }
 
 
+# [Optional] Boot the VM from a Cinder volume instead of the ephemeral
+# image disk. Lets the root disk be larger than the flavor's built-in disk
+# (and resizable). The volume is created from var.image at launch.
+variable "boot_from_volume" {
+  default = false
+}
+
+# [Optional] Size (GB) of the root boot volume when boot_from_volume is true.
+variable "boot_volume_size" {
+  default = 60
+}
+
+# [Optional] Whether the root boot volume is deleted when the instance is
+# destroyed. Only applies when boot_from_volume is true.
+variable "delete_boot_volume_on_termination" {
+  default = true
+}
+
 # [Optional] Create data volume (extra disk)
 # If applications generate non-ephemeral data,
 # it should have an external volume for the app data.

@@ -4,7 +4,7 @@ resource "openstack_networking_floatingip_v2" "ip" {
 
 resource "openstack_compute_instance_v2" "vm" {
   name        = "${var.project_name}-${var.hostname}"
-  image_id    = var.image
+  image_id    = var.boot_from_volume ? null : var.image
   flavor_name = var.flavor
   power_state = var.power_state
   key_pair    = data.terraform_remote_state.base.outputs.key-pair-name
@@ -18,16 +18,31 @@ resource "openstack_compute_instance_v2" "vm" {
     )
   )
 
+  # When booting from volume, Nova creates a Cinder root volume from the image
+  # so the root disk can be larger than the flavor's built-in disk.
+  dynamic "block_device" {
+    for_each = var.boot_from_volume ? [1] : []
+    content {
+      uuid                  = var.image
+      source_type           = "image"
+      destination_type      = "volume"
+      volume_size           = var.boot_volume_size
+      boot_index            = 0
+      delete_on_termination = var.delete_boot_volume_on_termination
+    }
+  }
 
   network {
     uuid = data.terraform_remote_state.base.outputs.network-id[var.region]
   }
 
   # Jetstream has a tendency of deprecating images and not allowing new ones
-  # Not recreating machines just because we changed the image ID
+  # Not recreating machines just because we changed the image ID (whether the
+  # image is referenced directly or via the boot-from-volume block_device).
   lifecycle {
     ignore_changes = [
-      image_id
+      image_id,
+      block_device,
     ]
   }
 }
