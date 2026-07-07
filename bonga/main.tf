@@ -20,22 +20,18 @@ module "single-machine" {
   ################################################
   # Change values in variables.tf file instead
   ################################################
-  flavor            = var.flavor
-  hostname          = var.hostname
-  region            = var.region
-  update_os         = var.update_os
-  use_ansible       = var.use_ansible
-  ansible_inventory = var.ansible_inventory
-  has_data_volume   = var.has_data_volume
-  data_volume_size  = var.data_volume_size
-  has_backup        = var.has_backup
-  dns_cnames        = var.dns_cnames
-
-  # _acme-challenge CNAMEs for DNS-01 (acme-dns); populated post-registration, empty until then.
+  flavor                = var.flavor
+  hostname              = var.hostname
+  region                = var.region
+  update_os             = var.update_os
+  use_ansible           = var.use_ansible
+  ansible_inventory     = var.ansible_inventory
+  has_data_volume       = var.has_data_volume
+  data_volume_size      = var.data_volume_size
+  has_backup            = var.has_backup
+  dns_cnames            = var.dns_cnames
   acme_challenge_cnames = var.acme_challenge_cnames
-
-  # CNAMEs to proxy through Cloudflare (test3 demo). See variables.tf for the apply ordering.
-  cf_proxied_cnames = var.cf_proxied_cnames
+  cf_proxied_cnames     = var.cf_proxied_cnames
 
 
   # ----------------------------------------------------------------------------------------------------------------------

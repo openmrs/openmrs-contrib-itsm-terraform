@@ -49,6 +49,17 @@ variable "dns_cnames" {
   default = ["talk"]
 }
 
+variable "cf_proxied_cnames" {
+  default = ["talk"]
+}
+
+variable "acme_challenge_cnames" {
+  default = {
+    "maji" = "c12635e1-215c-4e4c-b671-2942ca1f4309.acme.openmrs.org"
+    "talk" = "b63dfe2d-1007-4afc-a687-25b484b89bd6.acme.openmrs.org"
+  }
+}
+
 variable "description" {
   default = "Discourse/forum server"
 }
