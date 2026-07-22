@@ -29,3 +29,26 @@ resource "cloudflare_zone_setting" "openmrs_org_ssl" {
   setting_id = "ssl"
   value      = "strict"
 }
+
+# Custom WAF rules for openmrs.org
+resource "cloudflare_ruleset" "openmrs_org_custom_firewall" {
+  zone_id = cloudflare_zone.openmrs["openmrs.org"].id
+  name    = "openmrs.org custom firewall rules"
+  kind    = "zone"
+  phase   = "http_request_firewall_custom"
+
+  rules = [
+    {
+      ref         = "sbfm_skip_omrs"
+      description = "Bypass Super Bot Fight Mode for internal bots"
+      expression  = "(ip.src eq 149.165.154.224)"
+      action      = "skip"
+      action_parameters = {
+        phases = ["http_request_sbfm"]
+      }
+      logging = {
+        enabled = true
+      }
+    }
+  ]
+}
