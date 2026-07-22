@@ -542,15 +542,6 @@ resource "cloudflare_dns_record" "notes" {
   proxied = false
 }
 
-resource "cloudflare_dns_record" "o3_dev_docs_vercel" {
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "o3-dev.docs.openmrs.org"
-  type    = "CNAME"
-  content = "cname.vercel-dns.com"
-  ttl     = var.default_dns_ttl
-  proxied = false
-}
-
 resource "cloudflare_dns_record" "planet" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "planet.openmrs.org"
