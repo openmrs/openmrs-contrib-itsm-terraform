@@ -12,10 +12,6 @@ terraform {
       source = "terraform-provider-openstack/openstack"
     }
 
-    dme = {
-      source = "dnsmadeeasy/dme"
-    }
-
     cloudflare = {
       source = "cloudflare/cloudflare"
     }

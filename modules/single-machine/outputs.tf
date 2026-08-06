@@ -19,11 +19,11 @@ output "backup_access_key_secret" {
 }
 
 output "dns_entries" {
-  value = [dme_dns_record.hostname.name, values(dme_dns_record.cnames).*.name]
+  value = [cloudflare_dns_record.hostname.name, values(cloudflare_dns_record.cnames).*.name]
 }
 
 output "private-dns" {
-  value = element(concat(dme_dns_record.private_hostname.*.name, tolist([""])), 0)
+  value = element(concat(cloudflare_dns_record.private_hostname.*.name, tolist([""])), 0)
 }
 
 output "power_state" {

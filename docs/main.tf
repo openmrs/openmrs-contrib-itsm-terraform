@@ -137,14 +137,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
-resource "dme_dns_record" "docs" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "docs"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "docs" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "docs.openmrs.org"
@@ -152,14 +144,6 @@ resource "cloudflare_dns_record" "docs" {
   content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "resources" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "resources"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "resources" {
@@ -221,4 +205,3 @@ resource "aws_s3_object" "vms-list-html" {
   etag         = filemd5("vms.html")
   content_type = "text/html"
 }
-

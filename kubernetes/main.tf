@@ -72,14 +72,6 @@ data "openstack_networking_floatingip_v2" "fip_lb" {
   description = "Floating IP for Kubernetes external service ingress-nginx/ingress-nginx-controller from cluster ${openstack_containerinfra_cluster_v1.kubernetes.stack_id}"
 }
 
-resource "dme_dns_record" "hostname" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = var.hostname
-  type      = "A"
-  value     = data.openstack_networking_floatingip_v2.fip_lb.address
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "hostname" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "${var.hostname}.openmrs.org"
@@ -87,15 +79,6 @@ resource "cloudflare_dns_record" "hostname" {
   content = data.openstack_networking_floatingip_v2.fip_lb.address
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "cnames" {
-  count     = length(var.dns_cnames)
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = element(var.dns_cnames, count.index)
-  type      = "CNAME"
-  value     = var.hostname
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "cnames" {

@@ -24,11 +24,6 @@ terraform {
       version = "5.65.0"
     }
 
-    dme = {
-      source  = "dnsmadeeasy/dme"
-      version = "1.0.6"
-    }
-
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "5.19.1"
@@ -54,11 +49,6 @@ terraform {
       version = "2.3.5"
     }
   }
-}
-
-provider "dme" {
-  api_key    = var.dme_apikey
-  secret_key = var.dme_secretkey
 }
 
 provider "cloudflare" {

@@ -136,14 +136,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
-resource "dme_dns_record" "cdn-dns" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "cdn"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "cdn-dns" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "cdn.openmrs.org"
@@ -151,14 +143,6 @@ resource "cloudflare_dns_record" "cdn-dns" {
   content = aws_cloudfront_distribution.cloudfront_distribution.domain_name
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "assets-dns" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "assets"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.cloudfront_distribution.domain_name}."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "assets-dns" {
@@ -258,14 +242,6 @@ resource "aws_cloudfront_distribution" "dev-cdn" {
     Terraform   = "cdn-resources"
     Environment = "dev3"
   }
-}
-
-resource "dme_dns_record" "dev3-openmrs-org-cdn" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "dev3"
-  type      = "CNAME"
-  value     = "${aws_cloudfront_distribution.dev-cdn.domain_name}."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "dev3-openmrs-org-cdn" {

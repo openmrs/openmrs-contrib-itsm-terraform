@@ -49,14 +49,6 @@ module "single-machine" {
   default_dns_ttl = var.default_dns_ttl
 }
 
-resource "dme_dns_record" "short-dns" {
-  domain_id = var.domain_dns[var.dns_domain]
-  name      = ""
-  type      = "ANAME"
-  value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = var.default_dns_ttl
-}
-
 # Cloudflare flattens CNAME at the apex, so DME ANAME → CF CNAME with name = <zone>.
 resource "cloudflare_dns_record" "short-dns" {
   zone_id = var.cloudflare_zone_id[var.dns_domain]
@@ -65,14 +57,6 @@ resource "cloudflare_dns_record" "short-dns" {
   content = "${var.hostname}.${var.main_domain_dns}"
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "short-dns-wildcard" {
-  domain_id = var.domain_dns[var.dns_domain]
-  name      = "*"
-  type      = "ANAME"
-  value     = "${var.hostname}.${var.main_domain_dns}."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "short-dns-wildcard" {
@@ -84,14 +68,6 @@ resource "cloudflare_dns_record" "short-dns-wildcard" {
   proxied = false
 }
 
-resource "dme_dns_record" "servicedesk-cname" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "servicedesk.jira"
-  type      = "CNAME"
-  value     = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.saas.atlassian.com."
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "servicedesk-cname" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "servicedesk.jira.openmrs.org"
@@ -99,14 +75,6 @@ resource "cloudflare_dns_record" "servicedesk-cname" {
   content = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.saas.atlassian.com"
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "servicedesk-cname2" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "_75f1ffb08e1ad4e23e1a159cb1418945.servicedesk.jira"
-  type      = "CNAME"
-  value     = "servicedesk-jira-openmrs--bc43f69c-56bf-40be-adb3-601e89fad51a.ssl.atlassian.com."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "servicedesk-cname2" {

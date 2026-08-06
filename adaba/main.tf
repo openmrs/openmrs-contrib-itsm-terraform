@@ -56,15 +56,6 @@ module "single-machine" {
 # DNS RECORDS
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "dme_dns_record" "mx_id" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "id"
-  type      = "MX"
-  mx_level  = "10"
-  value     = "smtp"
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "mx_id" {
   zone_id  = var.cloudflare_zone_id["openmrs.org"]
   name     = "id.openmrs.org"
@@ -74,14 +65,6 @@ resource "cloudflare_dns_record" "mx_id" {
   ttl      = var.mail_dns_ttl
 }
 
-resource "dme_dns_record" "a_smtp" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "smtp"
-  type      = "A"
-  value     = module.single-machine.address
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "a_smtp" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "smtp.openmrs.org"
@@ -89,14 +72,6 @@ resource "cloudflare_dns_record" "a_smtp" {
   content = module.single-machine.address
   ttl     = var.default_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "a_id" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "id"
-  type      = "A"
-  value     = module.single-machine.address
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "a_id" {
@@ -112,14 +87,6 @@ resource "cloudflare_dns_record" "a_id" {
 # Temporary subdomain for Keycloak until ID is switched off
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "dme_dns_record" "a_id_new" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "id-new"
-  type      = "A"
-  value     = module.single-machine.address
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "a_id_new" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "id-new.openmrs.org"
@@ -133,28 +100,12 @@ resource "cloudflare_dns_record" "a_id_new" {
 # Domain verification for Atlassian outgoing e-mails
 # ----------------------------------------------------------------------------------------------------------------------
 
-resource "dme_dns_record" "txt_atlassian" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = ""
-  type      = "TXT"
-  value     = "atlassian-sending-domain-verification=0fdf1857-bba2-4642-ad65-82e86115de7b"
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "txt_atlassian" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "openmrs.org"
   type    = "TXT"
   content = "\"atlassian-sending-domain-verification=0fdf1857-bba2-4642-ad65-82e86115de7b\""
   ttl     = var.mail_dns_ttl
-}
-
-resource "dme_dns_record" "cname_active_atlassian" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "atlassian-6d771e._domainkey"
-  type      = "CNAME"
-  value     = "atlassian-6d771e.dkim.atlassian.net."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "cname_active_atlassian" {
@@ -166,14 +117,6 @@ resource "cloudflare_dns_record" "cname_active_atlassian" {
   proxied = false
 }
 
-resource "dme_dns_record" "cname_fallback_atlassian" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "atlassian-7cbba2._domainkey"
-  type      = "CNAME"
-  value     = "atlassian-7cbba2.dkim.atlassian.net."
-  ttl       = var.default_dns_ttl
-}
-
 resource "cloudflare_dns_record" "cname_fallback_atlassian" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "atlassian-7cbba2._domainkey.openmrs.org"
@@ -181,14 +124,6 @@ resource "cloudflare_dns_record" "cname_fallback_atlassian" {
   content = "atlassian-7cbba2.dkim.atlassian.net"
   ttl     = var.mail_dns_ttl
   proxied = false
-}
-
-resource "dme_dns_record" "cname_bounce_atlassian" {
-  domain_id = var.domain_dns["openmrs.org"]
-  name      = "atlassian-bounces"
-  type      = "CNAME"
-  value     = "bounces.mail-us.atlassian.net."
-  ttl       = var.default_dns_ttl
 }
 
 resource "cloudflare_dns_record" "cname_bounce_atlassian" {
@@ -225,7 +160,7 @@ resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps" {
 
 # ----------------------------------------------------------------------------------------------------------------------
 # goba (atlas) SEC GROUP
-# ---------------------------------------------------------------------------------------------------------------------- 
+# ----------------------------------------------------------------------------------------------------------------------
 
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rule_ldaps_atlas" {
   direction         = "ingress"

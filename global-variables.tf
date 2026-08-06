@@ -64,16 +64,6 @@ variable "mail_dns_ttl" {
   default     = 86400
 }
 
-variable "dme_apikey" {
-  sensitive = true
-  default   = ""
-}
-
-variable "dme_secretkey" {
-  sensitive = true
-  default   = ""
-}
-
 variable "cf_api_token" {
   description = "Cloudflare API token"
   sensitive   = true
