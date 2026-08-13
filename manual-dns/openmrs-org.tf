@@ -302,6 +302,18 @@ resource "cloudflare_dns_record" "smtp_stg_mandrill_verify" {
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
+# Google Search verification TXT
+# ----------------------------------------------------------------------------------------------------------------------
+
+resource "cloudflare_dns_record" "google_search_challenge_openmrs_org" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "openmrs.org"
+  type    = "TXT"
+  content = "\"google-site-verification=JFGfllCvsKyYljr5F4PVO9_XGOlrvfsn5DS-uJLtaAs\""
+  ttl     = var.default_dns_ttl
+}
+
+# ----------------------------------------------------------------------------------------------------------------------
 # GitHub domain / Pages verification TXTs
 # ----------------------------------------------------------------------------------------------------------------------
 
