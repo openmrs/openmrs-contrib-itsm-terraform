@@ -25,7 +25,7 @@ locals {
     "OSSRH-67009",
     "00df000000061l8maa",
     "have-i-been-pwned-verification=be1078f6fa217ec4987eaa9159f37a90",
-    "google-site-verification=lUCkW8r8SYIlfBa6AXSuvrz1Iyw5khBXZmctXricL2U",
+    "google-site-verification=JFGfllCvsKyYljr5F4PVO9_XGOlrvfsn5DS-uJLtaAs",
     "globalsign-domain-verification=MT3LmRzGYPgORWLlSBkPpAUpBDH9kl8xxYmB6FjtjY",
     "atlassian-domain-verification=VuGBujoVFWafPPRX7IedCYNeI6gUiJhWLsa2N29Ra7itcHm5JyiTfezcvpfbglPH",
     "atlassian-domain-verification=prCuZpfajIHzMgahOfwlE8Ge9z8vdnpDnR4i4UeBE4tcjXOEixaxiAilfM8SZb2v",
@@ -299,18 +299,6 @@ resource "cloudflare_dns_record" "smtp_stg_mandrill_verify" {
   type    = "TXT"
   content = "\"mandrill_verify.iynD2ZwHpLB7atww51svFg\""
   ttl     = var.mail_dns_ttl
-}
-
-# ----------------------------------------------------------------------------------------------------------------------
-# Google Search verification TXT
-# ----------------------------------------------------------------------------------------------------------------------
-
-resource "cloudflare_dns_record" "google_search_challenge_openmrs_org" {
-  zone_id = var.cloudflare_zone_id["openmrs.org"]
-  name    = "openmrs.org"
-  type    = "TXT"
-  content = "\"google-site-verification=JFGfllCvsKyYljr5F4PVO9_XGOlrvfsn5DS-uJLtaAs\""
-  ttl     = var.default_dns_ttl
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
