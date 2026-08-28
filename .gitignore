@@ -1,5 +1,6 @@
 .terraform
 openrc-personal
+conf/clouds.yaml
 .tmp
 *.tfstate*backup
 *.tfstate
