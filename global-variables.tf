@@ -70,6 +70,13 @@ variable "cf_api_token" {
   default     = ""
 }
 
+# API token for Bahmni to bypass Cloudflare for scripts
+variable "talk_bahmni_hmac_key" {
+  description = "Secret key used to validate HMAC bypass tokens for talk.openmrs.org"
+  sensitive   = true
+  default     = ""
+}
+
 variable "cf_account_id" {
   default = "8b602baa4865372bf49619922b9913d6"
 }
