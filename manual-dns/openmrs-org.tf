@@ -450,6 +450,24 @@ resource "cloudflare_dns_record" "acm_validation_dev3" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "acm_validation_docs" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "_b73f27b4a1c1f188be5d7a7c127ca0dc.docs.openmrs.org"
+  type    = "CNAME"
+  content = "_24b044bd5e1d0b4a3561ee8b8c5a6e49.wzccmgtwzk.acm-validations.aws"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "acm_validation_resourcces" {
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "_1f56923fbaeb68a00632cc81bd543e8c.resources.openmrs.org"
+  type    = "CNAME"
+  content = "_a8d2251942499365efed8647dba0ca44.wzccmgtwzk.acm-validations.aws"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "acm_validation_status" {
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "_8bb7f67dd51c93ba25999b0a44fb12f3.status.openmrs.org"
