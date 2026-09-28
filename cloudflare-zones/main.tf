@@ -30,37 +30,26 @@ resource "cloudflare_zone_setting" "openmrs_org_ssl" {
   value      = "strict"
 }
 
-# Timed-HMAC bypass letting an API client that signs its requests through Super Bot Fight Mode without
-# whitelisting its egress IPs.
+# Read-only Discourse JSON endpoints the Bahmni integration polls. Its client is not a browser, so
+# both Super Bot Fight Mode and Browser Integrity Check reject it; skipping them here keeps the
+# integration working without the client having to prove anything to Cloudflare. Discourse still
+# applies its own permissions to every one of these paths.
 #
-# X-OMRS-Token is in the format <ts>-<base64 hash> where the hash is SHA256(key, uri_path + ts).
-#
-# The "|" separator is just here to distinguish the URL from the token. It is stripped out by setting
-# the <length of separator> argument to `is_timed_hmac_valid_v0()`
+# Pro has no regex operator and wildcard "*" spans "/", so a pattern cannot pin a path segment. These
+# are correspondingly broader than the endpoints they cover: any .json under the prefix matches. The
+# method check keeps the skip to reads, and matching on uri.path ignores query strings.
 locals {
-  talk_hmac_message = "concat(http.request.uri, \"|\", http.request.headers[\"x-omrs-token\"][0])"
-
-  talk_hmac_conditions = [
-    "http.host eq \"talk.openmrs.org\"",
-    "any(http.request.headers[\"x-omrs-token\"][*] ne \"\")",
-    "is_timed_hmac_valid_v0(\"${var.talk_bahmni_hmac_key}\", ${local.talk_hmac_message}, 3600, http.request.timestamp.sec, 1, \"s\")",
+  talk_read_path_patterns = [
+    "/categories.json",
+    "/users/*.json", # /users/<username>.json, /users/<username>/emails.json
+    "/c/*.json",     # /c/<name>/<id>.json, /c/<id>/show.json
+    "/t/*.json",     # /t/<id>.json, /t/<id>/posts.json
   ]
 
-  # An empty key would deploy a rule that anyone can sign against, so drop the rule until one is set.
-  talk_hmac_rules = var.talk_bahmni_hmac_key == "" ? [] : [
-    {
-      ref         = "sbfm_skip_talk_hmac"
-      description = "Bypass Super Bot Fight Mode for talk.openmrs.org clients presenting a valid HMAC token"
-      expression  = "(${join(" and ", local.talk_hmac_conditions)})"
-      action      = "skip"
-      action_parameters = {
-        phases = ["http_request_sbfm"]
-        products = ["bic"]
-      }
-      logging = {
-        enabled = true
-      }
-    }
+  talk_read_conditions = [
+    "http.host eq \"talk.openmrs.org\"",
+    "http.request.method eq \"GET\"",
+    "(${join(" or ", [for p in local.talk_read_path_patterns : "http.request.uri.path wildcard \"${p}\""])})",
   ]
 }
 
@@ -71,7 +60,7 @@ resource "cloudflare_ruleset" "openmrs_org_custom_firewall" {
   kind    = "zone"
   phase   = "http_request_firewall_custom"
 
-  rules = concat([
+  rules = [
     {
       ref         = "sbfm_skip_omrs"
       description = "Bypass Super Bot Fight Mode for internal bots"
@@ -83,6 +72,19 @@ resource "cloudflare_ruleset" "openmrs_org_custom_firewall" {
       logging = {
         enabled = true
       }
+    },
+    {
+      ref         = "sbfm_skip_talk_reads"
+      description = "Bypass Super Bot Fight Mode and Browser Integrity Check for talk.openmrs.org read endpoints"
+      expression  = "(${join(" and ", local.talk_read_conditions)})"
+      action      = "skip"
+      action_parameters = {
+        phases   = ["http_request_sbfm"]
+        products = ["bic"]
+      }
+      logging = {
+        enabled = true
+      }
     }
-  ], local.talk_hmac_rules)
+  ]
 }
