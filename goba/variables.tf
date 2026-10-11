@@ -46,7 +46,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["addons", "modules", "atlas", "implementation", "quizgrader", "shields", "radarproxy"]
+  default = ["addons", "modules", "atlas", "implementation", "quizgrader", "shields", "radarproxy", "trustbot"]
 }
 
 variable "description" {
