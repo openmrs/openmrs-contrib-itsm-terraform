@@ -176,6 +176,26 @@ Each stack should be more or less:
 
 # Troubleshooting
 
+## Errors about missing arguments when running a plan
+
+If you see an error message like this when running a plan:
+```
+│ Error: Missing required argument
+│ The argument "api_key" is required, but was not set.
+│ Error: Missing required argument
+│ The argument "secret_key" is required, but was not set.
+```
+You probably have old state referencing DNS Made Easy (DME), which was our DNS provider before switching to Cloudflare. 
+
+You can fix this by removing the old state with these commands (replace <DIR> with your target server folder):
+```
+./build.rb terraform <DIR> 'state rm module.single-machine.dme_dns_record.hostname'
+./build.rb terraform <DIR> "state rm 'module.single-machine.dme_dns_record.cnames'"
+```
+
+Then you should be able to run `./build.rb init <DIR>` and `./build.rb plan <DIR>` without the error.
+
+
 ## Could not create DNS entries
 - Verify that the entry doesn't already exist in our DNS provider.
 
