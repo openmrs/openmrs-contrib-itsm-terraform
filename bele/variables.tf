@@ -46,7 +46,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["demo", "mdsbuilder", "o2", "o3", "cieladmin", "chartsearchai"]
+  default = ["demo", "mdsbuilder", "o2", "o3", "cieladmin"]
 }
 
 variable "acme_challenge_cnames" {
@@ -57,12 +57,11 @@ variable "acme_challenge_cnames" {
     "mdsbuilder"    = "20129a1f-3ec8-4414-a19b-f48268b508b6.acme.openmrs.org"
     "o2"            = "6e03a64d-11a2-4235-8d09-5c3f8037d0b6.acme.openmrs.org"
     "o3"            = "122fa16c-fa93-4752-83b4-21544567906c.acme.openmrs.org"
-    "chartsearchai" = "b4e619c0-b93d-4dc7-98bf-8bb8fc31f683.acme.openmrs.org"
   }
 }
 
 variable "cf_proxied_cnames" {
-  default = ["demo", "mdsbuilder", "o2", "o3", "cieladmin", "chartsearchai"]
+  default = ["demo", "mdsbuilder", "o2", "o3", "cieladmin"]
 }
 
 variable "description" {

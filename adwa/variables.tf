@@ -53,7 +53,8 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = []
+  default = ["chartsearchai"]
+}
 }
 
 variable "description" {
