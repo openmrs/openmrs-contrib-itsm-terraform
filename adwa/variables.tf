@@ -55,6 +55,16 @@ variable "has_backup" {
 variable "dns_cnames" {
   default = ["chartsearchai"]
 }
+
+variable "acme_challenge_cnames" {
+  default = {
+    "adwa"          = "8c5dff9b-0a88-4643-8d73-6a4f108a52c6.acme.openmrs.org"
+    "chartsearchai" = "ecd69516-62da-4ccc-859b-f5f784ae724d.acme.openmrs.org"
+  }
+}
+
+variable "cf_proxied_cnames" {
+  default = ["chartsearchai"]
 }
 
 variable "description" {
