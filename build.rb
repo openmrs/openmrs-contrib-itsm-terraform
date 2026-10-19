@@ -203,6 +203,17 @@ class Build < Thor
     system("source conf/openrc && cd #{dir} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} #{args}") || abort
   end
 
+  desc "terraform_servers 'subcommand --args'", 'run arbitrary terraform subcommands on all server stacks'
+  def terraform_all(args)
+    # cloudflare-zones, manual-dns and docs hold no VM stack, so bulk operations don't apply to them
+    excluded = $excluded_dirs + ['base-network/', 'cloudflare-zones/', 'manual-dns/']
+    (Dir['*/'] - excluded).sort.each do |d|
+      suffix=terraformVersion(d)
+      puts "Running terraform \'#{args}\' on #{d}"
+      system("source conf/openrc && cd #{d} && #{$pwd}/#{$tmp_dir}/terraform#{suffix} #{args}") || abort
+    end
+  end
+
   desc 'create DIR', 'creates files for new stack DIR'
   def create(dir)
     suffix=terraformVersion(dir)
