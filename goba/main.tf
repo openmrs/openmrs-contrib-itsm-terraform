@@ -30,7 +30,8 @@ module "single-machine" {
   data_volume_size  = var.data_volume_size
   has_backup        = var.has_backup
   dns_cnames        = var.dns_cnames
-
+  acme_challenge_cnames = var.acme_challenge_cnames
+  cf_proxied_cnames     = var.cf_proxied_cnames
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Global variables
