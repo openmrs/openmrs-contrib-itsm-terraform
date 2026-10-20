@@ -58,6 +58,8 @@ variable "acme_challenge_cnames" {
     "implementation" = "b6a661f9-9805-4c3a-a1db-eb9138b89e86.acme.openmrs.org"
     "quizgrader"     = "212335be-15da-4fd2-8c8c-edb3925f4b00.acme.openmrs.org"
     "shields"        = "1c86cee3-4ac6-4e79-95af-fc1835fbf42f.acme.openmrs.org"
+    "radarproxy"     = "a076843c-8a29-4ebd-ae8a-706382299e0a.acme.openmrs.org"
+    "trustbot"       = "8ee83c1d-13a4-4328-9fb2-d9cbd869e0fc.acme.openmrs.org"
   }
 }
 
