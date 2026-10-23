@@ -35,6 +35,7 @@ locals {
   github_pages_subdomains = [
     "devmanual",
     "fhir",
+    "github-workflows",
     "guide",
     "json",
     "o3-docs",
