@@ -44,6 +44,7 @@ locals {
     "rest",
     "security-dashboard",
     "slack",
+    "skills",
   ]
 
   google_xmpp_srv = {
