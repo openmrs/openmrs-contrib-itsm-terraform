@@ -113,6 +113,11 @@ variable "allow_web" {
   default = "true"
 }
 
+# [Optional] attach the shared ssh-icmp and https groups from base-network.
+variable "use_base_security_groups" {
+  default = true
+}
+
 # [Optional] If it should create a credentials to clone git repositories
 # from github and decrypt using git-crypt
 variable "leave_git_clone_creds" {

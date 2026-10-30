@@ -33,6 +33,9 @@ module "single-machine" {
   has_backup        = var.has_backup
   dns_cnames        = var.dns_cnames
 
+  use_base_security_groups = false
+  extra_security_groups    = [openstack_networking_secgroup_v2.aksum_isolated.name]
+
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Global variables

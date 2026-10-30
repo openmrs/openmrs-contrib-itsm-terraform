@@ -10,10 +10,10 @@ resource "openstack_compute_instance_v2" "vm" {
   key_pair    = data.terraform_remote_state.base.outputs.key-pair-name
   security_groups = compact(
     concat(
-      tolist([
+      var.use_base_security_groups ? tolist([
         data.terraform_remote_state.base.outputs.secgroup-ssh-name,
         var.allow_web ? data.terraform_remote_state.base.outputs.secgroup-http-name : ""
-      ]),
+      ]) : tolist([]),
       var.extra_security_groups
     )
   )
