@@ -495,6 +495,52 @@ resource "cloudflare_dns_record" "github_pages_cname" {
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
+# OpenMRS Atlas 3.0 — Firebase Hosting (https://github.com/openmrs/openmrs-contrib-atlas, infra/README.md)
+#   Each environment's site is a CNAME to its Firebase Hosting site, plus the TXT record Firebase uses to verify the
+#   domain. Unproxied, so Firebase can issue and renew the certificate. Production (atlas.openmrs.org) still points to
+#   goba (Atlas 2.0) through goba's dns_cnames until the 3.0 switch.
+# ----------------------------------------------------------------------------------------------------------------------
+
+locals {
+  # host → Firebase Hosting site id
+  atlas_firebase_sites = {
+    "atlas-stg" = "atlas-stg-513316"
+  }
+}
+
+resource "cloudflare_dns_record" "atlas_firebase_cname" {
+  for_each = local.atlas_firebase_sites
+
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "${each.key}.openmrs.org"
+  type    = "CNAME"
+  content = "${each.value}.web.app"
+  ttl     = var.default_dns_ttl
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "atlas_firebase_txt" {
+  for_each = local.atlas_firebase_sites
+
+  zone_id = var.cloudflare_zone_id["openmrs.org"]
+  name    = "${each.key}.openmrs.org"
+  type    = "TXT"
+  content = "\"hosting-site=${each.value}\""
+  ttl     = var.default_dns_ttl
+}
+
+# Adopt the atlas-stg records first created by hand in Cloudflare. Remove these blocks once applied.
+import {
+  to = cloudflare_dns_record.atlas_firebase_cname["atlas-stg"]
+  id = "b4971e2d7be2ee072cab9e438f687838/86f92a28ad2754b2ac3cc653dcf5555a"
+}
+
+import {
+  to = cloudflare_dns_record.atlas_firebase_txt["atlas-stg"]
+  id = "b4971e2d7be2ee072cab9e438f687838/ceb4a7ab7790207a7f2eeccd70bad2e0"
+}
+
+# ----------------------------------------------------------------------------------------------------------------------
 # Other CNAMEs — third-party services, one-off mappings
 # ----------------------------------------------------------------------------------------------------------------------
 
