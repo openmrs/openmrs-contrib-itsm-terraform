@@ -529,17 +529,6 @@ resource "cloudflare_dns_record" "atlas_firebase_txt" {
   ttl     = var.default_dns_ttl
 }
 
-# Adopt the atlas-stg records first created by hand in Cloudflare. Remove these blocks once applied.
-import {
-  to = cloudflare_dns_record.atlas_firebase_cname["atlas-stg"]
-  id = "b4971e2d7be2ee072cab9e438f687838/86f92a28ad2754b2ac3cc653dcf5555a"
-}
-
-import {
-  to = cloudflare_dns_record.atlas_firebase_txt["atlas-stg"]
-  id = "b4971e2d7be2ee072cab9e438f687838/ceb4a7ab7790207a7f2eeccd70bad2e0"
-}
-
 # ----------------------------------------------------------------------------------------------------------------------
 # Other CNAMEs — third-party services, one-off mappings
 # ----------------------------------------------------------------------------------------------------------------------
