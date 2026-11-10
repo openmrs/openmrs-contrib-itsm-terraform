@@ -496,16 +496,19 @@ resource "cloudflare_dns_record" "github_pages_cname" {
 
 # ----------------------------------------------------------------------------------------------------------------------
 # OpenMRS Atlas 3.0 — Firebase Hosting (https://github.com/openmrs/openmrs-contrib-atlas, infra/README.md)
-#   Each environment's site is a CNAME to its Firebase Hosting site, plus the TXT record Firebase uses to verify the
-#   domain. Unproxied, so Firebase can issue and renew the certificate. Production (atlas.openmrs.org) still points to
-#   goba (Atlas 2.0) through goba's dns_cnames until the 3.0 switch.
+#   Each environment's site is a CNAME to its Firebase Hosting site. Unproxied, so Firebase can issue and renew the
+#   certificate. Staging also has the TXT record Firebase asked for when it was added; production's setup asked only
+#   for the CNAME.
 # ----------------------------------------------------------------------------------------------------------------------
 
 locals {
   # host → Firebase Hosting site id
   atlas_firebase_sites = {
+    "atlas"     = "openmrs-atlas"
     "atlas-stg" = "atlas-stg-513316"
   }
+  # hosts that also get a "hosting-site=" TXT record
+  atlas_firebase_txt_hosts = ["atlas-stg"]
 }
 
 resource "cloudflare_dns_record" "atlas_firebase_cname" {
@@ -520,7 +523,7 @@ resource "cloudflare_dns_record" "atlas_firebase_cname" {
 }
 
 resource "cloudflare_dns_record" "atlas_firebase_txt" {
-  for_each = local.atlas_firebase_sites
+  for_each = { for host, site in local.atlas_firebase_sites : host => site if contains(local.atlas_firebase_txt_hosts, host) }
 
   zone_id = var.cloudflare_zone_id["openmrs.org"]
   name    = "${each.key}.openmrs.org"
