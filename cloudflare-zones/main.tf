@@ -63,7 +63,7 @@ resource "cloudflare_ruleset" "openmrs_org_custom_firewall" {
     {
       ref         = "sbfm_skip_omrs"
       description = "Bypass Super Bot Fight Mode for internal bots"
-      expression  = "(ip.src eq 149.165.154.224)"
+      expression  = "(ip.src in {149.165.154.224 149.165.173.108 })"
       action      = "skip"
       action_parameters = {
         phases = ["http_request_sbfm"]
