@@ -30,17 +30,16 @@ resource "cloudflare_zone_setting" "openmrs_org_ssl" {
   value      = "strict"
 }
 
-# Read-only Discourse JSON endpoints the Bahmni integration polls. Its client is not a browser, so
+# Read-only Discourse JSON endpoints. Its client is not a browser, so
 # both Super Bot Fight Mode and Browser Integrity Check reject it; skipping them here keeps the
 # integration working without the client having to prove anything to Cloudflare. Discourse still
 # applies its own permissions to every one of these paths.
 #
-# Pro has no regex operator and wildcard "*" spans "/", so a pattern cannot pin a path segment. These
-# are correspondingly broader than the endpoints they cover: any .json under the prefix matches. The
-# method check keeps the skip to reads, and matching on uri.path ignores query strings.
+# Note that * here covers /, so these rules are fairly broad.
 locals {
   talk_read_path_patterns = [
     "/categories.json",
+    "/latest.json",
     "/users/*.json", # /users/<username>.json, /users/<username>/emails.json
     "/c/*.json",     # /c/<name>/<id>.json, /c/<id>/show.json
     "/t/*.json",     # /t/<id>.json, /t/<id>/posts.json
