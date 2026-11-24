@@ -45,7 +45,7 @@ variable "has_backup" {
 }
 
 variable "dns_cnames" {
-  default = ["ldap"]
+  default = ["ldap", "authentik"]
 }
 
 variable "description" {
@@ -53,5 +53,5 @@ variable "description" {
 }
 
 output "dns_other_entries" {
-  value = ["id.openmrs.org", "authentik.openmrs.org", "smtp.openmrs.org"]
+  value = ["id.openmrs.org", "smtp.openmrs.org"]
 }
