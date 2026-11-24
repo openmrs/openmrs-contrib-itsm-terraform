@@ -53,5 +53,5 @@ variable "description" {
 }
 
 output "dns_other_entries" {
-  value = ["id.openmrs.org", "id-new.openmrs.org", "smtp.openmrs.org"]
+  value = ["id.openmrs.org", "authentik.openmrs.org", "smtp.openmrs.org"]
 }
