@@ -505,10 +505,9 @@ locals {
   # host → Firebase Hosting site id
   atlas_firebase_sites = {
     "atlas"     = "openmrs-atlas"
-    "atlas-stg" = "atlas-stg-513316"
   }
   # hosts that also get a "hosting-site=" TXT record
-  atlas_firebase_txt_hosts = ["atlas-stg"]
+  atlas_firebase_txt_hosts = []
 }
 
 resource "cloudflare_dns_record" "atlas_firebase_cname" {
